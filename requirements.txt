@@ -1,5 +1,6 @@
-matplotlib==3.7.1
-numpy==1.24.3
-pandas==2.0.1
-scikit-learn==1.2.2
-statsmodels==0.14.0
+opencv-python==4.11.0.86
+mediapipe==0.10.21
+pytube==15.0.0
+pandas==2.2.3
+matplotlib==3.10.3
+ytb-dlp==2025.5.22
