@@ -1,6 +1,29 @@
 // YouTube Shot Labeler: content script
 const PANEL_ID = 'yt-shot-labeler-panel';
 
+// Utility to format date/time as YYYY-MM-DD HH:MM:SS
+function formatDateTime(dt) {
+  const pad = (n) => n.toString().padStart(2, '0');
+  return `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())}:${pad(dt.getSeconds())}`;
+}
+
+// Get Youtube video title
+function getVideoTitle() {
+  let title =
+    document.querySelector('h1.title')?.innerText ||
+    document.querySelector('h1.ytd-watch-metadata')?.innerText ||
+    document.querySelector('.title.style-scope.ytd-video-primary-info-renderer')?.innerText ||
+    null;
+  if (!title || title.trim() === '') {
+    // Remove "(n) " at the start, and " - YouTube" at the end
+    title = document.title
+      .replace(/^\(\d+\)\s*/, '')      // Remove leading "(number) "
+      .replace(/ - YouTube$/, '')      // Remove trailing " - YouTube"
+      .trim();
+  }
+  return title;
+}
+
 // Listen for toggle-panel message from background
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.action === "toggle-panel") {
@@ -20,13 +43,24 @@ function createLabelerPanel() {
   let shots = [];
   let currentShot = {start: null, end: null, label: null};
 
+  // Top info
+  const now = new Date();
+  const dateTimeStr = formatDateTime(now);
+  const videoTitle = getVideoTitle();
+  const videoUrl = window.location.href;
+
   // Panel container
   const panel = document.createElement('div');
   panel.id = PANEL_ID;
   panel.innerHTML = `
     <div id="yt-shot-labeler-header" style="cursor:move;user-select:none;">
-      <strong style="font-size:16px;">YouTube Shot Labeler</strong>
       <button id="yt-shot-labeler-close" title="Close" style="float:right;background:transparent;border:none;font-size:18px;cursor:pointer;">×</button>
+      <strong style="font-size:16px;">YouTube Shot Labeler</strong>
+    </div>
+    <div id="yt-shot-labeler-info" style="font-size:12px;line-height:1.4;margin:7px 0 10px 0;">
+      <div><b>Date/Time:</b> <span id="yt-shot-labeler-datetime">${dateTimeStr}</span></div>
+      <div><b>Video Title:</b> <span id="yt-shot-labeler-videotitle">${videoTitle}</span></div>
+      <div style="max-width:310px;word-break:break-all;"><b>URL:</b> <span id="yt-shot-labeler-url">${videoUrl}</span></div>
     </div>
     <div style="margin:8px 0;">
       <button id="mark-start">Mark Start</button>
@@ -34,8 +68,8 @@ function createLabelerPanel() {
     </div>
     <div id="label-buttons" style="margin-bottom:10px;"></div>
     <button id="mark-end" style="margin-bottom:10px;">Mark End</button>
-    <button id="save-labels" style="margin-bottom:10px;">Download CSV</button>
-    <div id="label-list" style="max-height:120px;overflow:auto;font-size:13px;"></div>
+    <div id="label-list" style="max-height:120px;overflow:auto;font-size:13px;margin-bottom:10px;"></div>
+    <button id="save-labels" style="margin-bottom:2px;">Download CSV</button>
   `;
 
   // Styling

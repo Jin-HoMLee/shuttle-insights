@@ -21,7 +21,7 @@ This browser extension lets you label shots/events in any YouTube video and expo
    - Click "Mark Start" at the start of an event, select a shot label, then "Mark End" at the end.
    - Repeat for as many shots as you want.
    - Each shot can be deleted (🗑️) from the list.
-   - Click "Download CSV" to export the labels.
+   - Click "Download CSV" to export the labels (button is below the shot list).
 
 5. **Move the Panel:**
    - Drag the panel by its title bar to reposition anywhere in the window.
@@ -34,6 +34,7 @@ This browser extension lets you label shots/events in any YouTube video and expo
 
 - Show/hide panel with the extension icon.
 - Movable (draggable) panel.
+- Displays current date/time, video title, and URL at the top.
 - Works on any YouTube video page.
 - Lets you label shots/events using customizable buttons.
 - Download all labels as a CSV file.
