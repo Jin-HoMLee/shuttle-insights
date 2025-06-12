@@ -1,5 +1,6 @@
 #yt-shot-labeler-panel {
   transition: box-shadow 0.2s;
+  cursor:default;
 }
 #yt-shot-labeler-panel:hover {
   box-shadow: 0 8px 32px #0005;
@@ -28,7 +29,15 @@
 }
 #yt-shot-labeler-panel #yt-shot-labeler-close {
   color: #888;
+  font-weight: bold;
 }
 #yt-shot-labeler-panel #yt-shot-labeler-close:hover {
   color: #c00;
+  background: #eee;
+}
+#yt-shot-labeler-panel .yt-shot-labeler-delete {
+  color: #a00;
+}
+#yt-shot-labeler-panel .yt-shot-labeler-delete:hover {
+  background: #ffeaea;
 }

@@ -4,9 +4,8 @@ This browser extension lets you label shots/events in any YouTube video and expo
 
 ## How to Use
 
-1. **Download and Unzip:**
-   - Download all files (`manifest.json`, `content.js`, `styles.css`, `README.md`) into a folder.
-   - Zip the folder if you want to keep it as a package.
+1. **Download and Place Files:**
+   - Place `manifest.json`, `background.js`, `content.js`, `styles.css`, and `README.md` into a folder.
 
 2. **Load as Unpacked Extension:**
    - Open `chrome://extensions` in Chrome (or your browser's extensions page).
@@ -15,22 +14,30 @@ This browser extension lets you label shots/events in any YouTube video and expo
 
 3. **Go to YouTube:**
    - Open any YouTube video.
-   - A panel will appear at the top right.
+   - Click the extension icon to show/hide the labeling panel.
 
 4. **Labeling:**
    - Play/pause the video. 
    - Click "Mark Start" at the start of an event, select a shot label, then "Mark End" at the end.
    - Repeat for as many shots as you want.
+   - Each shot can be deleted (🗑️) from the list.
    - Click "Download CSV" to export the labels.
 
-5. **Remove the Panel:**
+5. **Move the Panel:**
+   - Drag the panel by its title bar to reposition anywhere in the window.
+
+6. **Close/Reopen the Panel:**
    - Click the `×` button to close the panel.
+   - Click the extension icon again to bring it back.
 
 ## Features
 
+- Show/hide panel with the extension icon.
+- Movable (draggable) panel.
 - Works on any YouTube video page.
 - Lets you label shots/events using customizable buttons.
 - Download all labels as a CSV file.
+- Delete shots if mis-labeled.
 - Non-destructive: no changes to the video or your YouTube account.
 
 ## Customization

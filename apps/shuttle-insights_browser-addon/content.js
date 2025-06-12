@@ -1,27 +1,44 @@
-// YouTube Shot Labeler injected panel
+// YouTube Shot Labeler: content script
+const PANEL_ID = 'yt-shot-labeler-panel';
 
-if (window.top === window && !document.getElementById('yt-shot-labeler-panel')) {
+// Listen for toggle-panel message from background
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.action === "toggle-panel") {
+    if (document.getElementById(PANEL_ID)) {
+      // If open, close it
+      document.getElementById(PANEL_ID).remove();
+    } else {
+      createLabelerPanel();
+    }
+  }
+});
+
+function createLabelerPanel() {
+  if (document.getElementById(PANEL_ID)) return; // Don't double-create
+
   const SHOT_LABELS = ["net shot", "lift", "clear", "smash", "drop", "drive", "block"];
   let shots = [];
   let currentShot = {start: null, end: null, label: null};
 
-  // Create panel
+  // Panel container
   const panel = document.createElement('div');
-  panel.id = 'yt-shot-labeler-panel';
+  panel.id = PANEL_ID;
   panel.innerHTML = `
-    <strong style="font-size:16px;">YouTube Shot Labeler</strong>
+    <div id="yt-shot-labeler-header" style="cursor:move;user-select:none;">
+      <strong style="font-size:16px;">YouTube Shot Labeler</strong>
+      <button id="yt-shot-labeler-close" title="Close" style="float:right;background:transparent;border:none;font-size:18px;cursor:pointer;">×</button>
+    </div>
     <div style="margin:8px 0;">
       <button id="mark-start">Mark Start</button>
-      <button id="mark-end">Mark End</button>
       <span id="shot-status" style="margin-left:10px;"></span>
     </div>
     <div id="label-buttons" style="margin-bottom:10px;"></div>
+    <button id="mark-end" style="margin-bottom:10px;">Mark End</button>
     <button id="save-labels" style="margin-bottom:10px;">Download CSV</button>
     <div id="label-list" style="max-height:120px;overflow:auto;font-size:13px;"></div>
-    <button id="yt-shot-labeler-close" title="Close" style="position:absolute;top:4px;right:8px;background:transparent;border:none;font-size:16px;cursor:pointer;">×</button>
   `;
 
-  // Style
+  // Styling
   panel.style.position = "fixed";
   panel.style.top = "80px";
   panel.style.right = "40px";
@@ -36,10 +53,35 @@ if (window.top === window && !document.getElementById('yt-shot-labeler-panel')) 
   panel.style.fontFamily = "Arial, sans-serif";
   panel.style.lineHeight = "1.5";
   panel.style.minHeight = "140px";
+  panel.style.userSelect = "none";
+  panel.style.transition = "box-shadow 0.2s";
 
   document.body.appendChild(panel);
 
-  // Insert label buttons
+  // --- Drag & Drop Logic ---
+  const header = panel.querySelector('#yt-shot-labeler-header');
+  let isDragging = false, offsetX = 0, offsetY = 0;
+  header.onmousedown = function(e) {
+    isDragging = true;
+    offsetX = e.clientX - panel.getBoundingClientRect().left;
+    offsetY = e.clientY - panel.getBoundingClientRect().top;
+    document.body.style.userSelect = "none";
+  };
+  document.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      panel.style.left = (e.clientX - offsetX) + "px";
+      panel.style.top = (e.clientY - offsetY) + "px";
+      panel.style.right = "auto";
+      panel.style.bottom = "auto";
+      panel.style.margin = "0";
+    }
+  });
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+    document.body.style.userSelect = "";
+  });
+
+  // Label buttons
   const labelDiv = panel.querySelector('#label-buttons');
   SHOT_LABELS.forEach(label => {
     const btn = document.createElement('button');
@@ -47,6 +89,9 @@ if (window.top === window && !document.getElementById('yt-shot-labeler-panel')) 
     btn.className = "yt-shot-labeler-label-btn";
     btn.onclick = () => {
       currentShot.label = label;
+      // Mark selected visually
+      [...labelDiv.children].forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
       updateStatus();
     };
     labelDiv.appendChild(btn);
@@ -89,15 +134,28 @@ if (window.top === window && !document.getElementById('yt-shot-labeler-panel')) 
     }
     shots.push({...currentShot});
     updateShotList();
+    // Reset
     currentShot = {start: null, end: null, label: null};
+    [...labelDiv.children].forEach(b => b.classList.remove("selected"));
     updateStatus();
   };
 
   function updateShotList() {
     const listDiv = panel.querySelector('#label-list');
     listDiv.innerHTML = shots.map((shot, i) =>
-      `<div>#${i+1}: <b>${shot.label}</b> [${shot.start.toFixed(2)}s - ${shot.end.toFixed(2)}s]</div>`
+      `<div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;">#${i+1}: <b>${shot.label}</b> [${shot.start.toFixed(2)}s - ${shot.end.toFixed(2)}s]</div>
+        <button title="Delete" class="yt-shot-labeler-delete" data-index="${i}" style="background:transparent;border:none;cursor:pointer;font-size:15px;">🗑️</button>
+      </div>`
     ).join("");
+    // Add delete handlers
+    listDiv.querySelectorAll('.yt-shot-labeler-delete').forEach(btn => {
+      btn.onclick = function() {
+        const idx = parseInt(btn.getAttribute('data-index'));
+        shots.splice(idx, 1);
+        updateShotList();
+      };
+    });
   }
 
   // Export labels as CSV
