@@ -136,3 +136,9 @@ models/*
 
 #config file has sensitive data
 .mlflow_uri
+
+# video files  
+*.mp4
+
+# macOS
+.DS_Store
