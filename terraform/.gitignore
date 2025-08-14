@@ -1,0 +1,12 @@
+# Local Terraform state files
+terraform.tfstate
+terraform.tfstate.*
+*.tfplan
+*.tfplan.*
+tfplan.out
+
+# Crash logs
+crash.log
+
+# Terraform provider and plugin directories
+.terraform/
