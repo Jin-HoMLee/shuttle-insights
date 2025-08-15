@@ -1,9 +1,9 @@
 import json
 
-LOCAL_MODEL_DIR = "../../models/movenet/saved_model" # Local model path (where your trained model is on disk)
+LOCAL_MODEL_DIR = "../models/movenet/saved_model" # Local model path (where your trained model is on disk)
 
 # Get global vars from terraform output
-with open("../../terraform/terraform_outputs.json") as f:
+with open("terraform/terraform_outputs.json") as f:
     tf_outputs = json.load(f)
 PROJECT_ID = tf_outputs["project_id"]["value"]
 REGION = tf_outputs["region"]["value"]
