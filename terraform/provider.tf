@@ -1,4 +1,4 @@
 provider "google" {
-  project = "shuttle-insights"
+  project = var.project_id
   region  = var.region
 }

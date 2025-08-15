@@ -1,0 +1,17 @@
+{
+  "bucket_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "jinhomlee-movenet-2024"
+  },
+  "project_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "shuttle-insights"
+  },
+  "region": {
+    "sensitive": false,
+    "type": "string",
+    "value": "us-central1"
+  }
+}
