@@ -1,6 +1,9 @@
+# notebooks/01_pose_overlay_video.ipynb
 ipykernel==6.30.1
 pandas==2.3.1
 matplotlib==3.10.5
 mediapipe==0.10.21
 opencv-python==4.12.0.88
 yt-dlp==2025.8.11
+# notebooks/02_manual_labeling_segmenting.ipynb
+ipywidgets==8.1.7
