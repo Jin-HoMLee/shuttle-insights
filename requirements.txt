@@ -7,3 +7,7 @@ opencv-python==4.12.0.88
 yt-dlp==2025.8.11
 # notebooks/02_manual_labeling_segmenting.ipynb
 ipywidgets==8.1.7
+# notebooks/03_lstm_shot_prediction.ipynb
+scikit-learn==1.7.1
+tensorflow==2.20.0
+seaborn==0.13.2
