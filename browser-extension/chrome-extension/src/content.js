@@ -1,7 +1,11 @@
 import { createLabelerPanel } from './panel.js';
 
 // === Vertex AI Pose Overlay Logic ===
-const VERTEX_AI_ENDPOINT = 'https://us-central1-aiplatform.googleapis.com/v1/projects/495366704424/locations/us-central1/endpoints/7801117462442803200:predict'; // <-- Replace with your endpoint
+// Vertex AI endpoint configuration
+const PROJECT_ID = '495366704424';
+const LOCATION = 'us-central1';
+const ENDPOINT_ID = '912861832379629568'; // <-- Change this value only
+const VERTEX_AI_ENDPOINT = `https://us-central1-aiplatform.googleapis.com/v1/projects/${PROJECT_ID}/locations/${LOCATION}/endpoints/${ENDPOINT_ID}:predict`;
 
 // Create overlay canvas
 function createOverlayCanvas(video) {
