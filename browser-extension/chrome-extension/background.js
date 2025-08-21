@@ -1,4 +1,18 @@
-// Service worker for YouTube Shot Labeler
+// Listen for token requests from content script
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.action === 'get-oauth-token') {
+    chrome.identity.getAuthToken({ interactive: true }, function(token) {
+      if (chrome.runtime.lastError || !token) {
+        sendResponse({ error: chrome.runtime.lastError });
+      } else {
+        sendResponse({ token });
+      }
+    });
+    // Return true to indicate async response
+    return true;
+  }
+});
+// Service worker for YouTube Badminton Shot Labeler
 
 // Listen for extension icon click to toggle panel
 chrome.action.onClicked.addListener((tab) => {

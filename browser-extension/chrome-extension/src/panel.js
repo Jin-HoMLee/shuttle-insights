@@ -22,10 +22,9 @@ export function createLabelerPanel() {
   panel.innerHTML = `
     <div id="yt-shot-labeler-header" class="yt-shot-labeler-section-title">
       <button id="yt-shot-labeler-close" title="Close" style="float:right;background:transparent;border:none;font-size:18px;cursor:pointer;">×</button>
-      <strong style="font-size:16px;">YouTube Shot Labeler</strong>
+      <strong style="font-size:16px;">YouTube Badminton Shot Labeler</strong>
     </div>
     <div id="yt-shot-labeler-content">
-      <hr>
       <div class="yt-shot-labeler-section">
         <div class="yt-shot-labeler-section-title">Video Details</div>
         <div class="yt-shot-labeler-info">
@@ -33,6 +32,10 @@ export function createLabelerPanel() {
           <div><b>Video Title:</b> <span id="yt-shot-labeler-videotitle">${videoTitle}</span></div>
           <div style="max-width:310px;word-break:break-all;"><b>URL:</b> <span id="yt-shot-labeler-url">${videoUrl}</span></div>
         </div>
+      </div>
+      <div class="yt-shot-labeler-section">
+        <div class="yt-shot-labeler-section-title">Overlay Poses</div>
+        <button id="custom-action-btn" style="margin-bottom:10px;">Custom Action</button>
       </div>
       <hr>
       <div class="yt-shot-labeler-section">
@@ -76,6 +79,24 @@ export function createLabelerPanel() {
 
   addResizeHandles(panel);
   document.body.appendChild(panel);
+
+  // Add event listener for custom action button
+  const customBtn = panel.querySelector('#custom-action-btn');
+  if (customBtn) {
+    customBtn.textContent = 'Start Overlay';
+    customBtn.dataset.state = 'stopped';
+    customBtn.onclick = () => {
+      if (customBtn.dataset.state === 'stopped') {
+        window.dispatchEvent(new CustomEvent('pose-overlay-control', { detail: { action: 'start' } }));
+        customBtn.textContent = 'Stop Overlay';
+        customBtn.dataset.state = 'started';
+      } else {
+        window.dispatchEvent(new CustomEvent('pose-overlay-control', { detail: { action: 'stop' } }));
+        customBtn.textContent = 'Start Overlay';
+        customBtn.dataset.state = 'stopped';
+      }
+    };
+  }
 
   // Make scrollable
   const observer = new MutationObserver(() => {
