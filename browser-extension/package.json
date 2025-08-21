@@ -3,6 +3,6 @@
     "esbuild": "^0.25.5"
   }, 
   "scripts": {
-  "build": "esbuild src/content.js --bundle --outfile=dist/content.js"
+  "build": "esbuild chrome-extension/src/content.js --bundle --outfile=chrome-extension/dist/content.js"
   }
 }

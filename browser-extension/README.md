@@ -45,6 +45,19 @@ This browser extension lets you label shots/events in any YouTube video and expo
 
 - To add new labels, edit the `badminton_shots_glossary.json`.
 
+## Packaging / Rebuilding
+After changing code in browser-extension/chrome-extension/src the files should be packaged / rebuilt again via node: 
+
+1. Move into the chrome extension folder, e.g.  
+```
+cd shuttle-insights/browser-extension/chrome-extension
+``` 
+2. Run packaging with
+```
+npm run build
+```
+
+
 ---
 
 **Enjoy!**
