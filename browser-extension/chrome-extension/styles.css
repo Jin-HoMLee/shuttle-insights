@@ -1,0 +1,106 @@
+#yt-shot-labeler-panel {
+  box-sizing: border-box;
+}
+
+.yt-shot-labeler-section {
+  margin: 0 12px 10px 12px;
+}
+.yt-shot-labeler-section-title {
+  font-size: 15px;
+  font-weight: bold;
+  color: #183e67;
+  margin: 10px 0 4px 0;
+  letter-spacing: 0.5px;
+}
+
+.yt-shot-labeler-info {
+  font-size: 13px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+#label-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Category sub-section for label buttons */
+.yt-shot-labeler-category-section {
+  margin-bottom: 8px;
+  padding: 8px 6px 6px 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #fafdff;
+  box-sizing: border-box;
+}
+
+.yt-shot-labeler-category-title {
+  font-weight: bold;
+  color: #1761a0;
+  margin-bottom: 5px;
+  font-size: 13.5px;
+}
+
+.yt-shot-labeler-label-btn {
+  background: #e6eefc;
+  border: 1px solid #b6c7e7;
+  border-radius: 4px;
+  margin: 2px 4px 2px 0;
+  padding: 2px 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.14s, border 0.14s;
+  color: #173a6a;
+  outline: none;
+  display: inline-block;
+}
+.yt-shot-labeler-label-btn.selected,
+.yt-shot-labeler-label-btn:active {
+  background: #1761a0;
+  color: #fff;
+  border: 1.5px solid #183e67;
+}
+
+.yt-shot-labeler-label-btn:hover {
+  background: #b2d2fa;
+  color: #183e67;
+}
+
+/* Resize handles */
+.yt-shot-labeler-resize-handle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  z-index: 10;
+  background: transparent;
+}
+.yt-shot-labeler-resize-handle.n { top: -6px; left: 50%; transform: translateX(-50%); cursor: ns-resize; }
+.yt-shot-labeler-resize-handle.s { bottom: -6px; left: 50%; transform: translateX(-50%); cursor: ns-resize; }
+.yt-shot-labeler-resize-handle.e { right: -6px; top: 50%; transform: translateY(-50%); cursor: ew-resize; }
+.yt-shot-labeler-resize-handle.w { left: -6px; top: 50%; transform: translateY(-50%); cursor: ew-resize; }
+.yt-shot-labeler-resize-handle.ne { top: -6px; right: -6px; cursor: nesw-resize; }
+.yt-shot-labeler-resize-handle.nw { top: -6px; left: -6px; cursor: nwse-resize; }
+.yt-shot-labeler-resize-handle.se { bottom: -6px; right: -6px; cursor: nwse-resize; }
+.yt-shot-labeler-resize-handle.sw { bottom: -6px; left: -6px; cursor: nesw-resize; }
+
+/* List of labeled shots */
+#label-list > div {
+  margin-bottom: 4px;
+  border-bottom: 1px dashed #e0e0e0;
+  padding-bottom: 2px;
+}
+
+.yt-shot-labeler-delete {
+  color: #e14;
+  background: transparent;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  margin-left: 2px;
+}
+.yt-shot-labeler-delete:hover {
+  color: #fff;
+  background: #e14;
+  border-radius: 3px;
+}

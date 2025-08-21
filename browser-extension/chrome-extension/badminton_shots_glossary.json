@@ -1,0 +1,62 @@
+{
+	"attribution": "Adapted and modified from https://www.worldbadminton.com/glossary.htm",
+	"categories": [
+		{
+			"category": "Serve",
+			"shots": [
+				{ "id": 1,  "term": "Short",  "definition": "A serve that barely clears the net and lands just inside the receiver's service court." },
+				{ "id": 2,  "term": "Flick",  "definition": "A serve used in doubles, using a quick flick of the wrist to send the shuttle high and deep." },
+				{ "id": 3,  "term": "Drive",  "definition": "A serve hit flat and fast, skimming low over the net." },
+				{ "id": 4,  "term": "Long (High)",   "definition": "A serve hit deep into the back boundary line of the receiver's court." },
+				{ "id": 5,  "term": "Spin",   "definition": "A serve that imparts spin to the shuttle, making it unpredictable to return." }
+			]
+		},
+		{
+			"category": "Clear",
+			"shots": [
+				{ "id": 6,  "term": "Normal",     "definition": "A shot hit deep to the opponent's back boundary line. The high clear is a defensive shot, while the flatter attacking clear is used offensively." },
+				{ "id": 7,  "term": "Defensive (High)",  "definition": "A high, deep clear shot used to move the opponent back and gain time to recover position." },
+				{ "id": 8,  "term": "Offensive (Punch, Flat)",  "definition": "A clear hit with speed and flat trajectory to pressure the opponent." }
+			]
+		},
+		{
+			"category": "Lift",
+			"shots": [
+				{ "id": 9,   "term": "Normal",      "definition": "A shot that sends the shuttle high and deep into the opponent's court." },
+				{ "id": 10,  "term": "Flat",        "definition": "A shot that sends the shuttle high and deep into the opponent's court." }
+			]
+		},	
+		{
+			"category": "Drop",
+			"shots": [
+				{ "id": 11, "term": "Normal",    "definition": "A shot hit softly and with finesse to fall rapidly and close to the net on the opponent's side." }, 
+				{ "id": 12, "term": "Slice",   "definition": "A deceptive shot where the shuttle is sliced with the racket to reduce its speed and alter its direction." },
+				{ "id": 13, "term": "Stop (Yong-Bo)",           "definition": "A shot hit softly and with finesse to fall rapidly and close to the net on the opponent's side." }
+			]
+		},	
+		{
+			"category": "Net Shot",
+			"shots": [
+				{ "id": 14, "term": "Normal",     "definition": "Shot played from the forecourt close to the net that just clears the net and drops sharply." },
+				{ "id": 15, "term": "Hairpin",      "definition": "A shot made from below and very close to the net, causing the shuttle to rise, just clear the net, and drop sharply down the other side; named because the shuttle's path resembles the shape of a hairpin." }, 
+				{ "id": 16, "term": "Spin",    "definition": "A net shot with spin to the shuttle, making it unpredictable to return." }
+			]
+		},
+		{
+			"category": "Smash & Kill",
+			"shots": [
+				{ "id": 17, "term": "Smash",          "definition": "A hard-hit overhead shot that forces the shuttle sharply downward; badminton's primary attacking stroke." }, 
+				{ "id": 18, "term": "Half Smash",          "definition": "A hard-hit overhead shot that forces the shuttle sharply downward; badminton's primary attacking stroke." }, 
+				{ "id": 19,  "term": "(Net) Kill",           "definition": "Fast, downward shot that cannot be returned; a 'putaway'." },
+				{ "id": 20, "term": "Push",    "definition": "An offensive shot played by pushing the shuttle with a controlled motion, usually from net to the opponent's midcourt or body." }
+			]
+		},
+		{
+			"category": "Drive & Block",
+			"shots": [
+				{ "id": 22, "term": "Drive",        "definition": "A fast and low shot that makes a horizontal flight over the net." }, 
+				{ "id": 23,  "term": "Block",        "definition": "A shot used to return a smash, directed softly and close to the net." }
+			]
+		}
+	]
+}
