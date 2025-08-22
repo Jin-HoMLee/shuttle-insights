@@ -1,150 +1,162 @@
+window.addEventListener('DOMContentLoaded', init);
+document.addEventListener('yt-navigate-finish', init); // For YouTube navigation (if available)
+import * as poseDetection from '@tensorflow-models/pose-detection';
+import * as tf from '@tensorflow/tfjs-core';
+import '@tensorflow/tfjs-backend-webgl';
 import { createLabelerPanel } from './panel.js';
 
-// === Vertex AI Pose Overlay Logic ===
-// Vertex AI endpoint configuration
-const PROJECT_ID = '495366704424';
-const LOCATION = 'us-central1';
-const ENDPOINT_ID = '912861832379629568'; // <-- Change this value only
-const VERTEX_AI_ENDPOINT = `https://us-central1-aiplatform.googleapis.com/v1/projects/${PROJECT_ID}/locations/${LOCATION}/endpoints/${ENDPOINT_ID}:predict`;
+console.log('[Shot Labeler] content.js injected');
 
-// Create overlay canvas
+const PANEL_ID = 'yt-shot-labeler-panel';
+let detector = null;
+let overlayActive = false;
+let poseLoopId = null;
+let mainVideo = null;
+let videoCollection = null;
+
+// --- Helper functions ---
+function removeOverlayCanvas() {
+  const oldCanvas = document.getElementById('pose-overlay-canvas');
+  if (oldCanvas && oldCanvas.parentElement) {
+    oldCanvas.parentElement.removeChild(oldCanvas);
+  }
+}
+
+function disconnectOverlayObserver() {
+  if (window.overlayResizeObserver) {
+    window.overlayResizeObserver.disconnect();
+    window.overlayResizeObserver = null;
+  }
+}
+
+function getLatestVideo() {
+  let videos = document.getElementsByClassName('html5-main-video');
+  return videos.length ? videos[videos.length - 1] : null;
+}
+
+function init() {
+  mainVideo = getLatestVideo();
+  if (!mainVideo) return;
+  // If overlay is active, stop and restart with the new video
+  if (overlayActive) {
+    stopPoseOverlay();
+  }
+  // Start overlay if panel/button requests it
+  // Optionally, auto-start overlay here if desired
+}
+
 function createOverlayCanvas(video) {
-  let canvas = document.getElementById('pose-overlay-canvas');
-  if (!canvas) {
-    canvas = document.createElement('canvas');
-    canvas.id = 'pose-overlay-canvas';
-    canvas.style.position = 'absolute';
-    canvas.style.left = video.offsetLeft + 'px';
-    canvas.style.top = video.offsetTop + 'px';
-    canvas.style.pointerEvents = 'none';
+  // Remove any old overlay canvas and disconnect ResizeObserver
+  removeOverlayCanvas();
+  disconnectOverlayObserver();
+  // Find the current video container (YouTube uses 'html5-video-container')
+  const containers = document.getElementsByClassName('html5-video-container');
+  const container = containers.length ? containers[containers.length - 1] : video.parentElement;
+  // Create new overlay canvas
+  const canvas = document.createElement('canvas');
+  canvas.id = 'pose-overlay-canvas';
+  canvas.style.position = 'absolute';
+  canvas.style.top = '0px';
+  canvas.style.left = '0px';
+  canvas.style.pointerEvents = 'none';
+  canvas.style.zIndex = 10000;
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  container.appendChild(canvas);
+  // Use ResizeObserver to keep canvas size in sync with video
+  if (window.overlayResizeObserver) {
+    window.overlayResizeObserver.disconnect();
+  }
+  window.overlayResizeObserver = new ResizeObserver(() => {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    video.parentElement.appendChild(canvas);
-  }
+  });
+  window.overlayResizeObserver.observe(video);
   return canvas;
 }
 
-// Capture current video frame as a 384x640 RGB int32 array
-function getFrameData(video) {
-  // Resize to 128x224 for MoveNet (multiples of 32, preserves aspect ratio)
-  const targetWidth = 224;
-  const targetHeight = 128;
-  const canvas = document.createElement('canvas');
-  canvas.width = targetWidth;
-  canvas.height = targetHeight;
-  const ctx = canvas.getContext('2d');
-  ctx.drawImage(video, 0, 0, targetWidth, targetHeight);
-  // Get image data as Uint8ClampedArray
-  const imageData = ctx.getImageData(0, 0, targetWidth, targetHeight).data;
-  // Convert to nested array [384][640][3] and int32
-  const arr = [];
-  for (let y = 0; y < targetHeight; y++) {
-    const row = [];
-    for (let x = 0; x < targetWidth; x++) {
-      const idx = (y * targetWidth + x) * 4;
-      // [R, G, B] only, ignore alpha
-      row.push([
-        imageData[idx],
-        imageData[idx + 1],
-        imageData[idx + 2]
-      ]);
-    }
-    arr.push(row);
-  }
-  return arr;
-}
-
-// Send frame to Vertex AI endpoint
-async function predictPose(frameData, accessToken) {
-  const payload = {
-    instances: [frameData] // Now a [384,640,3] int32 array
-  };
-  // Debug: log payload shape and type
-  console.log('Vertex AI payload:', {
-    shape: [frameData.length, frameData[0]?.length, frameData[0]?.[0]?.length],
-    sample: frameData[0]?.[0],
-    type: typeof frameData[0]?.[0]?.[0],
-    payload: payload
-  });
-  const response = await fetch(VERTEX_AI_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  });
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Vertex AI error:', response.status, errorText);
-    throw new Error(`Vertex AI error: ${response.status} ${errorText}`);
-  }
-  return response.json();
-}
-
-// Draw keypoints on overlay canvas
-function drawKeypoints(canvas, predictions) {
+function drawKeypoints(canvas, poses, threshold = 0.2) {
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  if (!predictions || !predictions.length) return;
-  predictions.forEach(person => {
-    if (!person.keypoints) return;
-    person.keypoints.forEach(kp => {
-      ctx.beginPath();
-      ctx.arc(kp.x, kp.y, 5, 0, 2 * Math.PI);
-      ctx.fillStyle = 'red';
-      ctx.fill();
-    });
-    // Optionally draw skeleton lines here
-  });
-}
-
-// Get OAuth token from background script
-function getAccessToken() {
-  return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({ action: 'get-oauth-token' }, (response) => {
-      if (response && response.token) {
-        resolve(response.token);
-      } else {
-        reject(response && response.error ? response.error : 'No token received');
+  poses.forEach(pose => {
+    pose.keypoints.forEach(kp => {
+      if (kp.score > threshold) {
+        ctx.beginPath();
+        ctx.arc(kp.x, kp.y, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = 'red';
+        ctx.fill();
       }
     });
   });
 }
 
-// Main polling loop with authentication
-let overlayInterval = null;
+async function setupDetector() {
+  await tf.setBackend('webgl');
+  await tf.ready();
+  detector = await poseDetection.createDetector(
+    poseDetection.SupportedModels.MoveNet,
+    { modelType: poseDetection.movenet.modelType.MULTIPOSE_LIGHTNING }
+  );
+}
 
-// Main polling loop with authentication
-async function startPoseOverlay() {
-  const video = document.querySelector('video');
-  if (!video || video.videoWidth === 0) return;
-  const overlay = createOverlayCanvas(video);
-  try {
-    const accessToken = await getAccessToken();
-    overlayInterval = setInterval(async () => {
-      const frameData = getFrameData(video);
-      try {
-        const result = await predictPose(frameData, accessToken);
-        drawKeypoints(overlay, result.predictions);
-      } catch (e) {
-        // Optionally log errors
+async function poseOverlayLoop(video, overlay) {
+  if (!overlayActive) return;
+  // Always re-query the video element in case YouTube replaced it or changed quality
+  const currentVideo = getLatestVideo();
+  let currentOverlay = overlay;
+  if (currentVideo !== video) {
+    // Video element changed (e.g., ad transition or manual quality change)
+    removeOverlayCanvas();
+    disconnectOverlayObserver();
+    // Wait for the new video element to update its resolution after quality change
+    let initialWidth = currentVideo.videoWidth;
+    let initialHeight = currentVideo.videoHeight;
+    let tries = 0;
+    while (tries < 40) {
+      await new Promise(res => setTimeout(res, 50));
+      if (currentVideo.videoWidth !== initialWidth || currentVideo.videoHeight !== initialHeight) {
+        break;
       }
-    }, 1000); // 1 FPS
-  } catch (err) {
-    console.error('Failed to get OAuth token:', err);
+      tries++;
+    }
+    currentOverlay = createOverlayCanvas(currentVideo);
+    video = currentVideo;
   }
+  // Always use latest video dimensions for pose detection
+  if (video.videoWidth === 0 || video.videoHeight === 0 || video.paused || video.ended) {
+    poseLoopId = requestAnimationFrame(() => poseOverlayLoop(video, currentOverlay));
+    return;
+  }
+  const poses = await detector.estimatePoses(video, { maxPoses: 6 });
+  drawKeypoints(currentOverlay, poses);
+  poseLoopId = requestAnimationFrame(() => poseOverlayLoop(video, currentOverlay));
+}
+
+async function startPoseOverlay() {
+  if (overlayActive) return;
+  const video = getLatestVideo();
+  if (!video || video.videoWidth === 0) {
+    alert('No video element found or video not loaded.');
+    return;
+  }
+  if (!detector) {
+    await setupDetector();
+  }
+  const overlay = createOverlayCanvas(video);
+  overlayActive = true;
+  poseOverlayLoop(video, overlay);
 }
 
 function stopPoseOverlay() {
-  if (overlayInterval) {
-    clearInterval(overlayInterval);
-    overlayInterval = null;
-    const canvas = document.getElementById('pose-overlay-canvas');
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
+  overlayActive = false;
+  if (poseLoopId) {
+    cancelAnimationFrame(poseLoopId);
+    poseLoopId = null;
+  }
+  const canvas = document.getElementById('pose-overlay-canvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 }
 
@@ -157,16 +169,16 @@ window.addEventListener('pose-overlay-control', (e) => {
   }
 });
 
-// Overlay is now controlled only by the panel button
-
-const PANEL_ID = 'yt-shot-labeler-panel';
-
+// Panel toggle logic remains unchanged
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.action === "toggle-panel") {
+    console.log('[Shot Labeler] Received toggle-panel message');
     const panel = document.getElementById(PANEL_ID);
     if (panel) {
+      console.log('[Shot Labeler] Removing panel');
       panel.remove();
     } else {
+      console.log('[Shot Labeler] Creating panel');
       createLabelerPanel();
     }
   }

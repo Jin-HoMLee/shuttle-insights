@@ -1,15 +1,9 @@
   {
-    "oauth2": {
-      "client_id": "495366704424-1ibiimstjq2gdcr2jg0rnq82ghnvd8jt.apps.googleusercontent.com",
-      "scopes": [
-        "https://www.googleapis.com/auth/cloud-platform"
-      ]
-    },
   "manifest_version": 3,
   "name": "YouTube Badminton Shot Labeler",
   "version": "2.0",
   "description": "Label shots/events in any YouTube video, export to CSV.",
-  "permissions": ["downloads", "scripting", "storage", "activeTab", "identity"],
+  "permissions": ["downloads", "scripting", "storage", "activeTab"],
   "host_permissions": [
     "https://www.youtube.com/*"
   ],
@@ -21,8 +15,10 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.youtube.com/watch*"],
-      "js": ["dist/content.js"],
+      "matches": ["https://www.youtube.com/*"],
+      "js": [
+        "dist/content.js"
+      ],
       "css": ["styles.css"],
       "run_at": "document_idle"
     }
