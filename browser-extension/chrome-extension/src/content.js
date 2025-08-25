@@ -1,27 +1,26 @@
-window.addEventListener('DOMContentLoaded', init);
-document.addEventListener('yt-navigate-finish', init); // For YouTube navigation (if available)
+window.addEventListener('DOMContentLoaded', init); // Ensures that init runs only after HTML document is fully loaded and parsed
+document.addEventListener('yt-navigate-finish', init); // Ensures that init re-runs after navigating to new videos
+
 import * as poseDetection from '@tensorflow-models/pose-detection';
 import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
-import { createLabelerPanel } from './panel.js';
 
-console.log('[Shot Labeler] content.js injected');
+import { createLabelerPanel } from './panel.js'; 
 
 const PANEL_ID = 'yt-shot-labeler-panel';
 let detector = null;
 let overlayActive = false;
 let poseLoopId = null;
 let mainVideo = null;
-let videoCollection = null;
 
 // --- Helper functions ---
+// Remove overlay canvas from DOM
 function removeOverlayCanvas() {
   const oldCanvas = document.getElementById('pose-overlay-canvas');
-  if (oldCanvas && oldCanvas.parentElement) {
-    oldCanvas.parentElement.removeChild(oldCanvas);
-  }
+  if (oldCanvas?.parentElement) oldCanvas.parentElement.removeChild(oldCanvas);
 }
 
+// Disconnect ResizeObserver for overlay
 function disconnectOverlayObserver() {
   if (window.overlayResizeObserver) {
     window.overlayResizeObserver.disconnect();
@@ -29,30 +28,26 @@ function disconnectOverlayObserver() {
   }
 }
 
+// Get the latest YouTube video element
 function getLatestVideo() {
-  let videos = document.getElementsByClassName('html5-main-video');
+  const videos = document.getElementsByClassName('html5-main-video');
   return videos.length ? videos[videos.length - 1] : null;
 }
 
+// Initialize main video and overlay state
 function init() {
   mainVideo = getLatestVideo();
   if (!mainVideo) return;
-  // If overlay is active, stop and restart with the new video
-  if (overlayActive) {
-    stopPoseOverlay();
-  }
-  // Start overlay if panel/button requests it
+  if (overlayActive) stopPoseOverlay();
   // Optionally, auto-start overlay here if desired
 }
 
+// Create overlay canvas and attach to video container
 function createOverlayCanvas(video) {
-  // Remove any old overlay canvas and disconnect ResizeObserver
   removeOverlayCanvas();
   disconnectOverlayObserver();
-  // Find the current video container (YouTube uses 'html5-video-container')
   const containers = document.getElementsByClassName('html5-video-container');
   const container = containers.length ? containers[containers.length - 1] : video.parentElement;
-  // Create new overlay canvas
   const canvas = document.createElement('canvas');
   canvas.id = 'pose-overlay-canvas';
   canvas.style.position = 'absolute';
@@ -63,10 +58,7 @@ function createOverlayCanvas(video) {
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
   container.appendChild(canvas);
-  // Use ResizeObserver to keep canvas size in sync with video
-  if (window.overlayResizeObserver) {
-    window.overlayResizeObserver.disconnect();
-  }
+  window.overlayResizeObserver?.disconnect();
   window.overlayResizeObserver = new ResizeObserver(() => {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -75,6 +67,7 @@ function createOverlayCanvas(video) {
   return canvas;
 }
 
+// Draw pose keypoints on overlay canvas
 function drawKeypoints(canvas, poses, threshold = 0.2) {
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -90,6 +83,7 @@ function drawKeypoints(canvas, poses, threshold = 0.2) {
   });
 }
 
+// Setup pose detector
 async function setupDetector() {
   await tf.setBackend('webgl');
   await tf.ready();
@@ -99,30 +93,25 @@ async function setupDetector() {
   );
 }
 
+// Main pose overlay loop
 async function poseOverlayLoop(video, overlay) {
   if (!overlayActive) return;
-  // Always re-query the video element in case YouTube replaced it or changed quality
   const currentVideo = getLatestVideo();
   let currentOverlay = overlay;
   if (currentVideo !== video) {
-    // Video element changed (e.g., ad transition or manual quality change)
     removeOverlayCanvas();
     disconnectOverlayObserver();
-    // Wait for the new video element to update its resolution after quality change
-    let initialWidth = currentVideo.videoWidth;
-    let initialHeight = currentVideo.videoHeight;
+    const initialWidth = currentVideo.videoWidth;
+    const initialHeight = currentVideo.videoHeight;
     let tries = 0;
     while (tries < 40) {
       await new Promise(res => setTimeout(res, 50));
-      if (currentVideo.videoWidth !== initialWidth || currentVideo.videoHeight !== initialHeight) {
-        break;
-      }
+      if (currentVideo.videoWidth !== initialWidth || currentVideo.videoHeight !== initialHeight) break;
       tries++;
     }
     currentOverlay = createOverlayCanvas(currentVideo);
     video = currentVideo;
   }
-  // Always use latest video dimensions for pose detection
   if (video.videoWidth === 0 || video.videoHeight === 0 || video.paused || video.ended) {
     poseLoopId = requestAnimationFrame(() => poseOverlayLoop(video, currentOverlay));
     return;
@@ -132,6 +121,7 @@ async function poseOverlayLoop(video, overlay) {
   poseLoopId = requestAnimationFrame(() => poseOverlayLoop(video, currentOverlay));
 }
 
+// Start overlay
 async function startPoseOverlay() {
   if (overlayActive) return;
   const video = getLatestVideo();
@@ -139,14 +129,13 @@ async function startPoseOverlay() {
     alert('No video element found or video not loaded.');
     return;
   }
-  if (!detector) {
-    await setupDetector();
-  }
+  if (!detector) await setupDetector();
   const overlay = createOverlayCanvas(video);
   overlayActive = true;
   poseOverlayLoop(video, overlay);
 }
 
+// Stop overlay
 function stopPoseOverlay() {
   overlayActive = false;
   if (poseLoopId) {
@@ -162,24 +151,15 @@ function stopPoseOverlay() {
 
 // Listen for start/stop overlay events from panel button
 window.addEventListener('pose-overlay-control', (e) => {
-  if (e.detail.action === 'start') {
-    startPoseOverlay();
-  } else if (e.detail.action === 'stop') {
-    stopPoseOverlay();
-  }
+  if (e.detail.action === 'start') startPoseOverlay();
+  else if (e.detail.action === 'stop') stopPoseOverlay();
 });
 
-// Panel toggle logic remains unchanged
+// Panel toggle logic
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  if (msg.action === "toggle-panel") {
-    console.log('[Shot Labeler] Received toggle-panel message');
+  if (msg.action === 'toggle-panel') {
     const panel = document.getElementById(PANEL_ID);
-    if (panel) {
-      console.log('[Shot Labeler] Removing panel');
-      panel.remove();
-    } else {
-      console.log('[Shot Labeler] Creating panel');
-      createLabelerPanel();
-    }
+    if (panel) panel.remove();
+    else createLabelerPanel();
   }
 });
