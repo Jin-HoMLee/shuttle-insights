@@ -6,17 +6,6 @@ let detector = null;
 let overlayActive = false;
 let poseLoopId = null;
 
-// Initialize main video and overlay state
-export function init() {
-  if (overlayActive) {
-    stopPoseOverlay(); // stop overlay if active
-    startPoseOverlay(); // andre-start overlay
-  }
-}
-
-window.addEventListener('DOMContentLoaded', init); // Ensures that init runs only after HTML document is fully loaded and parsed
-document.addEventListener('yt-navigate-finish', init); // Ensures that init re-runs after navigating to new videos
-
 // Main pose overlay loop
 async function poseOverlayLoop(video, overlay) {
   if (!overlayActive) return;
