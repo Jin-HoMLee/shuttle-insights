@@ -3,17 +3,12 @@ import { getVideo, disconnectOverlayObserver, removeOverlayCanvas, createOverlay
 
 const PANEL_ID = 'yt-shot-labeler-panel';
 let detector = null;
-let poseLoopId = null;
 
 // Pose overlay loop
 async function poseOverlayLoop(video, detector, overlay) {
-  if (video.videoWidth === 0 || video.videoHeight === 0 || video.paused || video.ended) {
-    poseLoopId = requestAnimationFrame(() => poseOverlayLoop(video, detector, overlay));
-    return;
-  }
   const poses = await detector.estimatePoses(video, { maxPoses: 6 });
   drawKeypoints(overlay, poses);
-  poseLoopId = requestAnimationFrame(() => poseOverlayLoop(video, detector, overlay));
+  requestAnimationFrame(() => poseOverlayLoop(video, detector, overlay));
 }
 
 // Start overlay
@@ -30,10 +25,6 @@ async function startPoseOverlay() {
 
 // Stop overlay
 function stopPoseOverlay() {
-  if (poseLoopId) {
-    cancelAnimationFrame(poseLoopId);
-    poseLoopId = null;
-  }
   const canvas = document.getElementById('pose-overlay-canvas');
   if (canvas) {
     const ctx = canvas.getContext('2d');
