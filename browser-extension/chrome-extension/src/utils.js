@@ -87,18 +87,3 @@ export async function setupDetector() {
   );
 }
 
-// Draw pose keypoints on overlay canvas
-export function drawKeypoints(canvas, poses, threshold = 0.2) {
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  poses.forEach(pose => {
-    pose.keypoints.forEach(kp => {
-      if (kp.score > threshold) {
-        ctx.beginPath();
-        ctx.arc(kp.x, kp.y, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = 'red';
-        ctx.fill();
-      }
-    });
-  });
-}

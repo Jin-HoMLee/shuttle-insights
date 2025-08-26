@@ -1,5 +1,6 @@
 import { togglePanel } from './panel.js';
-import { getVideo, disconnectOverlayObserver, removeOverlayCanvas, createOverlayCanvas, drawKeypoints, setupDetector } from './utils.js'; 
+import { getVideo, disconnectOverlayObserver, removeOverlayCanvas, createOverlayCanvas, setupDetector } from './utils.js'; 
+import { drawKeypoints, drawSkeletonAndBoxes} from './poseDrawing.js'; 
 
 let detector = null; // Pose detector instance (needed for pose estimation)
 let poseLoopId = null; // ID of the pose overlay loop (needed for canceling)
@@ -7,7 +8,12 @@ let poseLoopId = null; // ID of the pose overlay loop (needed for canceling)
 // Pose overlay loop
 async function poseOverlayLoop(video, detector, overlay) {
   const poses = await detector.estimatePoses(video, { maxPoses: 6 });
+  // draw keypoints
   drawKeypoints(overlay, poses);
+  // draw skeleton
+  const ctx = overlay.getContext('2d');
+  drawSkeletonAndBoxes(ctx, poses);
+  // request next animation frame
   poseLoopId = window.requestAnimationFrame(() => poseOverlayLoop(video, detector, overlay));
 }
 
