@@ -1,7 +1,6 @@
-import { createLabelerPanel } from './panel.js'; 
+import { togglePanel } from './panel.js';
 import { getVideo, disconnectOverlayObserver, removeOverlayCanvas, createOverlayCanvas, drawKeypoints, setupDetector } from './utils.js'; 
 
-const PANEL_ID = 'yt-shot-labeler-panel';
 let detector = null;
 
 // Pose overlay loop
@@ -39,10 +38,8 @@ window.addEventListener('pose-overlay-control', (e) => {
 });
 
 // Panel toggle logic
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((msg) => {
   if (msg.action === 'toggle-panel') {
-    const panel = document.getElementById(PANEL_ID);
-    if (panel) panel.remove();
-    else createLabelerPanel();
+    togglePanel();
   }
 });
