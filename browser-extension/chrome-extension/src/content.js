@@ -5,25 +5,15 @@ const PANEL_ID = 'yt-shot-labeler-panel';
 let detector = null;
 let poseLoopId = null;
 
-// Main pose overlay loop
+// Pose overlay loop
 async function poseOverlayLoop(video, overlay) {
-  const currentVideo = getVideo();
-  let currentOverlay = overlay;
-  if (currentVideo !== video) {
-    removeOverlayCanvas();
-    disconnectOverlayObserver();
-    const initialWidth = currentVideo.videoWidth;
-    const initialHeight = currentVideo.videoHeight;
-    currentOverlay = createOverlayCanvas(currentVideo);
-    video = currentVideo;
-  }
   if (video.videoWidth === 0 || video.videoHeight === 0 || video.paused || video.ended) {
-    poseLoopId = requestAnimationFrame(() => poseOverlayLoop(video, currentOverlay));
+    poseLoopId = requestAnimationFrame(() => poseOverlayLoop(video, overlay));
     return;
   }
   const poses = await detector.estimatePoses(video, { maxPoses: 6 });
-  drawKeypoints(currentOverlay, poses);
-  poseLoopId = requestAnimationFrame(() => poseOverlayLoop(video, currentOverlay));
+  drawKeypoints(overlay, poses);
+  poseLoopId = requestAnimationFrame(() => poseOverlayLoop(video, overlay));
 }
 
 // Start overlay
