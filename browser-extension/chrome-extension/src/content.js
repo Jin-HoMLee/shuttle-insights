@@ -27,12 +27,6 @@ async function poseOverlayLoop(video, overlay) {
     disconnectOverlayObserver();
     const initialWidth = currentVideo.videoWidth;
     const initialHeight = currentVideo.videoHeight;
-    let tries = 0;
-    while (tries < 40) {
-      await new Promise(res => setTimeout(res, 50));
-      if (currentVideo.videoWidth !== initialWidth || currentVideo.videoHeight !== initialHeight) break;
-      tries++;
-    }
     currentOverlay = createOverlayCanvas(currentVideo);
     video = currentVideo;
   }
