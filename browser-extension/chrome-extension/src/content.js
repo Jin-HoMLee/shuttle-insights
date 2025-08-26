@@ -1,6 +1,3 @@
-window.addEventListener('DOMContentLoaded', init); // Ensures that init runs only after HTML document is fully loaded and parsed
-document.addEventListener('yt-navigate-finish', init); // Ensures that init re-runs after navigating to new videos
-
 import { createLabelerPanel } from './panel.js'; 
 import { getVideo, disconnectOverlayObserver, removeOverlayCanvas, createOverlayCanvas, drawKeypoints, setupDetector } from './utils.js'; 
 
@@ -11,9 +8,14 @@ let poseLoopId = null;
 
 // Initialize main video and overlay state
 export function init() {
-  if (overlayActive) stopPoseOverlay();
-  // Optionally, auto-start overlay here if desired
+  if (overlayActive) {
+    stopPoseOverlay(); // stop overlay if active
+    startPoseOverlay(); // andre-start overlay
+  }
 }
+
+window.addEventListener('DOMContentLoaded', init); // Ensures that init runs only after HTML document is fully loaded and parsed
+document.addEventListener('yt-navigate-finish', init); // Ensures that init re-runs after navigating to new videos
 
 // Main pose overlay loop
 async function poseOverlayLoop(video, overlay) {
@@ -45,7 +47,6 @@ async function poseOverlayLoop(video, overlay) {
 
 // Start overlay
 async function startPoseOverlay() {
-  if (overlayActive) return;
   const video = getVideo();
   if (!video || video.videoWidth === 0) {
     alert('No video element found or video not loaded.');
