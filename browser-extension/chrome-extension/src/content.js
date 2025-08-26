@@ -3,12 +3,10 @@ import { getVideo, disconnectOverlayObserver, removeOverlayCanvas, createOverlay
 
 const PANEL_ID = 'yt-shot-labeler-panel';
 let detector = null;
-let overlayActive = false;
 let poseLoopId = null;
 
 // Main pose overlay loop
 async function poseOverlayLoop(video, overlay) {
-  if (!overlayActive) return;
   const currentVideo = getVideo();
   let currentOverlay = overlay;
   if (currentVideo !== video) {
@@ -37,13 +35,11 @@ async function startPoseOverlay() {
   }
   if (!detector) detector = await setupDetector();
   const overlay = createOverlayCanvas(video);
-  overlayActive = true;
   poseOverlayLoop(video, overlay);
 }
 
 // Stop overlay
 function stopPoseOverlay() {
-  overlayActive = false;
   if (poseLoopId) {
     cancelAnimationFrame(poseLoopId);
     poseLoopId = null;
