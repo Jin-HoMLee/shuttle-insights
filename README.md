@@ -195,6 +195,33 @@ pose_sequence = preprocess_pose_sequence(pose_data)
 prediction = predict_shot(model, pose_sequence)
 ```
 
+## Troubleshooting
+
+### Common Issues
+
+1. **Import errors when running scripts**
+   - Make sure your virtual environment is activated: `source .venv/bin/activate`
+   - Install dependencies: `pip install -r requirements.txt`
+
+2. **Dependency conflicts during installation**
+   - Try installing packages individually to identify conflicts
+   - Use `pip install --upgrade pip` before installing requirements
+   - Consider using fresh virtual environment
+
+3. **MediaPipe installation issues**
+   - MediaPipe has specific platform requirements
+   - Try: `pip install --upgrade mediapipe`
+   - On some systems, you may need to install system dependencies
+
+4. **Jupyter notebooks not starting**
+   - Install Jupyter: `pip install -r requirements_dev.txt`
+   - Or manually: `pip install jupyter ipykernel ipywidgets`
+
+5. **Browser extension not loading**
+   - Enable Developer mode in Chrome Extensions
+   - Check for console errors in the extension
+   - Rebuild with `npm run build` in the chrome-extension directory
+
 ## Contributing
 
 1. Fork the repository
