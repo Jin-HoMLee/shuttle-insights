@@ -68,7 +68,6 @@ export function createOverlayCanvas(video) {
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
   container.appendChild(canvas);
-  window.overlayResizeObserver?.disconnect();
   window.overlayResizeObserver = new ResizeObserver(() => {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
