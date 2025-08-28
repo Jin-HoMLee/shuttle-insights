@@ -65,15 +65,49 @@ export function createOverlayCanvas(video) {
   canvas.style.left = '0px';
   canvas.style.pointerEvents = 'none';
   canvas.style.zIndex = 10000;
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
+  
+  // Set initial canvas dimensions to match video's intrinsic dimensions
+  updateCanvasDimensions(canvas, video);
   container.appendChild(canvas);
+  
+  // Use ResizeObserver for DOM element resize events
   window.overlayResizeObserver = new ResizeObserver(() => {
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    updateCanvasDimensions(canvas, video);
   });
   window.overlayResizeObserver.observe(video);
+  
+  // Store last known video dimensions for change detection
+  canvas._lastVideoWidth = video.videoWidth;
+  canvas._lastVideoHeight = video.videoHeight;
+  
   return canvas;
+}
+
+// Update canvas dimensions to match video's intrinsic dimensions
+export function updateCanvasDimensions(canvas, video) {
+  if (video.videoWidth > 0 && video.videoHeight > 0) {
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+  }
+}
+
+// Check if video dimensions have changed and update canvas accordingly
+export function checkAndUpdateCanvasScale(canvas, video) {
+  if (!canvas || !video) return false;
+  
+  const currentWidth = video.videoWidth;
+  const currentHeight = video.videoHeight;
+  
+  // Check if video dimensions have changed
+  if (canvas._lastVideoWidth !== currentWidth || canvas._lastVideoHeight !== currentHeight) {
+    if (currentWidth > 0 && currentHeight > 0) {
+      updateCanvasDimensions(canvas, video);
+      canvas._lastVideoWidth = currentWidth;
+      canvas._lastVideoHeight = currentHeight;
+      return true; // Dimensions changed
+    }
+  }
+  return false; // No change
 }
 
 // Setup pose detector

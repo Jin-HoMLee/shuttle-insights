@@ -1,5 +1,5 @@
 import { togglePanel } from './panel.js';
-import { getVideo, disconnectOverlayObserver, removeOverlayCanvas, createOverlayCanvas, setupDetector } from './utils.js'; 
+import { getVideo, disconnectOverlayObserver, removeOverlayCanvas, createOverlayCanvas, setupDetector, checkAndUpdateCanvasScale } from './utils.js'; 
 import { drawKeypoints, drawSkeletonAndBoxes} from './poseDrawing.js'; 
 
 let detector = null; // Pose detector instance (needed for pose estimation)
@@ -12,6 +12,14 @@ async function poseOverlayLoop(video, detector, overlay, ctx) {
     if (!video || video.videoWidth === 0 || video.videoHeight === 0 || video.paused || video.ended) {
       return; // Stop loop if video is not ready
     }
+    
+    // Check for video quality changes and update canvas dimensions if needed
+    const dimensionsChanged = checkAndUpdateCanvasScale(overlay, video);
+    if (dimensionsChanged) {
+      // Clear canvas when dimensions change to avoid artifacts
+      ctx.clearRect(0, 0, overlay.width, overlay.height);
+    }
+    
     const poses = await detector.estimatePoses(video, { maxPoses: 6 });
     drawKeypoints(ctx, poses);
     drawSkeletonAndBoxes(ctx, poses);
