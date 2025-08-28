@@ -26,6 +26,8 @@ async function poseOverlayLoop(video, detector, overlay, ctx) {
 // Start overlay
 async function startPoseOverlay() {
   const video = getVideo();
+  video.addEventListener('loadeddata', handleVideoChange);
+  video.addEventListener('resize', handleVideoChange);
   if (!video || video.videoWidth === 0) {
     alert('No video element found or video not loaded.');
     return;
@@ -57,3 +59,10 @@ chrome.runtime.onMessage.addListener((msg) => {
     togglePanel();
   }
 });
+
+// Handle video change events (quality, modes)
+export function handleVideoChange() {
+  const video = getVideo();
+  stopPoseOverlay();
+  startPoseOverlay(); // This will use the updated video element
+}
