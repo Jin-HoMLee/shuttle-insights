@@ -26,7 +26,12 @@ This browser extension lets you label shots/events in any YouTube video and expo
 5. **Move the Panel:**
    - Drag the panel by its title bar to reposition anywhere in the window.
 
-6. **Close/Reopen the Panel:**
+6. **Use Pose Overlay:**
+   - Click "Start Overlay" in the panel to enable real-time pose detection visualization.
+   - The overlay automatically adapts to video quality changes.
+   - Click "Stop Overlay" to disable the visualization.
+
+7. **Close/Reopen the Panel:**
    - Click the `×` button to close the panel.
    - Click the extension icon again to bring it back.
 
@@ -37,6 +42,7 @@ This browser extension lets you label shots/events in any YouTube video and expo
 - Displays current date/time, video title, and URL at the top.
 - Works on any YouTube video page.
 - Lets you label shots/events using customizable buttons.
+- **Dynamic pose overlay** that automatically scales with video quality changes.
 - Download all labels as a CSV file.
 - Delete shots if mis-labeled.
 - Non-destructive: no changes to the video or your YouTube account.
