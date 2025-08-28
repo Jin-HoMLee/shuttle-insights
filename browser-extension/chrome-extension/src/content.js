@@ -7,13 +7,20 @@ let poseLoopId = null; // ID of the pose overlay loop (needed for canceling)
 
 // Pose overlay loop
 async function poseOverlayLoop(video, detector, overlay) {
-  const poses = await detector.estimatePoses(video, { maxPoses: 6 });
-  // draw keypoints
-  drawKeypoints(overlay, poses);
-  // draw skeleton
-  const ctx = overlay.getContext('2d');
-  drawSkeletonAndBoxes(ctx, poses);
-  // request next animation frame
+  try {
+    // Validate video and overlay
+    if (!video || video.videoWidth === 0 || video.videoHeight === 0 || video.paused || video.ended) {
+      return; // Stop loop if video is not ready
+    }
+    const poses = await detector.estimatePoses(video, { maxPoses: 6 });
+    drawKeypoints(overlay, poses);
+    const ctx = overlay.getContext('2d');
+    drawSkeletonAndBoxes(ctx, poses);
+  } catch (err) {
+    console.error('Pose estimation failed:', err);
+    return; // Stop loop on error
+  }
+  // Request next animation frame
   poseLoopId = window.requestAnimationFrame(() => poseOverlayLoop(video, detector, overlay));
 }
 
