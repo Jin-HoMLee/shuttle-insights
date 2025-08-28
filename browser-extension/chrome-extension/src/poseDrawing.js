@@ -32,15 +32,25 @@ export function drawKeypoints(ctx, poses, threshold = 0.2) {
 export function drawSkeletonAndBoxes(ctx, poses, threshold = 0.2) {
   poses.forEach(pose => {
 // Draw bounding box if available
+// The bounding box coordinates (xMin, xMax, yMin, yMax) are expected to be normalized (0-1).
 if (pose.box) {
-  // Use normalized coordinates (0-1) if needed, or scale to canvas size
-  const x = pose.box.xMin * ctx.canvas.width;
-  const y = pose.box.yMin * ctx.canvas.height;
-  const width = (pose.box.xMax - pose.box.xMin) * ctx.canvas.width;
-  const height = (pose.box.yMax - pose.box.yMin) * ctx.canvas.height;
-  ctx.strokeStyle = 'blue';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(x, y, width, height);
+  const { xMin, xMax, yMin, yMax } = pose.box;
+  if (
+    xMin >= 0 && xMin <= 1 &&
+    xMax >= 0 && xMax <= 1 &&
+    yMin >= 0 && yMin <= 1 &&
+    yMax >= 0 && yMax <= 1
+  ) {
+    const x = xMin * ctx.canvas.width;
+    const y = yMin * ctx.canvas.height;
+    const width = (xMax - xMin) * ctx.canvas.width;
+    const height = (yMax - yMin) * ctx.canvas.height;
+    ctx.strokeStyle = 'blue';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, width, height);
+  } else {
+    console.warn('Bounding box coordinates are not normalized (0-1):', pose.box);
+  }
 }
 
     // Draw skeleton lines
