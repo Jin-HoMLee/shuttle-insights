@@ -1,4 +1,4 @@
-// MoveNet keypoint connections (for skeleton lines)
+// MoveNet keypoint connections map (for skeleton lines)
 const MOVENET_CONNECTIONS = [
   [0, 1], [1, 3], [0, 2], [2, 4], // Head to shoulders
   [5, 7], [7, 9], // Left arm
@@ -10,10 +10,12 @@ const MOVENET_CONNECTIONS = [
   [12, 14], [14, 16]  // Right leg
 ];
 
-// Draw pose keypoints on overlay canvas
-export function drawKeypoints(canvas, poses, threshold = 0.2) {
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+// Draw pose keypoints on canvas 
+// The canvas element is for display and layout.
+// The context (ctx) is for drawing and rendering graphics.
+// All drawing operations are performed on the context (ctx), not the canvas element itself.
+export function drawKeypoints(ctx, poses, threshold = 0.2) {
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   poses.forEach(pose => {
     pose.keypoints.forEach(kp => {
       if (kp.score > threshold) {

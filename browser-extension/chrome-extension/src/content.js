@@ -6,22 +6,21 @@ let detector = null; // Pose detector instance (needed for pose estimation)
 let poseLoopId = null; // ID of the pose overlay loop (needed for canceling)
 
 // Pose overlay loop
-async function poseOverlayLoop(video, detector, overlay) {
+async function poseOverlayLoop(video, detector, overlay, ctx) {
   try {
     // Validate video and overlay
     if (!video || video.videoWidth === 0 || video.videoHeight === 0 || video.paused || video.ended) {
       return; // Stop loop if video is not ready
     }
     const poses = await detector.estimatePoses(video, { maxPoses: 6 });
-    drawKeypoints(overlay, poses);
-    const ctx = overlay.getContext('2d');
+    drawKeypoints(ctx, poses);
     drawSkeletonAndBoxes(ctx, poses);
   } catch (err) {
     console.error('Pose estimation failed:', err);
     return; // Stop loop on error
   }
   // Request next animation frame
-  poseLoopId = window.requestAnimationFrame(() => poseOverlayLoop(video, detector, overlay));
+  poseLoopId = window.requestAnimationFrame(() => poseOverlayLoop(video, detector, overlay, ctx));
 }
 
 // Start overlay
@@ -33,7 +32,8 @@ async function startPoseOverlay() {
   }
   if (!detector) detector = await setupDetector();
   const overlay = createOverlayCanvas(video);
-  poseOverlayLoop(video, detector, overlay);
+  const ctx = overlay.getContext('2d');
+  poseOverlayLoop(video, detector, overlay, ctx);
 }
 
 // Stop overlay
