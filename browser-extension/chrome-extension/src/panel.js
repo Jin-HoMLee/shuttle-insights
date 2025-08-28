@@ -1,3 +1,5 @@
+const PANEL_ID = 'yt-shot-labeler-panel';
+
 import { formatDateTime, sanitize, getVideoTitle, getVideo } from './utils.js';
 import { addResizeHandles } from './resize.js';
 import { addDragBehavior } from './drag.js';
@@ -5,7 +7,6 @@ import { setupCSV } from './csv.js';
 import { setupGlossaryButtons } from './glossary.js';
 
 export function createLabelerPanel() {
-  const PANEL_ID = 'yt-shot-labeler-panel';
   if (document.getElementById(PANEL_ID)) return;
 
   let shots = [];
@@ -174,4 +175,13 @@ export function createLabelerPanel() {
   };
 
   updateStatus();
+}
+
+export function togglePanel() {
+  const panel = document.getElementById(PANEL_ID);
+  if (panel) {
+    panel.remove();
+  } else {
+    createLabelerPanel();
+  }
 }
