@@ -43,7 +43,8 @@ This browser extension lets you label shots/events in any YouTube video and expo
 
 ## Customization
 
-- To add new labels, edit the `badminton_shots_glossary.json`.
+- To add new labels, edit the `chrome-extension/badminton_shots_glossary.json` file.
+- After making changes, rebuild the extension using `npm run build` (see Packaging section below).
 
 ## Packaging / Rebuilding
 After changing code in browser-extension/chrome-extension/src the files should be packaged / rebuilt again via node: 
@@ -64,7 +65,7 @@ npm run build
 
 ## Credits
 
-The badminton shots glossary [badminton_shots_glossary.json](app/badminton_shots_glossary.json) in this repository is adapted and modified from [WorldBadminton.com Glossary](https://www.worldbadminton.com/glossary.htm). 
+The badminton shots glossary [badminton_shots_glossary.json](chrome-extension/badminton_shots_glossary.json) in this repository is adapted and modified from [WorldBadminton.com Glossary](https://www.worldbadminton.com/glossary.htm). 
 
 Special thanks to GitHub Copilot Chat Assistant for guidance and coding help during development.
 
