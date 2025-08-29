@@ -83,7 +83,6 @@ export function createOverlayCanvas(video) {
     canvas.style.top = `${rect.top + window.scrollY}px`;
     canvas.style.width = `${rect.width}px`;
     canvas.style.height = `${rect.height}px`;
-    console.log('ResizeObserver fired:', rect);
   });
   window.overlayResizeObserver.observe(video);
 
