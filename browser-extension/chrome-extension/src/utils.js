@@ -56,23 +56,36 @@ export function disconnectOverlayObserver() {
 export function createOverlayCanvas(video) {
   removeOverlayCanvas();
   disconnectOverlayObserver();
-  const containers = document.getElementsByClassName('html5-video-container');
-  const container = containers.length ? containers[containers.length - 1] : video.parentElement;
   const canvas = document.createElement('canvas');
   canvas.id = 'pose-overlay-canvas';
   canvas.style.position = 'absolute';
-  canvas.style.top = '0px';
-  canvas.style.left = '0px';
   canvas.style.pointerEvents = 'none';
   canvas.style.zIndex = 10000;
+
+  // Intrinsic size for drawing
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
-  container.appendChild(canvas);
+
+  // Position and display size for overlay
+  const rect = video.getBoundingClientRect();
+  canvas.style.left = `${rect.left + window.scrollX}px`;
+  canvas.style.top = `${rect.top + window.scrollY}px`;
+  canvas.style.width = `${rect.width}px`;
+  canvas.style.height = `${rect.height}px`;
+
+  document.body.appendChild(canvas); // Attach directly to body for absolute positioning
+
   window.overlayResizeObserver = new ResizeObserver(() => {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
+    const rect = video.getBoundingClientRect();
+    canvas.style.left = `${rect.left + window.scrollX}px`;
+    canvas.style.top = `${rect.top + window.scrollY}px`;
+    canvas.style.width = `${rect.width}px`;
+    canvas.style.height = `${rect.height}px`;
   });
   window.overlayResizeObserver.observe(video);
+
   return canvas;
 }
 
@@ -85,4 +98,3 @@ export async function setupDetector() {
     { modelType: poseDetection.movenet.modelType.MULTIPOSE_LIGHTNING }
   );
 }
-

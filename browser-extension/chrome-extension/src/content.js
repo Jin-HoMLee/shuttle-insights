@@ -26,6 +26,7 @@ async function poseOverlayLoop(video, detector, overlay, ctx) {
 // Start overlay
 async function startPoseOverlay() {
   const video = getVideo();
+  // Check if video is ready
   if (!video || video.videoWidth === 0) {
     alert('No video element found or video not loaded.');
     return;
@@ -43,6 +44,22 @@ function stopPoseOverlay() {
     poseLoopId = null;
   }
   removeOverlayCanvas();
+}
+
+// Handle video change events (quality, modes)
+export function handleVideoChange() {
+  const video = getVideo();
+  stopPoseOverlay();
+  startPoseOverlay(); // This will use the updated video element
+}
+
+// Main control flow
+
+// Video element
+const video = getVideo();
+if (video) {
+  video.addEventListener('loadeddata', handleVideoChange);
+  video.addEventListener('resize', handleVideoChange);
 }
 
 // Listen for start/stop overlay events from panel button
