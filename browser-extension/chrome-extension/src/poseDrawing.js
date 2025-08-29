@@ -14,11 +14,13 @@ const MOVENET_CONNECTIONS = [
 // The canvas element is for display and layout.
 // The context (ctx) is for drawing and rendering graphics.
 // All drawing operations are performed on the context (ctx), not the canvas element itself.
-export function drawKeypoints(ctx, poses, threshold = 0.2) {
+export function drawKeypoints(ctx, poses, threshold = 0.2, debug = false) {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  ctx.strokeStyle = 'yellow';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  if (debug) {
+    ctx.strokeStyle = 'yellow';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  }
   poses.forEach(pose => {
     pose.keypoints.forEach(kp => {
       if (kp.score > threshold) {
