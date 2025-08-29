@@ -26,12 +26,14 @@ async function poseOverlayLoop(video, detector, overlay, ctx) {
 // Start overlay
 async function startPoseOverlay() {
   const video = getVideo();
-  video.addEventListener('loadeddata', handleVideoChange);
-  video.addEventListener('resize', handleVideoChange);
+  // Check if video is ready
   if (!video || video.videoWidth === 0) {
     alert('No video element found or video not loaded.');
     return;
   }
+  // Event listeners for video changes
+  video.addEventListener('loadeddata', handleVideoChange);
+  video.addEventListener('resize', handleVideoChange);
   if (!detector) detector = await setupDetector();
   const overlay = createOverlayCanvas(video);
   const ctx = overlay.getContext('2d');
