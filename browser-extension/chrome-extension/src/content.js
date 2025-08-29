@@ -31,9 +31,6 @@ async function startPoseOverlay() {
     alert('No video element found or video not loaded.');
     return;
   }
-  // Event listeners for video changes
-  video.addEventListener('loadeddata', handleVideoChange);
-  video.addEventListener('resize', handleVideoChange);
   if (!detector) detector = await setupDetector();
   const overlay = createOverlayCanvas(video);
   const ctx = overlay.getContext('2d');
@@ -49,6 +46,22 @@ function stopPoseOverlay() {
   removeOverlayCanvas();
 }
 
+// Handle video change events (quality, modes)
+export function handleVideoChange() {
+  const video = getVideo();
+  stopPoseOverlay();
+  startPoseOverlay(); // This will use the updated video element
+}
+
+// Main control flow
+
+// Video element
+const video = getVideo();
+if (video) {
+  video.addEventListener('loadeddata', handleVideoChange);
+  video.addEventListener('resize', handleVideoChange);
+}
+
 // Listen for start/stop overlay events from panel button
 window.addEventListener('pose-overlay-control', (e) => {
   if (e.detail.action === 'start') startPoseOverlay();
@@ -61,10 +74,3 @@ chrome.runtime.onMessage.addListener((msg) => {
     togglePanel();
   }
 });
-
-// Handle video change events (quality, modes)
-export function handleVideoChange() {
-  const video = getVideo();
-  stopPoseOverlay();
-  startPoseOverlay(); // This will use the updated video element
-}
