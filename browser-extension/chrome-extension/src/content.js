@@ -3,7 +3,7 @@ import { getVideo, disconnectOverlayObserver, removeOverlayCanvas, createOverlay
 import { drawKeypoints, drawSkeletonAndBoxes} from './poseDrawing.js'; 
 
 let detector = null; // Pose detector instance (needed for pose estimation)
-let poseLoopId = null; // ID of the pose overlay loop (needed for canceling)
+let poseLoopId = null; // ID of the pose overlay loop (needed for checking and canceling)
 
 // Pose overlay loop
 async function poseOverlayLoop(video, detector, overlay, ctx) {
@@ -48,9 +48,11 @@ function stopPoseOverlay() {
 
 // Handle video change events (quality, modes)
 export function handleVideoChange() {
-  const video = getVideo();
-  stopPoseOverlay();
-  startPoseOverlay(); // This will use the updated video element
+  // Only restart overlay if it is currently active
+  if (poseLoopId !== null) {
+    stopPoseOverlay();
+    startPoseOverlay(); // This will use the updated video element
+  }
 }
 
 // Main control flow
