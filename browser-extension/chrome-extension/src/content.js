@@ -28,7 +28,7 @@ function detachModeObserver() {
 async function poseOverlayLoop(video, detector, overlay, ctx) {
   try {
     // Validate video and overlay
-    if (!video || video.videoWidth === 0 || video.videoHeight === 0 || video.paused || video.ended) {
+    if (!video || video.videoWidth === 0 || video.videoHeight === 0 || video.ended) {
       return; // Stop loop if video is not ready
     }
     const poses = await detector.estimatePoses(video, { maxPoses: 6 });
