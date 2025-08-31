@@ -25,12 +25,14 @@ async function poseOverlayLoop(video, detector, overlay, ctx) {
 
 // Start overlay
 async function startPoseOverlay() {
-  const video = getVideo();
   // Check if video is ready
+  const video = getVideo();
   if (!video || video.videoWidth === 0) {
     alert('No video element found or video not loaded.');
     return;
   }
+  // Attach event listeners to handle video changes
+  attachVideoListeners(video);
   if (!detector) detector = await setupDetector();
   const overlay = createOverlayCanvas(video);
   const ctx = overlay.getContext('2d');
@@ -55,14 +57,15 @@ export function handleVideoChange() {
   }
 }
 
-// Main control flow
-
-// Video element
-const video = getVideo();
-if (video) {
-  video.addEventListener('loadeddata', handleVideoChange);
-  video.addEventListener('resize', handleVideoChange);
+// Attach event listeners to the current video element
+function attachVideoListeners(video) {
+  if (video) {
+    video.addEventListener('loadeddata', handleVideoChange);
+    video.addEventListener('resize', handleVideoChange);
+  }
 }
+
+// Main control flow
 
 // Listen for start/stop overlay events from panel button
 window.addEventListener('pose-overlay-control', (e) => {
