@@ -4,6 +4,25 @@ import { drawKeypoints, drawSkeletonAndBoxes} from './poseDrawing.js';
 
 let detector = null; // Pose detector instance (needed for pose estimation)
 let poseLoopId = null; // ID of the pose overlay loop (needed for checking and canceling)
+let modeObserver = null; // MutationObserver for mode changes
+
+// Modularized MutationObserver logic
+function attachModeObserver() {
+  const player = document.querySelector('.html5-video-player');
+  if (player && !modeObserver) {
+    modeObserver = new MutationObserver(() => {
+      handleVideoChange();
+    });
+    modeObserver.observe(player, { attributes: true, attributeFilter: ['class', 'style'] });
+  }
+}
+
+function detachModeObserver() {
+  if (modeObserver) {
+    modeObserver.disconnect();
+    modeObserver = null;
+  }
+}
 
 // Pose overlay loop
 async function poseOverlayLoop(video, detector, overlay, ctx) {
@@ -33,6 +52,8 @@ async function startPoseOverlay() {
   }
   // Attach event listeners to handle video changes
   attachVideoListeners(video);
+  // Attach MutationObserver for YouTube mode changes (Default, Theater, Fullscreen)
+  attachModeObserver();
   if (!detector) detector = await setupDetector();
   const overlay = createOverlayCanvas(video);
   const ctx = overlay.getContext('2d');
@@ -46,6 +67,8 @@ function stopPoseOverlay() {
     poseLoopId = null;
   }
   removeOverlayCanvas();
+  // Disconnect MutationObserver when overlay stops
+  detachModeObserver();
 }
 
 // Handle video change events (quality, modes)
