@@ -171,6 +171,7 @@ export function createLabelerPanel() {
   setupCSV(panel, shots, updateShotList, videoUrl, sanitizedTitle);
 
   panel.querySelector('#yt-shot-labeler-close').onclick = () => {
+    window.dispatchEvent(new CustomEvent('pose-overlay-control', { detail: { action: 'stop' } }));
     panel.remove();
   };
 
@@ -180,6 +181,7 @@ export function createLabelerPanel() {
 export function togglePanel() {
   const panel = document.getElementById(PANEL_ID);
   if (panel) {
+    window.dispatchEvent(new CustomEvent('pose-overlay-control', { detail: { action: 'stop' } }));
     panel.remove();
   } else {
     createLabelerPanel();
