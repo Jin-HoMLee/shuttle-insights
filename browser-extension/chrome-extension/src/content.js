@@ -44,14 +44,14 @@ async function poseOverlayLoop(video, detector, overlay, ctx) {
 
 // Start overlay
 async function startPoseOverlay() {
-  // Check if video is ready
   const video = getVideo();
-  if (!video || video.videoWidth === 0) {
-    alert('No video element found or video not loaded.');
-    return;
-  }
   // Attach event listeners to handle video changes
   attachVideoListeners(video);
+  // Check if video is ready
+  if (!video || video.videoWidth === 0) {
+    // Silently skip if video is not ready; overlay will restart when video is ready
+    return;
+  }
   // Attach MutationObserver for YouTube mode changes (Default, Theater, Fullscreen)
   attachModeObserver();
   if (!detector) detector = await setupDetector();
