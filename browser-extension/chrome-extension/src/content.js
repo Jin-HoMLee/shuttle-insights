@@ -3,13 +3,32 @@ import { getVideo, disconnectOverlayObserver, removeOverlayCanvas, createOverlay
 import { drawKeypoints, drawSkeletonAndBoxes} from './poseDrawing.js'; 
 
 let detector = null; // Pose detector instance (needed for pose estimation)
-let poseLoopId = null; // ID of the pose overlay loop (needed for canceling)
+let poseLoopId = null; // ID of the pose overlay loop (needed for checking and canceling)
+let modeObserver = null; // MutationObserver for mode changes
+
+// Modularized MutationObserver logic
+function attachModeObserver() {
+  const player = document.querySelector('.html5-video-player');
+  if (player && !modeObserver) {
+    modeObserver = new MutationObserver(() => {
+      handleVideoChange();
+    });
+    modeObserver.observe(player, { attributes: true, attributeFilter: ['class', 'style'] });
+  }
+}
+
+function detachModeObserver() {
+  if (modeObserver) {
+    modeObserver.disconnect();
+    modeObserver = null;
+  }
+}
 
 // Pose overlay loop
 async function poseOverlayLoop(video, detector, overlay, ctx) {
   try {
     // Validate video and overlay
-    if (!video || video.videoWidth === 0 || video.videoHeight === 0 || video.paused || video.ended) {
+    if (!video || video.videoWidth === 0 || video.videoHeight === 0 || video.ended) {
       return; // Stop loop if video is not ready
     }
     const poses = await detector.estimatePoses(video, { maxPoses: 6 });
@@ -26,10 +45,15 @@ async function poseOverlayLoop(video, detector, overlay, ctx) {
 // Start overlay
 async function startPoseOverlay() {
   const video = getVideo();
+  // Attach event listeners to handle video changes
+  attachVideoListeners(video);
+  // Check if video is ready
   if (!video || video.videoWidth === 0) {
-    alert('No video element found or video not loaded.');
+    // Silently skip if video is not ready; overlay will restart when video is ready
     return;
   }
+  // Attach MutationObserver for YouTube mode changes (Default, Theater, Fullscreen)
+  attachModeObserver();
   if (!detector) detector = await setupDetector();
   const overlay = createOverlayCanvas(video);
   const ctx = overlay.getContext('2d');
@@ -43,7 +67,28 @@ function stopPoseOverlay() {
     poseLoopId = null;
   }
   removeOverlayCanvas();
+  // Disconnect MutationObserver when overlay stops
+  detachModeObserver();
 }
+
+// Handle video change events (quality, modes)
+export function handleVideoChange() {
+  // Only restart overlay if it is currently active
+  if (poseLoopId !== null) {
+    stopPoseOverlay();
+    startPoseOverlay(); // This will use the updated video element
+  }
+}
+
+// Attach event listeners to the current video element
+function attachVideoListeners(video) {
+  if (video) {
+    video.addEventListener('loadeddata', handleVideoChange);
+    video.addEventListener('resize', handleVideoChange);
+  }
+}
+
+// Main control flow
 
 // Listen for start/stop overlay events from panel button
 window.addEventListener('pose-overlay-control', (e) => {
