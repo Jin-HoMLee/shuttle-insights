@@ -10,7 +10,18 @@ export function createLabelerPanel() {
   if (document.getElementById(PANEL_ID)) return;
 
   let shots = [];
-  let currentShot = { start: null, end: null, label: null };
+  let currentShot = { 
+    start: null, 
+    end: null, 
+    label: null,
+    longitudinalPosition: null,
+    lateralPosition: null,
+    timing: null,
+    intention: null,
+    stroke: null,
+    impact: null,
+    direction: null
+  };
 
   const now = new Date();
   const dateTimeStr = formatDateTime(now);
@@ -52,6 +63,7 @@ export function createLabelerPanel() {
           <span id="shot-status" style="margin-left:10px;"></span>
         </div>
         <div id="label-buttons" style="margin-bottom:10px;"></div>
+        <div id="dimension-controls" style="margin-bottom:10px;"></div>
         <button id="mark-end" style="margin-bottom:10px;">Mark End</button>
       </div>
       <hr>
@@ -115,19 +127,32 @@ export function createLabelerPanel() {
 
   function updateStatus() {
     const status = panel.querySelector('#shot-status');
-    status.textContent = `Start: ${currentShot.start !== null ? currentShot.start.toFixed(2) + 's' : "-"} | End: ${currentShot.end !== null ? currentShot.end.toFixed(2) + 's' : "-"} | Label: ${currentShot.label ?? '-'}`;
+    const dimensions = [];
+    if (currentShot.longitudinalPosition) dimensions.push(`Pos: ${currentShot.longitudinalPosition}`);
+    if (currentShot.timing) dimensions.push(`Time: ${currentShot.timing}`);
+    if (currentShot.intention) dimensions.push(`Intent: ${currentShot.intention}`);
+    
+    const dimensionText = dimensions.length > 0 ? ` | ${dimensions.join(' | ')}` : '';
+    status.textContent = `Start: ${currentShot.start !== null ? currentShot.start.toFixed(2) + 's' : "-"} | End: ${currentShot.end !== null ? currentShot.end.toFixed(2) + 's' : "-"} | Label: ${currentShot.label ?? '-'}${dimensionText}`;
   }
 
   function updateShotList() {
     const listDiv = panel.querySelector('#label-list');
     listDiv.innerHTML = shots.length === 0
       ? `<div style="color:#999;">No shots labeled yet.</div>`
-      : shots.map((shot, i) =>
-        `<div style="display:flex;align-items:center;gap:6px;">
-          <div style="flex:1;">#${i + 1}: <b>${shot.label}</b> [${shot.start.toFixed(2)}s - ${shot.end.toFixed(2)}s]</div>
-          <button title="Delete" class="yt-shot-labeler-delete" data-index="${i}" style="background:transparent;border:none;cursor:pointer;font-size:15px;">🗑️</button>
-        </div>`
-      ).join("");
+      : shots.map((shot, i) => {
+          const dimensions = [];
+          if (shot.stroke) dimensions.push(shot.stroke);
+          if (shot.intention) dimensions.push(shot.intention);
+          if (shot.longitudinalPosition) dimensions.push(shot.longitudinalPosition);
+          
+          const dimensionText = dimensions.length > 0 ? ` (${dimensions.join(', ')})` : '';
+          
+          return `<div style="display:flex;align-items:center;gap:6px;">
+            <div style="flex:1;">#${i + 1}: <b>${shot.label}</b>${dimensionText} [${shot.start.toFixed(2)}s - ${shot.end.toFixed(2)}s]</div>
+            <button title="Delete" class="yt-shot-labeler-delete" data-index="${i}" style="background:transparent;border:none;cursor:pointer;font-size:15px;">🗑️</button>
+          </div>`;
+        }).join("");
     listDiv.querySelectorAll('.yt-shot-labeler-delete').forEach(btn => {
       btn.onclick = function () {
         const idx = parseInt(btn.getAttribute('data-index'));
@@ -162,7 +187,18 @@ export function createLabelerPanel() {
     }
     shots.push({ ...currentShot });
     updateShotList();
-    currentShot = { start: null, end: null, label: null };
+    currentShot = { 
+      start: null, 
+      end: null, 
+      label: null,
+      longitudinalPosition: null,
+      lateralPosition: null,
+      timing: null,
+      intention: null,
+      stroke: null,
+      impact: null,
+      direction: null
+    };
     updateStatus();
     // --- Re-render label buttons for the new shot object so handlers are fresh ---
     setupGlossaryButtons(panel, () => currentShot, updateStatus);

@@ -14,9 +14,19 @@ export function setupCSV(panel, shots, updateShotList, videoUrl, sanitizedTitle)
       const lines = text.trim().split('\n');
       if (lines.length < 2) return;
       const header = lines[0].split(',').map(s => s.trim());
+      
+      // Find column indices
       const idxStart = header.indexOf('start_sec');
       const idxEnd = header.indexOf('end_sec');
       const idxLabel = header.indexOf('label');
+      const idxLongPos = header.indexOf('longitudinal_position');
+      const idxLatPos = header.indexOf('lateral_position');
+      const idxTiming = header.indexOf('timing');
+      const idxIntention = header.indexOf('intention');
+      const idxStroke = header.indexOf('stroke');
+      const idxImpact = header.indexOf('impact');
+      const idxDirection = header.indexOf('direction');
+      
       shots.length = 0;
       lines.slice(1).forEach(line => {
         const parts = [];
@@ -27,12 +37,24 @@ export function setupCSV(panel, shots, updateShotList, videoUrl, sanitizedTitle)
           else part += c;
         }
         parts.push(part);
+        
         if (!isNaN(parts[idxStart]) && !isNaN(parts[idxEnd]) && parts[idxLabel]) {
-          shots.push({
+          const shot = {
             start: parseFloat(parts[idxStart]),
             end: parseFloat(parts[idxEnd]),
             label: parts[idxLabel]?.replace(/^"|"$/g, '') ?? ''
-          });
+          };
+          
+          // Add dimension fields if they exist in CSV
+          if (idxLongPos >= 0) shot.longitudinalPosition = parts[idxLongPos]?.replace(/^"|"$/g, '') || null;
+          if (idxLatPos >= 0) shot.lateralPosition = parts[idxLatPos]?.replace(/^"|"$/g, '') || null;
+          if (idxTiming >= 0) shot.timing = parts[idxTiming]?.replace(/^"|"$/g, '') || null;
+          if (idxIntention >= 0) shot.intention = parts[idxIntention]?.replace(/^"|"$/g, '') || null;
+          if (idxStroke >= 0) shot.stroke = parts[idxStroke]?.replace(/^"|"$/g, '') || null;
+          if (idxImpact >= 0) shot.impact = parts[idxImpact]?.replace(/^"|"$/g, '') || null;
+          if (idxDirection >= 0) shot.direction = parts[idxDirection]?.replace(/^"|"$/g, '') || null;
+          
+          shots.push(shot);
         }
       });
       updateShotList();
@@ -46,11 +68,19 @@ export function setupCSV(panel, shots, updateShotList, videoUrl, sanitizedTitle)
       alert("No labels to save!");
       return;
     }
-    let csv = 'video_url,shot_id,start_sec,end_sec,label\n';
+    let csv = 'video_url,shot_id,start_sec,end_sec,label,longitudinal_position,lateral_position,timing,intention,stroke,impact,direction\n';
     shots.forEach((shot, idx) => {
       const safeLabel = `"${(shot.label ?? '').replace(/"/g, '""')}"`;
       const safeUrl = `"${videoUrl.replace(/"/g, '""')}"`;
-      csv += `${safeUrl},${idx + 1},${shot.start},${shot.end},${safeLabel}\n`;
+      const safeLongPos = `"${(shot.longitudinalPosition ?? '').replace(/"/g, '""')}"`;
+      const safeLatPos = `"${(shot.lateralPosition ?? '').replace(/"/g, '""')}"`;
+      const safeTiming = `"${(shot.timing ?? '').replace(/"/g, '""')}"`;
+      const safeIntention = `"${(shot.intention ?? '').replace(/"/g, '""')}"`;
+      const safeStroke = `"${(shot.stroke ?? '').replace(/"/g, '""')}"`;
+      const safeImpact = `"${(shot.impact ?? '').replace(/"/g, '""')}"`;
+      const safeDirection = `"${(shot.direction ?? '').replace(/"/g, '""')}"`;
+      
+      csv += `${safeUrl},${idx + 1},${shot.start},${shot.end},${safeLabel},${safeLongPos},${safeLatPos},${safeTiming},${safeIntention},${safeStroke},${safeImpact},${safeDirection}\n`;
     });
     const blob = new Blob([csv], { type: 'text/csv' });
     const reader = new FileReader();
