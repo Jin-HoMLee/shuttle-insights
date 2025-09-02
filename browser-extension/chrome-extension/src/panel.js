@@ -141,7 +141,6 @@ export function createLabelerPanel() {
       ? `<div style="color:#999;">No shots labeled yet.</div>`
       : shots.map((shot, i) => {
           const dimensions = [];
-          // if (shot.stroke) dimensions.push(shot.stroke); // removed
           if (shot.intention) dimensions.push(shot.intention);
           if (shot.longitudinalPosition) dimensions.push(shot.longitudinalPosition);
           
@@ -194,7 +193,6 @@ export function createLabelerPanel() {
       lateralPosition: null,
       timing: null,
       intention: null,
-  // stroke: null, // removed
       impact: null,
       direction: null
     };
