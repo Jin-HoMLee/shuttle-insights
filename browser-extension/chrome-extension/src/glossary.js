@@ -8,35 +8,33 @@ export function setupGlossaryButtons(panel, getCurrentShot, updateStatus) {
   fetch(chrome.runtime.getURL('badminton_shots_glossary.json'))
     .then(r => r.json())
     .then(glossaryData => {
-      // Setup shot category buttons (existing functionality)
-      if (glossaryData.categories) {
-        glossaryData.categories.forEach(category => {
-          const catSection = document.createElement('div');
-          catSection.className = "yt-shot-labeler-category-section";
-          const categoryHeader = document.createElement('div');
-          categoryHeader.textContent = category.category;
-          categoryHeader.className = "yt-shot-labeler-category-title";
-          catSection.appendChild(categoryHeader);
+      // Setup shot buttons from the shots array
+      if (glossaryData.shots) {
+        const shotSection = document.createElement('div');
+        shotSection.className = "yt-shot-labeler-category-section";
+        const shotHeader = document.createElement('div');
+        shotHeader.textContent = "Shots";
+        shotHeader.className = "yt-shot-labeler-category-title";
+        shotSection.appendChild(shotHeader);
 
-          category.shots.forEach(shot => {
-            const btn = document.createElement('button');
-            btn.textContent = shot.term;
-            btn.className = "yt-shot-labeler-label-btn";
-            btn.title = shot.definition;
+        glossaryData.shots.forEach(shot => {
+          const btn = document.createElement('button');
+          btn.textContent = shot.term;
+          btn.className = "yt-shot-labeler-label-btn";
+          btn.title = shot.definition;
 
-            btn.onclick = () => {
-              const currentShot = getCurrentShot();
-              currentShot.label = shot.term;
-              labelDiv.querySelectorAll('button').forEach(b => b.classList.remove("selected"));
-              btn.classList.add("selected");
-              updateStatus();
-            };
+          btn.onclick = () => {
+            const currentShot = getCurrentShot();
+            currentShot.label = shot.term;
+            labelDiv.querySelectorAll('button').forEach(b => b.classList.remove("selected"));
+            btn.classList.add("selected");
+            updateStatus();
+          };
 
-            catSection.appendChild(btn);
-          });
-
-          labelDiv.appendChild(catSection);
+          shotSection.appendChild(btn);
         });
+
+        labelDiv.appendChild(shotSection);
       }
 
       // Setup dimension controls (new functionality)
