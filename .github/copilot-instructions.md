@@ -6,28 +6,12 @@ Shuttle Insights is a multi-component badminton video analysis system with a Pyt
 ## Working Effectively
 
 ### Environment Setup
-- **CRITICAL DEPENDENCY ISSUE**: The requirements.txt file has numpy version conflicts that prevent installation. You MUST resolve these conflicts before proceeding with Python work:
+- **CRITICAL DEPENDENCY ISSUE RESOLVED**: Use the provided `requirements-fixed.txt` file with compatible version pins to avoid numpy and other dependency conflicts. You MUST use this file for Python work:
   ```bash
   python3 -m venv .venv
   source .venv/bin/activate
   pip install --upgrade pip
-  # KNOWN ISSUE: pip install -r requirements.txt fails due to numpy version conflicts
-  # Resolution: Install packages individually without version pins to resolve dependencies
-  pip install ipykernel pandas matplotlib mediapipe opencv-python yt-dlp ipywidgets scikit-learn tensorflow seaborn
-  ```
-- **NEVER CANCEL**: Python dependency installation can take 10-15 minutes due to large packages like TensorFlow. NEVER CANCEL. Set timeout to 20+ minutes.
-- Alternative setup without version conflicts:
-  ```bash
-  python3 -m venv .venv
-  source .venv/bin/activate
-  pip install --upgrade pip
-  # Install core packages first
-  pip install numpy pandas matplotlib opencv-python
-  # Then install ML packages
-  pip install mediapipe tensorflow scikit-learn
-  # Finally install remaining packages
-  pip install ipykernel yt-dlp ipywidgets seaborn
-  ```
+  pip install -r requirements-fixed.txt
 
 ### Browser Extension Development
 - **FASTEST BUILD COMPONENT**: Browser extension builds in under 1 second
