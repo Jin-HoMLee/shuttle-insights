@@ -49,7 +49,6 @@ export function setupCSV(panel, shots, updateShotList, videoUrl, sanitizedTitle)
           if (idxLatPos >= 0) shot.lateralPosition = parts[idxLatPos]?.replace(/^"|"$/g, '') || null;
           if (idxTiming >= 0) shot.timing = parts[idxTiming]?.replace(/^"|"$/g, '') || null;
           if (idxIntention >= 0) shot.intention = parts[idxIntention]?.replace(/^"|"$/g, '') || null;
-          // if (idxStroke >= 0) shot.stroke = parts[idxStroke]?.replace(/^"|"$/g, '') || null; // removed
           if (idxImpact >= 0) shot.impact = parts[idxImpact]?.replace(/^"|"$/g, '') || null;
           if (idxDirection >= 0) shot.direction = parts[idxDirection]?.replace(/^"|"$/g, '') || null;
           
@@ -75,7 +74,6 @@ export function setupCSV(panel, shots, updateShotList, videoUrl, sanitizedTitle)
       const safeLatPos = `"${(shot.lateralPosition ?? '').replace(/"/g, '""')}"`;
       const safeTiming = `"${(shot.timing ?? '').replace(/"/g, '""')}"`;
       const safeIntention = `"${(shot.intention ?? '').replace(/"/g, '""')}"`;
-  // const safeStroke = `"${(shot.stroke ?? '').replace(/"/g, '""')}"`; // removed
       const safeImpact = `"${(shot.impact ?? '').replace(/"/g, '""')}"`;
       const safeDirection = `"${(shot.direction ?? '').replace(/"/g, '""')}"`;
       
