@@ -43,9 +43,32 @@ export function setupGlossaryButtons(panel, getCurrentShot, updateStatus) {
         dimensionSection.className = "yt-shot-labeler-category-section";
 
         const dimensionHeader = document.createElement('div');
-        dimensionHeader.textContent = 'Shot Dimensions';
+        dimensionHeader.textContent = 'Advanced Shot Dimensions';
         dimensionHeader.className = "yt-shot-labeler-category-title";
         dimensionHeader.style.marginTop = "10px";
+        dimensionHeader.style.cursor = "pointer";
+        dimensionHeader.title = "Click to expand/collapse";
+
+        // Collapse icon
+        const collapseIcon = document.createElement('span');
+        collapseIcon.textContent = '▼'; // Default collapsed
+        collapseIcon.style.marginLeft = '8px';
+        dimensionHeader.appendChild(collapseIcon);
+
+        // Container for dimension controls
+        const dimensionContent = document.createElement('div');
+        dimensionContent.style.display = 'none'; // Default collapsed
+
+        dimensionHeader.onclick = () => {
+          if (dimensionContent.style.display === 'none') {
+            dimensionContent.style.display = 'block';
+            collapseIcon.textContent = '▲';
+          } else {
+            dimensionContent.style.display = 'none';
+            collapseIcon.textContent = '▼';
+          }
+        };
+
         dimensionSection.appendChild(dimensionHeader);
 
         glossaryData.dimensions.forEach(dimension => {
@@ -97,9 +120,10 @@ export function setupGlossaryButtons(panel, getCurrentShot, updateStatus) {
           });
 
           dimSection.appendChild(dimButtonGroup);
-          dimensionSection.appendChild(dimSection);
+          dimensionContent.appendChild(dimSection);
         });
 
+        dimensionSection.appendChild(dimensionContent);
         dimensionDiv.appendChild(dimensionSection);
       }
     });
