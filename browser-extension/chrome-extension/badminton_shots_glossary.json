@@ -1,5 +1,4 @@
 {
-	"attribution": "Adapted and modified from https://www.worldbadminton.com/glossary.htm",
 	"dimensions": [
 		{
 			"dim_id": 1,
@@ -43,20 +42,6 @@
 		},
 		{
 			"dim_id": 5,
-			"term": "Stroke",
-			"description": "The type of stroke technique used to hit the shuttle.",
-			"values": [
-				{ "stroke_id": 1, "term": "clear", "description": "high, deep shot to the back of the court." },
-				{ "stroke_id": 2, "term": "drop", "description": "soft shot that falls close to the net." },
-				{ "stroke_id": 3, "term": "smash", "description": "hard, downward attacking shot." },
-				{ "stroke_id": 4, "term": "half-smash", "description": "moderate power downward shot." },
-				{ "stroke_id": 5, "term": "drive", "description": "fast, flat shot at net level." },
-				{ "stroke_id": 6, "term": "push", "description": "controlled attacking shot to midcourt." },
-				{ "stroke_id": 7, "term": "kill", "description": "fast downward shot that ends the rally." }
-			]
-		},
-		{
-			"dim_id": 6,
 			"term": "Impact",
 			"description": "The type of contact made with the shuttle affecting its flight characteristics.",
 			"values": [
@@ -68,7 +53,7 @@
 			]
 		},
 		{
-			"dim_id": 7,
+			"dim_id": 6,
 			"term": "Direction",
 			"description": "The directional target of where the shot is aimed on the opponent's court.",
 			"values": [

@@ -111,7 +111,7 @@ function getDimensionKey(dimensionTerm) {
     'Lateral Position': 'lateralPosition',
     'Timing': 'timing',
     'Intention': 'intention',
-    'Stroke': 'stroke',
+  // 'Stroke': 'stroke', // removed
     'Impact': 'impact',
     'Direction': 'direction'
   };
