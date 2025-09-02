@@ -25,8 +25,7 @@ Shuttle Insights is a multi-component badminton video analysis system with a Pyt
 - Extension can be loaded in Chrome via `chrome://extensions` -> "Load unpacked" -> select `chrome-extension` folder
 
 ### Python Pipeline
-- **Core Scripts Location**: `src/` directory contains main pipeline scripts
-- **NO CLI INTERFACES**: Scripts do not have `if __name__ == "__main__"` blocks - they are library functions
+- **NO CLI INTERFACES**: Scripts are intended to be imported and called programmatically; they do not support direct command-line execution and lack `if __name__ == "__main__"` blocks.
 - **Required Dependencies**: OpenCV, MediaPipe, yt-dlp, pandas for core functionality
 - Basic pipeline workflow:
   ```python
