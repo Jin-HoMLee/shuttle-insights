@@ -138,8 +138,6 @@ shuttle-insights/
 ## Known Issues and Limitations
 
 ### Critical Dependency Conflicts
-- **requirements.txt has numpy version conflicts** - resolve by installing packages without version pins
-- **requirements_dev.txt missing** - Makefile references this file but it doesn't exist
 - **Network timeouts** - PyPI installations may timeout, retry with longer timeouts
 
 ### Missing Tools
