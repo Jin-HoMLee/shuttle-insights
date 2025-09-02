@@ -6,12 +6,12 @@ Shuttle Insights is a multi-component badminton video analysis system with a Pyt
 ## Working Effectively
 
 ### Environment Setup
-- **CRITICAL DEPENDENCY ISSUE RESOLVED**: Use the provided `requirements-fixed.txt` file with compatible version pins to avoid numpy and other dependency conflicts. You MUST use this file for Python work:
+- **CRITICAL DEPENDENCY ISSUE RESOLVED**: Use the provided `requirements.txt` file with compatible version pins to avoid numpy and other dependency conflicts. You MUST use this file for Python work:
   ```bash
   python3 -m venv .venv
   source .venv/bin/activate
   pip install --upgrade pip
-  pip install -r requirements-fixed.txt
+  pip install -r requirements.txt
 
 ### Browser Extension Development
 - **FASTEST BUILD COMPONENT**: Browser extension builds in under 1 second
