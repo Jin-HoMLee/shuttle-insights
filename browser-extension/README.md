@@ -25,6 +25,7 @@ This browser extension lets you label shots/events in any YouTube video and expo
 
 5. **Move the Panel:**
    - Drag the panel by its title bar to reposition anywhere in the window.
+   - Resize the panel by dragging the edges or corners.
 
 6. **Close/Reopen the Panel:**
    - Click the `×` button to close the panel.
@@ -33,31 +34,114 @@ This browser extension lets you label shots/events in any YouTube video and expo
 ## Features
 
 - Show/hide panel with the extension icon.
-- Movable (draggable) panel.
+- Movable and resizable panel.
+- Pose overlay visualization with TensorFlow.js.
+- Advanced shot dimensions (position, timing, intention, etc.).
 - Displays current date/time, video title, and URL at the top.
 - Works on any YouTube video page.
 - Lets you label shots/events using customizable buttons.
 - Download all labels as a CSV file.
+- Load existing CSV files to continue labeling.
 - Delete shots if mis-labeled.
 - Non-destructive: no changes to the video or your YouTube account.
 
+## Developer Information
+
+### Architecture Overview
+
+The extension has been refactored for improved maintainability and scalability:
+
+#### Core Modules:
+
+- **`content.js`** - Main entry point, handles pose overlay and panel management
+- **`panel.js`** - Panel UI creation and shot labeling workflow
+- **`background.js`** - Service worker for extension-level functionality
+
+#### Utility Modules:
+
+- **`constants.js`** - Centralized configuration and magic strings
+- **`ui-utils.js`** - UI-related utilities (formatting, sanitization, error handling)
+- **`video-utils.js`** - Video element utilities and state management
+- **`pose-utils.js`** - TensorFlow.js pose detection utilities
+- **`overlay-utils.js`** - Canvas overlay management and positioning
+- **`data-validation.js`** - Data validation and integrity checks
+
+#### Feature Modules:
+
+- **`csv.js`** - CSV import/export functionality
+- **`glossary.js`** - Shot glossary and dimension controls
+- **`poseDrawing.js`** - Pose visualization on canvas
+- **`resize.js`** - Panel resizing functionality
+- **`drag.js`** - Panel drag and drop
+
+#### Key Improvements:
+
+- **Modular Architecture**: Clear separation of concerns
+- **Comprehensive Documentation**: JSDoc comments throughout
+- **Type Safety**: Input validation and error handling
+- **Maintainable Code**: Consistent naming and structure
+- **Scalable Design**: Easy to add new features
+
+### Building and Development
+
+1. **Install Dependencies:**
+   ```bash
+   cd browser-extension
+   npm install
+   ```
+
+2. **Build the Extension:**
+   ```bash
+   npm run build
+   ```
+
+3. **Development Workflow:**
+   - Source files are in `chrome-extension/src/`
+   - Built files go to `chrome-extension/dist/`
+   - Edit source files and rebuild to see changes
+
+### File Structure
+
+```
+chrome-extension/
+├── src/                          # Source code (edit these)
+│   ├── content.js               # Main content script
+│   ├── panel.js                 # Panel UI management
+│   ├── constants.js             # Configuration constants
+│   ├── ui-utils.js              # UI utilities
+│   ├── video-utils.js           # Video handling utilities
+│   ├── pose-utils.js            # Pose detection utilities
+│   ├── overlay-utils.js         # Canvas overlay utilities
+│   ├── data-validation.js       # Data validation utilities
+│   ├── csv.js                   # CSV import/export
+│   ├── glossary.js              # Shot glossary management
+│   ├── poseDrawing.js           # Pose visualization
+│   ├── resize.js                # Panel resizing
+│   ├── drag.js                  # Panel dragging
+│   └── utils.js                 # Legacy compatibility layer
+├── dist/                        # Built files (generated)
+│   └── content.js               # Bundled content script
+├── manifest.json                # Extension manifest
+├── background.js                # Service worker
+├── styles.css                   # Extension styles
+├── badminton_shots_glossary.json # Shot definitions
+└── esbuild.config.js            # Build configuration
+```
+
 ## Customization
 
-- To add new labels, edit the `chrome-extension/badminton_shots_glossary.json` file.
-- After making changes, rebuild the extension using `npm run build` (see Packaging section below).
+- **Add new labels**: Edit `chrome-extension/badminton_shots_glossary.json` file
+- **Modify UI**: Edit CSS in `chrome-extension/styles.css`
+- **Add features**: Create new modules in `src/` directory
+- **Configure settings**: Update constants in `src/constants.js`
 
-## Packaging / Rebuilding
-After changing code in browser-extension/chrome-extension/src the files should be packaged / rebuilt again via node: 
+After making changes, rebuild the extension using `npm run build`.
 
-1. Move into the chrome extension folder, e.g.  
-```
-cd shuttle-insights/browser-extension/chrome-extension
-``` 
-2. Run packaging with
-```
-npm run build
-```
+## Dependencies
 
+- **TensorFlow.js**: For pose detection and overlay visualization
+- **esbuild**: For building and bundling the extension
+- **Chrome Extensions API**: For browser integration
 
 ---
 
@@ -67,6 +151,6 @@ npm run build
 
 The badminton shots glossary [badminton_shots_glossary.json](chrome-extension/badminton_shots_glossary.json) in this repository is adapted and modified from [WorldBadminton.com Glossary](https://www.worldbadminton.com/glossary.htm). 
 
-Special thanks to GitHub Copilot Chat Assistant for guidance and coding help during development.
+Special thanks to GitHub Copilot for guidance and assistance during the refactoring process.
 
 Developed by Jin-HoMLee. 
