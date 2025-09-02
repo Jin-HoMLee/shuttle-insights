@@ -137,8 +137,11 @@ shuttle-insights/
 
 ## Known Issues and Limitations
 
+- **Network timeouts** - PyPI installations may timeout, retry with longer timeouts.
+
 ### Critical Dependency Conflicts
-- **Network timeouts** - PyPI installations may timeout, retry with longer timeouts
+- **Numpy version incompatibilities** - Some packages require conflicting numpy versions; always use the provided `requirements.txt` to avoid these issues.
+- **requirements.txt conflicts** - The `requirements.txt` file may contain packages with incompatible version pins; do not modify without verifying compatibility.
 
 ### Missing Tools
 - **No Terraform installed** - Required for cloud deployment
