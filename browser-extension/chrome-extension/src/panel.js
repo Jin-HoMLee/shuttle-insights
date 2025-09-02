@@ -18,7 +18,6 @@ export function createLabelerPanel() {
     lateralPosition: null,
     timing: null,
     intention: null,
-  // stroke: null, // removed
     impact: null,
     direction: null
   };
