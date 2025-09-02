@@ -23,7 +23,6 @@ export function setupCSV(panel, shots, updateShotList, videoUrl, sanitizedTitle)
       const idxLatPos = header.indexOf('lateral_position');
       const idxTiming = header.indexOf('timing');
       const idxIntention = header.indexOf('intention');
-  // const idxStroke = header.indexOf('stroke'); // removed
       const idxImpact = header.indexOf('impact');
       const idxDirection = header.indexOf('direction');
       
