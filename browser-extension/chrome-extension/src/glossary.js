@@ -39,11 +39,14 @@ export function setupGlossaryButtons(panel, getCurrentShot, updateStatus) {
 
       // Setup dimension controls (new functionality)
       if (glossaryData.dimensions) {
+        const dimensionSection = document.createElement('div');
+        dimensionSection.className = "yt-shot-labeler-category-section";
+
         const dimensionHeader = document.createElement('div');
         dimensionHeader.textContent = 'Shot Dimensions';
         dimensionHeader.className = "yt-shot-labeler-category-title";
         dimensionHeader.style.marginTop = "10px";
-        dimensionDiv.appendChild(dimensionHeader);
+        dimensionSection.appendChild(dimensionHeader);
 
         glossaryData.dimensions.forEach(dimension => {
           const dimSection = document.createElement('div');
@@ -80,7 +83,6 @@ export function setupGlossaryButtons(panel, getCurrentShot, updateStatus) {
               const currentShot = getCurrentShot();
               const dimensionKey = getDimensionKey(dimension.term);
               currentShot[dimensionKey] = value.term;
-              
               // Update button states for this dimension
               dimButtonGroup.querySelectorAll('button').forEach(b => {
                 b.style.background = "#f9f9f9";
@@ -88,7 +90,6 @@ export function setupGlossaryButtons(panel, getCurrentShot, updateStatus) {
               });
               btn.style.background = "#007cba";
               btn.style.color = "white";
-              
               updateStatus();
             };
 
@@ -96,8 +97,10 @@ export function setupGlossaryButtons(panel, getCurrentShot, updateStatus) {
           });
 
           dimSection.appendChild(dimButtonGroup);
-          dimensionDiv.appendChild(dimSection);
+          dimensionSection.appendChild(dimSection);
         });
+
+        dimensionDiv.appendChild(dimensionSection);
       }
     });
 }
