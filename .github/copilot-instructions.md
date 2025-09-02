@@ -12,6 +12,7 @@ Shuttle Insights is a multi-component badminton video analysis system with a Pyt
   source .venv/bin/activate
   pip install --upgrade pip
   pip install -r requirements.txt
+  ```
 
 ### Browser Extension Development
 - **FASTEST BUILD COMPONENT**: Browser extension builds in under 1 second
@@ -131,8 +132,8 @@ shuttle-insights/
 │   └── *.ipynb                   # Vertex AI deployment notebooks
 ├── experiments/                   # Experimental code
 ├── data/                         # Data storage (gitignored)
-├── requirements.txt              # Python dependencies (HAS CONFLICTS)
-└── Makefile                      # Environment setup (references missing requirements_dev.txt)
+├── requirements.txt              # Python dependencies
+└── Makefile                      # Environment setup
 ```
 
 ## Known Issues and Limitations
