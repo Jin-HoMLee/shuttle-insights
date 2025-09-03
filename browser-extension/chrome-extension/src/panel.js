@@ -17,6 +17,7 @@ import { addResizeHandles } from './resize.js';
 import { addDragBehavior } from './drag.js';
 import { setupCSV } from './csv.js';
 import { setupGlossaryButtons } from './glossary.js';
+import { associatePoseDataWithShot, exportAllPoseData, getPoseDataStats } from './pose-data.js';
 import { 
   UI_IDS, 
   CSS_CLASSES, 
@@ -162,6 +163,7 @@ function createPanelElement(dateTimeStr, videoTitle, videoUrl) {
       <div class="${CSS_CLASSES.SECTION}">
         <div class="${CSS_CLASSES.SECTION_TITLE}">Export Labels</div>
         <button id="${UI_IDS.SAVE_LABELS}" style="margin-bottom:2px;">Download CSV</button>
+        <button id="${UI_IDS.EXPORT_POSE_DATA}" style="margin-bottom:2px;">Export Pose Data</button>
       </div>
     </div>
   `;
@@ -227,6 +229,9 @@ function setupPanelFunctionality(panel, shots, currentShot, updateStatus, update
   
   // Setup glossary and dimension controls
   setupGlossaryButtons(panel, () => currentShot, updateStatus);
+  
+  // Setup pose data export button
+  setupPoseDataExport(panel);
   
   // Setup close button
   setupCloseButton(panel);
@@ -297,6 +302,13 @@ function setupShotMarkingButtons(panel, currentShot, shots, updateStatus, update
         return;
       }
       
+      // Associate pose data with this shot
+      const poseDataId = associatePoseDataWithShot(currentShot);
+      if (poseDataId) {
+        currentShot.poseDataId = poseDataId;
+        console.log('Associated pose data with shot:', poseDataId);
+      }
+      
       // Save current shot and reset
       shots.push({ ...currentShot });
       updateShotList();
@@ -322,6 +334,41 @@ function setupCloseButton(panel) {
         detail: { action: 'stop' } 
       }));
       panel.remove();
+    };
+  }
+}
+
+/**
+ * Sets up the pose data export button
+ */
+function setupPoseDataExport(panel) {
+  const exportBtn = panel.querySelector(`#${UI_IDS.EXPORT_POSE_DATA}`);
+  if (exportBtn) {
+    exportBtn.onclick = () => {
+      const stats = getPoseDataStats();
+      
+      if (stats.storedShots === 0) {
+        alert('No pose data available for export. Please label some shots while the pose overlay is active.');
+        return;
+      }
+      
+      // Show export options
+      const format = prompt(
+        `Found ${stats.storedShots} shot(s) with pose data.\n\nChoose export format:\n- json\n- csv\n- parquet\n\nEnter format:`, 
+        'json'
+      );
+      
+      if (format && ['json', 'csv', 'parquet'].includes(format.toLowerCase())) {
+        try {
+          exportAllPoseData(format.toLowerCase(), 'badminton_pose_data');
+          alert(`Pose data exported successfully in ${format.toUpperCase()} format!`);
+        } catch (error) {
+          console.error('Export failed:', error);
+          alert('Export failed. Please check the console for details.');
+        }
+      } else if (format !== null) {
+        alert('Invalid format. Please choose json, csv, or parquet.');
+      }
     };
   }
 }

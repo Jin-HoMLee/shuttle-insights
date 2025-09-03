@@ -11,6 +11,7 @@
  * - Panel toggle functionality
  * - Event listener management for video elements
  * - MutationObserver for YouTube UI changes
+ * - Pose data collection during overlay active periods
  */
 
 import { togglePanel } from './panel.js';
@@ -19,6 +20,7 @@ import { disconnectOverlayObserver, removeOverlayCanvas, createOverlayCanvas } f
 import { setupDetector } from './pose-utils.js';
 import { drawKeypoints, drawSkeletonAndBoxes } from './poseDrawing.js';
 import { EVENTS } from './constants.js';
+import { initPoseDataCollection, collectPoseData, cleanupPoseDataCollection } from './pose-data.js';
 
 // State management
 let detector = null; // Pose detector instance (needed for pose estimation)
@@ -54,6 +56,7 @@ function detachModeObserver() {
 /**
  * Main pose overlay rendering loop
  * Continuously estimates poses from video and draws them on canvas
+ * Also collects pose data when overlay is active for later association with shots
  * 
  * @param {HTMLVideoElement} video - The video element to analyze
  * @param {Object} detector - The pose detection model instance
@@ -69,6 +72,9 @@ async function poseOverlayLoop(video, detector, overlay, ctx) {
     
     // Estimate poses from current video frame
     const poses = await detector.estimatePoses(video, { maxPoses: 6 });
+    
+    // Collect pose data for later association with shots
+    collectPoseData(poses, video.currentTime);
     
     // Draw the detected poses on the overlay canvas
     drawKeypoints(ctx, poses);
@@ -86,7 +92,7 @@ async function poseOverlayLoop(video, detector, overlay, ctx) {
 /**
  * Starts the pose overlay functionality
  * Sets up video event listeners, initializes detector, creates overlay canvas,
- * and begins the pose detection loop
+ * and begins the pose detection loop. Also initializes pose data collection.
  */
 async function startPoseOverlay() {
   const video = getVideo();
@@ -99,6 +105,11 @@ async function startPoseOverlay() {
     // Silently skip if video is not ready; overlay will restart when video is ready
     return;
   }
+  
+  // Initialize pose data collection for this session
+  const videoUrl = window.location.href;
+  const videoTitle = document.title;
+  initPoseDataCollection(videoUrl, videoTitle);
   
   // Attach MutationObserver for YouTube mode changes (Default, Theater, Fullscreen)
   attachModeObserver();
@@ -116,7 +127,8 @@ async function startPoseOverlay() {
 
 /**
  * Stops the pose overlay functionality
- * Cancels the animation loop, removes overlay canvas, and cleans up observers
+ * Cancels the animation loop, removes overlay canvas, cleans up observers,
+ * and stops pose data collection
  */
 function stopPoseOverlay() {
   // Cancel the pose detection loop
@@ -124,6 +136,9 @@ function stopPoseOverlay() {
     window.cancelAnimationFrame(poseLoopId);
     poseLoopId = null;
   }
+  
+  // Clean up pose data collection
+  cleanupPoseDataCollection();
   
   // Remove overlay canvas from DOM
   removeOverlayCanvas();

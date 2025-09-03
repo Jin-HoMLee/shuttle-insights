@@ -22,7 +22,8 @@ export const UI_IDS = {
   CONTENT: 'yt-shot-labeler-content',
   DATETIME: 'yt-shot-labeler-datetime',
   VIDEO_TITLE: 'yt-shot-labeler-videotitle',
-  URL: 'yt-shot-labeler-url'
+  URL: 'yt-shot-labeler-url',
+  EXPORT_POSE_DATA: 'export-pose-data'
 };
 
 // CSS Classes
@@ -86,7 +87,8 @@ export const DEFAULT_SHOT = {
   timing: null,
   intention: null,
   impact: null,
-  direction: null
+  direction: null,
+  poseDataId: null // Reference to associated pose data
 };
 
 // CSV Headers
@@ -109,6 +111,18 @@ export const EXTENSION_CONFIG = {
   GLOSSARY_FILE: 'badminton_shots_glossary.json',
   CSV_DOWNLOAD_ACTION: 'download-csv',
   DEFAULT_CSV_PATH: 'YouTube Shot Labeler'
+};
+
+// Pose Data Configuration
+export const POSE_DATA_CONFIG = {
+  COLLECTION_INTERVAL_MS: 33, // ~30 FPS collection rate
+  KEYPOINT_NAMES: [
+    'nose', 'left_eye', 'right_eye', 'left_ear', 'right_ear',
+    'left_shoulder', 'right_shoulder', 'left_elbow', 'right_elbow',
+    'left_wrist', 'right_wrist', 'left_hip', 'right_hip',
+    'left_knee', 'right_knee', 'left_ankle', 'right_ankle'
+  ],
+  EXPORT_FORMAT: 'parquet'
 };
 
 // Maximum allowed shot duration in seconds (5 minutes)
