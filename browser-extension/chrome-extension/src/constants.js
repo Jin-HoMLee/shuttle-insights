@@ -55,9 +55,9 @@ export const VIDEO_SELECTORS = {
 export const PANEL_CONFIG = {
   DEFAULT_POSITION: { top: '80px', right: '40px' },
   DEFAULT_SIZE: { width: '360px', minWidth: '320px', minHeight: '200px' },
-  MAX_SIZE: { 
-    width: 'window.innerWidth * 0.98', 
-    height: 'window.innerHeight * 0.98' 
+  MAX_SIZE: {
+    width: () => window.innerWidth * 0.98,
+    height: () => window.innerHeight * 0.98
   },
   MIN_SIZE: { width: 280, height: 200 },
   Z_INDEX: 99999
