@@ -146,7 +146,7 @@ export async function isTensorFlowReady() {
 export function getTensorFlowInfo() {
   return {
     backend: tf.getBackend(),
-    version: tf.version_core || 'unknown', // tf.version_core may not be available in some builds
+    version: tf.version_core || 'unknown', // tf.version_core is undefined in some TensorFlow.js builds (e.g., custom or minified)
     environment: tf.env(),
     memory: tf.memory()
   };
