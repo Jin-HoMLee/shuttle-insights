@@ -14,7 +14,9 @@
  */
 
 import { togglePanel } from './panel.js';
-import { getVideo, disconnectOverlayObserver, removeOverlayCanvas, createOverlayCanvas, setupDetector } from './utils.js'; 
+import { getVideo } from './video-utils.js';
+import { disconnectOverlayObserver, removeOverlayCanvas, createOverlayCanvas } from './overlay-utils.js';
+import { setupDetector } from './pose-utils.js';
 import { drawKeypoints, drawSkeletonAndBoxes } from './poseDrawing.js';
 import { EVENTS } from './constants.js';
 
