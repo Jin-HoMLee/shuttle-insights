@@ -1,6 +1,6 @@
 # YouTube Badminton Shot Labeler Extension
 
-This browser extension lets you label shots/events in any YouTube video and export the results as a CSV file.
+This browser extension lets you label shots/events in any YouTube video and export the results as a CSV file. **New in this version**: Collect and export pose keypoint data for labeled shots.
 
 ## How to Use
 
@@ -16,12 +16,15 @@ This browser extension lets you label shots/events in any YouTube video and expo
    - Open any YouTube video.
    - Click the extension icon to show/hide the labeling panel.
 
-4. **Labeling:**
+4. **Labeling with Pose Data Collection:**
    - Play/pause the video. 
+   - **Click "Start Overlay"** to begin pose detection and data collection.
    - Click "Mark Start" at the start of an event, select a shot label, then "Mark End" at the end.
+   - **Pose data is automatically collected and associated with each labeled shot.**
    - Repeat for as many shots as you want.
    - Each shot can be deleted (🗑️) from the list.
-   - Click "Download CSV" to export the labels (button is below the shot list).
+   - Click "Download CSV" to export shot labels.
+   - **Click "Export Pose Data"** to export pose keypoint data for all labeled shots.
 
 5. **Move the Panel:**
    - Drag the panel by its title bar to reposition anywhere in the window.
@@ -35,7 +38,9 @@ This browser extension lets you label shots/events in any YouTube video and expo
 
 - Show/hide panel with the extension icon.
 - Movable and resizable panel.
-- Pose overlay visualization with TensorFlow.js.
+- **🆕 Pose overlay visualization with TensorFlow.js.**
+- **🆕 Automatic pose data collection during overlay active periods.**
+- **🆕 Pose data export in JSON, CSV, and parquet-compatible formats.**
 - Advanced shot dimensions (position, timing, intention, etc.).
 - Displays current date/time, video title, and URL at the top.
 - Works on any YouTube video page.
@@ -44,6 +49,53 @@ This browser extension lets you label shots/events in any YouTube video and expo
 - Load existing CSV files to continue labeling.
 - Delete shots if mis-labeled.
 - Non-destructive: no changes to the video or your YouTube account.
+
+## 🆕 Pose Data Collection
+
+This extension now includes advanced pose data collection capabilities for machine learning research and analysis:
+
+### What's Collected
+- **17 keypoint coordinates** (x, y) for each detected person per frame
+- **Confidence scores** for each keypoint 
+- **Frame timestamps** synchronized with video playback
+- **Bounding boxes** around detected persons
+- **Automatic association** with labeled shots
+
+### Data Formats
+- **JSON**: Human-readable format with full metadata
+- **CSV**: Spreadsheet-compatible format for statistical analysis  
+- **Parquet-compatible**: Structured format for ML training pipelines
+
+### Data Structure
+The exported pose data follows the ASL signs dataset format:
+```json
+{
+  "metadata": {
+    "shot_id": "session_abc123_shot_1693834938",
+    "shot_label": "smash",
+    "shot_start": 12.34,
+    "shot_end": 15.67,
+    "total_frames": 98
+  },
+  "frames": [
+    {
+      "frame_timestamp": 12.34,
+      "poses": [{
+        "score": 0.85,
+        "nose_x": 320, "nose_y": 240, "nose_score": 0.9,
+        "left_eye_x": 315, "left_eye_y": 235, "left_eye_score": 0.88,
+        // ... all 17 keypoints with x, y, score
+      }]
+    }
+  ]
+}
+```
+
+### Usage for Research
+- **Badminton technique analysis**: Study body movements during different shot types
+- **ML model training**: Train shot detection and classification models
+- **Performance analysis**: Compare pose patterns between players
+- **Dataset creation**: Build training datasets for sports analytics
 
 ## Developer Information
 
@@ -63,6 +115,7 @@ The extension has been refactored for improved maintainability and scalability:
 - **`ui-utils.js`** - UI-related utilities (formatting, sanitization, error handling)
 - **`video-utils.js`** - Video element utilities and state management
 - **`pose-utils.js`** - TensorFlow.js pose detection utilities
+- **`pose-data.js`** - 🆕 Pose data collection, storage, and export functionality
 - **`overlay-utils.js`** - Canvas overlay management and positioning
 - **`data-validation.js`** - Data validation and integrity checks
 
