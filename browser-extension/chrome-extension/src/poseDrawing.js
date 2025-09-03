@@ -115,7 +115,7 @@ function drawBoundingBox(ctx, box) {
     ctx.strokeRect(x, y, width, height);
     
   } else {
-    console.warn('Bounding box coordinates are not normalized (0-1):', box);
+    console.warn('Bounding box coordinates are not normalized (0-1). Expected range [0,1], got:', box);
   }
 }
 
