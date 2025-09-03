@@ -1,93 +1,321 @@
-// CSV import/export logic
+/**
+ * CSV Import/Export Functionality
+ * 
+ * This module handles the import and export of shot labeling data in CSV format.
+ * It supports loading existing labels from CSV files and exporting current labels
+ * for analysis or backup purposes.
+ * 
+ * CSV Format:
+ * - Headers: video_url, shot_id, start_sec, end_sec, label, longitudinal_position, 
+ *           lateral_position, timing, intention, impact, direction
+ * - Supports quoted fields with comma escaping
+ * - Handles both basic shot data and advanced dimension annotations
+ */
 
+import { CSV_HEADERS, EXTENSION_CONFIG } from './constants.js';
+import { showError, showSuccess } from './ui-utils.js';
+
+/**
+ * Sets up CSV import and export functionality for the panel
+ * 
+ * @param {HTMLElement} panel - The main panel element containing CSV controls
+ * @param {Array} shots - Reference to the shots array for data manipulation
+ * @param {Function} updateShotList - Callback to refresh the shot list display
+ * @param {string} videoUrl - Current video URL for export metadata
+ * @param {string} sanitizedTitle - Sanitized video title for filename
+ */
 export function setupCSV(panel, shots, updateShotList, videoUrl, sanitizedTitle) {
-  // Import
+  setupCSVImport(panel, shots, updateShotList);
+  setupCSVExport(panel, shots, videoUrl, sanitizedTitle);
+}
+
+/**
+ * Sets up CSV import functionality
+ * 
+ * @param {HTMLElement} panel - The main panel element
+ * @param {Array} shots - Reference to shots array to populate
+ * @param {Function} updateShotList - Callback to refresh display after import
+ */
+function setupCSVImport(panel, shots, updateShotList) {
   const loadBtn = panel.querySelector('#load-csv');
   const fileInput = panel.querySelector('#csv-file-input');
+  
+  if (!loadBtn || !fileInput) {
+    console.warn('CSV import elements not found');
+    return;
+  }
+  
+  // Trigger file picker when load button is clicked
   loadBtn.onclick = () => fileInput.click();
+  
+  // Handle file selection and processing
   fileInput.onchange = (event) => {
     const file = event.target.files[0];
     if (!file) return;
+    
     const reader = new FileReader();
     reader.onload = (e) => {
-      const text = e.target.result;
-      const lines = text.trim().split('\n');
-      if (lines.length < 2) return;
-      const header = lines[0].split(',').map(s => s.trim());
-      
-      // Find column indices
-      const idxStart = header.indexOf('start_sec');
-      const idxEnd = header.indexOf('end_sec');
-      const idxLabel = header.indexOf('label');
-      const idxLongPos = header.indexOf('longitudinal_position');
-      const idxLatPos = header.indexOf('lateral_position');
-      const idxTiming = header.indexOf('timing');
-      const idxIntention = header.indexOf('intention');
-      const idxImpact = header.indexOf('impact');
-      const idxDirection = header.indexOf('direction');
-      
-      shots.length = 0;
-      lines.slice(1).forEach(line => {
-        const parts = [];
-        let part = '', inQuotes = false;
-        for (let c of line) {
-          if (c === '"') inQuotes = !inQuotes;
-          else if (c === ',' && !inQuotes) { parts.push(part); part = ''; }
-          else part += c;
-        }
-        parts.push(part);
+      try {
+        const importedShots = parseCSVContent(e.target.result);
         
-        if (!isNaN(parts[idxStart]) && !isNaN(parts[idxEnd]) && parts[idxLabel]) {
-          const shot = {
-            start: parseFloat(parts[idxStart]),
-            end: parseFloat(parts[idxEnd]),
-            label: parts[idxLabel]?.replace(/^"|"$/g, '') ?? ''
-          };
-          
-          // Add dimension fields if they exist in CSV
-          if (idxLongPos >= 0) shot.longitudinalPosition = parts[idxLongPos]?.replace(/^"|"$/g, '') || null;
-          if (idxLatPos >= 0) shot.lateralPosition = parts[idxLatPos]?.replace(/^"|"$/g, '') || null;
-          if (idxTiming >= 0) shot.timing = parts[idxTiming]?.replace(/^"|"$/g, '') || null;
-          if (idxIntention >= 0) shot.intention = parts[idxIntention]?.replace(/^"|"$/g, '') || null;
-          if (idxImpact >= 0) shot.impact = parts[idxImpact]?.replace(/^"|"$/g, '') || null;
-          if (idxDirection >= 0) shot.direction = parts[idxDirection]?.replace(/^"|"$/g, '') || null;
-          
-          shots.push(shot);
-        }
-      });
-      updateShotList();
+        // Replace current shots with imported data
+        shots.length = 0;
+        shots.push(...importedShots);
+        
+        updateShotList();
+        showSuccess(`Imported ${importedShots.length} shots from CSV`, panel);
+        
+      } catch (error) {
+        console.error('CSV import failed:', error);
+        showError(`Failed to import CSV: ${error.message}`, panel);
+      }
     };
+    
+    reader.onerror = () => {
+      showError('Failed to read CSV file', panel);
+    };
+    
     reader.readAsText(file);
   };
+}
 
-  // Export
-  panel.querySelector('#save-labels').onclick = () => {
+/**
+ * Sets up CSV export functionality
+ * 
+ * @param {HTMLElement} panel - The main panel element
+ * @param {Array} shots - Array of shot data to export
+ * @param {string} videoUrl - Current video URL for metadata
+ * @param {string} sanitizedTitle - Sanitized video title for filename
+ */
+function setupCSVExport(panel, shots, videoUrl, sanitizedTitle) {
+  const saveBtn = panel.querySelector('#save-labels');
+  
+  if (!saveBtn) {
+    console.warn('CSV export button not found');
+    return;
+  }
+  
+  saveBtn.onclick = () => {
     if (!shots.length) {
-      alert("No labels to save!");
+      showError('No labels to save!', panel);
       return;
     }
-  let csv = 'video_url,shot_id,start_sec,end_sec,label,longitudinal_position,lateral_position,timing,intention,impact,direction\n';
-    shots.forEach((shot, idx) => {
-      const safeLabel = `"${(shot.label ?? '').replace(/"/g, '""')}"`;
-      const safeUrl = `"${videoUrl.replace(/"/g, '""')}"`;
-      const safeLongPos = `"${(shot.longitudinalPosition ?? '').replace(/"/g, '""')}"`;
-      const safeLatPos = `"${(shot.lateralPosition ?? '').replace(/"/g, '""')}"`;
-      const safeTiming = `"${(shot.timing ?? '').replace(/"/g, '""')}"`;
-      const safeIntention = `"${(shot.intention ?? '').replace(/"/g, '""')}"`;
-      const safeImpact = `"${(shot.impact ?? '').replace(/"/g, '""')}"`;
-      const safeDirection = `"${(shot.direction ?? '').replace(/"/g, '""')}"`;
+    
+    try {
+      const csvContent = generateCSVContent(shots, videoUrl);
+      downloadCSV(csvContent, sanitizedTitle);
+      showSuccess(`Exported ${shots.length} shots to CSV`, panel);
       
-  csv += `${safeUrl},${idx + 1},${shot.start},${shot.end},${safeLabel},${safeLongPos},${safeLatPos},${safeTiming},${safeIntention},${safeImpact},${safeDirection}\n`;
-    });
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const reader = new FileReader();
-    reader.onload = () => {
-      chrome.runtime.sendMessage({
-        action: "download-csv",
-        filename: `YouTube Shot Labeler/${sanitizedTitle}/labeled_shots.csv`,
-        dataUrl: reader.result
-      });
-    };
-    reader.readAsDataURL(blob);
+    } catch (error) {
+      console.error('CSV export failed:', error);
+      showError(`Failed to export CSV: ${error.message}`, panel);
+    }
   };
+}
+
+/**
+ * Parses CSV content and extracts shot data
+ * 
+ * @param {string} csvText - Raw CSV text content
+ * @returns {Array} Array of parsed shot objects
+ * @throws {Error} If CSV format is invalid
+ */
+function parseCSVContent(csvText) {
+  const lines = csvText.trim().split('\n');
+  
+  if (lines.length < 2) {
+    throw new Error('CSV file must contain headers and at least one data row');
+  }
+  
+  const headers = lines[0].split(',').map(header => header.trim());
+  
+  // Find column indices for required and optional fields
+  const columnIndices = mapCSVColumns(headers);
+  
+  const shots = [];
+  
+  // Process each data row
+  lines.slice(1).forEach((line, index) => {
+    try {
+      const parsedRow = parseCSVRow(line);
+      const shot = extractShotFromRow(parsedRow, columnIndices);
+      
+      if (shot) {
+        shots.push(shot);
+      }
+    } catch (error) {
+      console.warn(`Skipping invalid row ${index + 2}: ${error.message}`);
+    }
+  });
+  
+  return shots;
+}
+
+/**
+ * Maps CSV headers to column indices
+ * 
+ * @param {Array} headers - Array of header strings
+ * @returns {Object} Object mapping field names to column indices
+ */
+function mapCSVColumns(headers) {
+  return {
+    start: headers.indexOf('start_sec'),
+    end: headers.indexOf('end_sec'),
+    label: headers.indexOf('label'),
+    longitudinalPosition: headers.indexOf('longitudinal_position'),
+    lateralPosition: headers.indexOf('lateral_position'),
+    timing: headers.indexOf('timing'),
+    intention: headers.indexOf('intention'),
+    impact: headers.indexOf('impact'),
+    direction: headers.indexOf('direction')
+  };
+}
+
+/**
+ * Parses a single CSV row, handling quoted fields and commas
+ * 
+ * @param {string} line - CSV row string
+ * @returns {Array} Array of parsed field values
+ */
+function parseCSVRow(line) {
+  const fields = [];
+  let currentField = '';
+  let inQuotes = false;
+  
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      fields.push(currentField);
+      currentField = '';
+    } else {
+      currentField += char;
+    }
+  }
+  
+  // Add the last field
+  fields.push(currentField);
+  
+  return fields;
+}
+
+/**
+ * Extracts shot object from parsed CSV row
+ * 
+ * @param {Array} fields - Array of field values
+ * @param {Object} indices - Column index mapping
+ * @returns {Object|null} Shot object or null if invalid
+ */
+function extractShotFromRow(fields, indices) {
+  // Validate required fields
+  if (indices.start < 0 || indices.end < 0 || indices.label < 0) {
+    throw new Error('Required columns (start_sec, end_sec, label) not found');
+  }
+  
+  const startTime = parseFloat(fields[indices.start]);
+  const endTime = parseFloat(fields[indices.end]);
+  const label = cleanFieldValue(fields[indices.label]);
+  
+  // Validate time values
+  if (isNaN(startTime) || isNaN(endTime) || !label) {
+    return null;
+  }
+  
+  const shot = {
+    start: startTime,
+    end: endTime,
+    label: label
+  };
+  
+  // Add optional dimension fields if present
+  const dimensionFields = [
+    'longitudinalPosition', 'lateralPosition', 'timing', 
+    'intention', 'impact', 'direction'
+  ];
+  
+  dimensionFields.forEach(field => {
+    const index = indices[field];
+    if (index >= 0 && fields[index]) {
+      shot[field] = cleanFieldValue(fields[index]) || null;
+    }
+  });
+  
+  return shot;
+}
+
+/**
+ * Generates CSV content from shots array
+ * 
+ * @param {Array} shots - Array of shot objects
+ * @param {string} videoUrl - Video URL for metadata
+ * @returns {string} CSV content string
+ */
+function generateCSVContent(shots, videoUrl) {
+  let csv = CSV_HEADERS.join(',') + '\n';
+  
+  shots.forEach((shot, index) => {
+    const row = [
+      escapeCSVField(videoUrl),
+      index + 1,
+      shot.start,
+      shot.end,
+      escapeCSVField(shot.label || ''),
+      escapeCSVField(shot.longitudinalPosition || ''),
+      escapeCSVField(shot.lateralPosition || ''),
+      escapeCSVField(shot.timing || ''),
+      escapeCSVField(shot.intention || ''),
+      escapeCSVField(shot.impact || ''),
+      escapeCSVField(shot.direction || '')
+    ];
+    
+    csv += row.join(',') + '\n';
+  });
+  
+  return csv;
+}
+
+/**
+ * Downloads CSV content as a file
+ * 
+ * @param {string} csvContent - CSV content to download
+ * @param {string} sanitizedTitle - Base filename
+ */
+function downloadCSV(csvContent, sanitizedTitle) {
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const reader = new FileReader();
+  
+  reader.onload = () => {
+    chrome.runtime.sendMessage({
+      action: EXTENSION_CONFIG.CSV_DOWNLOAD_ACTION,
+      filename: `${EXTENSION_CONFIG.DEFAULT_CSV_PATH}/${sanitizedTitle}/labeled_shots.csv`,
+      dataUrl: reader.result
+    });
+  };
+  
+  reader.readAsDataURL(blob);
+}
+
+/**
+ * Cleans and unquotes a CSV field value
+ * 
+ * @param {string} value - Raw field value
+ * @returns {string} Cleaned field value
+ */
+function cleanFieldValue(value) {
+  if (!value) return '';
+  return value.replace(/^"|"$/g, '').trim();
+}
+
+/**
+ * Escapes a field value for CSV output
+ * 
+ * @param {string} value - Field value to escape
+ * @returns {string} Escaped and quoted field value
+ */
+function escapeCSVField(value) {
+  if (!value) return '""';
+  const escaped = value.toString().replace(/"/g, '""');
+  return `"${escaped}"`;
 }
