@@ -110,3 +110,6 @@ export const EXTENSION_CONFIG = {
   CSV_DOWNLOAD_ACTION: 'download-csv',
   DEFAULT_CSV_PATH: 'YouTube Shot Labeler'
 };
+
+// Maximum allowed shot duration in seconds (5 minutes)
+export const MAX_SHOT_DURATION_SECONDS = 300;

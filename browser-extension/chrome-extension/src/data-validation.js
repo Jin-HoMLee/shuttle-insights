@@ -11,7 +11,7 @@
  * - Input validation helpers
  */
 
-import { DEFAULT_SHOT } from './constants.js';
+import { DEFAULT_SHOT, MAX_SHOT_DURATION_SECONDS } from './constants.js';
 
 /**
  * Validates a shot object for completeness and data integrity
@@ -53,7 +53,7 @@ export function validateShot(shot) {
       errors.push('End time must be greater than start time');
     }
     
-    if (shot.end - shot.start > 300) { // 5 minutes seems like a reasonable max
+    if (shot.end - shot.start > MAX_SHOT_DURATION_SECONDS) { // 5 minutes seems like a reasonable max
       errors.push('Shot duration seems too long (over 5 minutes)');
     }
   }
@@ -169,8 +169,8 @@ export function validateTimeRange(start, end) {
       errors.push('Shot duration must be at least 0.1 seconds');
     }
     
-    if (end - start > 300) {
-      errors.push('Shot duration cannot exceed 5 minutes');
+    if (end - start > MAX_SHOT_DURATION_SECONDS) {
+      errors.push(`Shot duration cannot exceed ${MAX_SHOT_DURATION_SECONDS / 60} minutes`);
     }
   }
   
