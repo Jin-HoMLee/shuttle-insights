@@ -425,8 +425,10 @@ function setupShotMarkingButtons(panel, currentShot, shots, updateStatus, update
  * Sets up keyboard shortcuts for the panel
  */
 function setupKeyboardShortcuts(panel, currentShot, shots, updateStatus, updateShotList) {
+  let removed = false;
   const handleKeydown = (event) => {
     // Only handle shortcuts when panel is active and not in an input field
+    if (removed) return;
     if (!panel || !document.contains(panel)) return;
     if (
       event.target.tagName === 'INPUT' ||
@@ -441,7 +443,6 @@ function setupKeyboardShortcuts(panel, currentShot, shots, updateStatus, updateS
           if (markStartBtn) markStartBtn.click();
         }
         break;
-        
       case KEYBOARD_SHORTCUTS.MARK_END:
         if (event.ctrlKey || event.metaKey) {
           event.preventDefault();
@@ -449,7 +450,6 @@ function setupKeyboardShortcuts(panel, currentShot, shots, updateStatus, updateS
           if (markEndBtn) markEndBtn.click();
         }
         break;
-        
       case KEYBOARD_SHORTCUTS.TOGGLE_OVERLAY:
         if (event.ctrlKey || event.metaKey) {
           event.preventDefault();
@@ -457,7 +457,6 @@ function setupKeyboardShortcuts(panel, currentShot, shots, updateStatus, updateS
           if (overlayBtn) overlayBtn.click();
         }
         break;
-        
       case KEYBOARD_SHORTCUTS.CLOSE_PANEL:
         event.preventDefault();
         const closeBtn = panel.querySelector(`#${UI_IDS.CLOSE_BTN}`);
@@ -465,16 +464,15 @@ function setupKeyboardShortcuts(panel, currentShot, shots, updateStatus, updateS
         break;
     }
   };
-  
-  // Add event listener
+
   document.addEventListener('keydown', handleKeydown);
-  
+
   // Add visual indication of keyboard shortcuts to buttons
   const markStartBtn = panel.querySelector(`#${UI_IDS.MARK_START}`);
   const markEndBtn = panel.querySelector(`#${UI_IDS.MARK_END}`);
   const overlayBtn = panel.querySelector(`#${UI_IDS.CUSTOM_ACTION_BTN}`);
   const closeBtn = panel.querySelector(`#${UI_IDS.CLOSE_BTN}`);
-  
+
   if (markStartBtn) {
     addTooltip(markStartBtn, 'Mark shot start time (Ctrl+S)');
   }
@@ -487,9 +485,13 @@ function setupKeyboardShortcuts(panel, currentShot, shots, updateStatus, updateS
   if (closeBtn) {
     addTooltip(closeBtn, 'Close panel (Esc)');
   }
-  
-  // Store reference to remove listener when panel is destroyed
-  panel._keydownHandler = handleKeydown;
+
+  // Provide a cleanup function for removing the event listener
+  panel._removeKeydownHandler = () => {
+    removed = true;
+    document.removeEventListener('keydown', handleKeydown);
+    delete panel._removeKeydownHandler;
+  };
 }
 
 /**
@@ -511,8 +513,8 @@ function setupCloseButton(panel) {
     
     closeBtn.onclick = () => {
       // Clean up keyboard event listener
-      if (panel._keydownHandler) {
-        document.removeEventListener('keydown', panel._keydownHandler);
+      if (panel._removeKeydownHandler) {
+        panel._removeKeydownHandler();
       }
       
       // Add closing animation
