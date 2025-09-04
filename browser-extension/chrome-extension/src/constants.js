@@ -7,6 +7,7 @@
 export const UI_IDS = {
   PANEL: 'yt-shot-labeler-panel',
   OVERLAY_CANVAS: 'pose-overlay-canvas',
+  OVERLAY_STATUS: 'overlay-status',
   MARK_START: 'mark-start',
   MARK_END: 'mark-end',
   SHOT_STATUS: 'shot-status',

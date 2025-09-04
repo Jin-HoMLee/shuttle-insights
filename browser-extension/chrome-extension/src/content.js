@@ -15,7 +15,7 @@
 
 import { togglePanel } from './panel.js';
 import { getVideo } from './video-utils.js';
-import { disconnectOverlayObserver, removeOverlayCanvas, createOverlayCanvas } from './overlay-utils.js';
+import { removeOverlayCanvas, createOverlayCanvas } from './overlay-utils.js';
 import { setupDetector } from './pose-utils.js';
 import { drawKeypoints, drawSkeletonAndBoxes } from './poseDrawing.js';
 import { EVENTS } from './constants.js';
@@ -89,6 +89,10 @@ async function poseOverlayLoop(video, detector, overlay, ctx) {
  * and begins the pose detection loop
  */
 async function startPoseOverlay() {
+  // Set status: loading
+  const statusEl = document.getElementById('overlay-status');
+  if (statusEl) statusEl.textContent = 'Overlay loading...';
+
   const video = getVideo();
   
   // Attach event listeners to handle video changes
@@ -96,7 +100,7 @@ async function startPoseOverlay() {
   
   // Check if video is ready for pose detection
   if (!video || video.videoWidth === 0) {
-    // Silently skip if video is not ready; overlay will restart when video is ready
+    if (statusEl) statusEl.textContent = 'Overlay: video not ready';
     return;
   }
   
@@ -104,12 +108,18 @@ async function startPoseOverlay() {
   attachModeObserver();
   
   // Initialize pose detector if not already done
-  if (!detector) detector = await setupDetector();
-  
+  if (!detector) {
+    if (statusEl) statusEl.textContent = 'Loading pose model...';
+    detector = await setupDetector();
+  }
+
   // Create overlay canvas positioned over the video
   const overlay = createOverlayCanvas(video);
   const ctx = overlay.getContext('2d');
-  
+
+  // Set status: online
+  if (statusEl) statusEl.textContent = 'Overlay online';
+
   // Start the pose detection and rendering loop
   poseOverlayLoop(video, detector, overlay, ctx);
 }
@@ -119,15 +129,19 @@ async function startPoseOverlay() {
  * Cancels the animation loop, removes overlay canvas, and cleans up observers
  */
 function stopPoseOverlay() {
+  // Set status: offline
+  const statusEl = document.getElementById('overlay-status');
+  if (statusEl) statusEl.textContent = 'Overlay offline';
+
   // Cancel the pose detection loop
   if (poseLoopId) {
     window.cancelAnimationFrame(poseLoopId);
     poseLoopId = null;
   }
-  
+
   // Remove overlay canvas from DOM
   removeOverlayCanvas();
-  
+
   // Disconnect MutationObserver when overlay stops
   detachModeObserver();
 }
