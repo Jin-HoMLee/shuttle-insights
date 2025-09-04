@@ -428,8 +428,11 @@ function setupKeyboardShortcuts(panel, currentShot, shots, updateStatus, updateS
   const handleKeydown = (event) => {
     // Only handle shortcuts when panel is active and not in an input field
     if (!panel || !document.contains(panel)) return;
-    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') return;
-    
+    if (
+      event.target.tagName === 'INPUT' ||
+      event.target.tagName === 'TEXTAREA' ||
+      event.target.isContentEditable
+    ) return;
     switch (event.code) {
       case KEYBOARD_SHORTCUTS.MARK_START:
         if (event.ctrlKey || event.metaKey) {
