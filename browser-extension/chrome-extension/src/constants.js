@@ -115,7 +115,7 @@ export const EXTENSION_CONFIG = {
 
 // Pose Data Configuration
 export const POSE_DATA_CONFIG = {
-  COLLECTION_INTERVAL_MS: 33, // ~30 FPS collection rate
+  COLLECTION_INTERVAL_MS: 1000 / 30, // exactly 30 FPS collection rate
   KEYPOINT_NAMES: [
     'nose', 'left_eye', 'right_eye', 'left_ear', 'right_ear',
     'left_shoulder', 'right_shoulder', 'left_elbow', 'right_elbow',
