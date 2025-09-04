@@ -22,7 +22,8 @@ import {
   CSS_CLASSES, 
   PANEL_CONFIG, 
   DEFAULT_SHOT, 
-  EVENTS 
+  EVENTS,
+  KEYBOARD_SHORTCUTS 
 } from './constants.js';
 
 /**
@@ -47,6 +48,10 @@ export function createLabelerPanel() {
   // Create main panel structure
   const panel = createPanelElement(dateTimeStr, videoTitle, videoUrl);
   
+  // Set initial state for entrance animation
+  panel.style.opacity = '0';
+  panel.style.transform = 'scale(0.8) translateY(-20px)';
+  
   // Apply panel styling and behavior
   stylePanelElement(panel);
   addResizeHandles(panel);
@@ -59,6 +64,13 @@ export function createLabelerPanel() {
 
   // Add panel to DOM
   document.body.appendChild(panel);
+
+  // Trigger entrance animation
+  requestAnimationFrame(() => {
+    panel.style.transition = 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    panel.style.opacity = '1';
+    panel.style.transform = 'scale(1) translateY(0)';
+  });
 
   // Initialize display
   updateStatus();
@@ -182,6 +194,18 @@ function createPanelElement(dateTimeStr, videoTitle, videoUrl) {
           <span>⬇️</span> Download CSV
         </button>
       </div>
+      <div class="${CSS_CLASSES.SECTION}">
+        <div class="${CSS_CLASSES.SECTION_TITLE}">❓ Quick Help</div>
+        <div class="${CSS_CLASSES.INFO}" style="font-size: 12px;">
+          <div><b>Keyboard Shortcuts:</b></div>
+          <div>• Ctrl+S: Mark start time</div>
+          <div>• Ctrl+E: Mark end time & save</div>
+          <div>• Ctrl+O: Toggle pose overlay</div>
+          <div>• Esc: Close panel</div>
+          <div style="margin-top: 8px;"><b>Workflow:</b></div>
+          <div>1. Mark shot start → 2. Select shot type → 3. Mark end & save</div>
+        </div>
+      </div>
     </div>
   `;
   return panel;
@@ -262,6 +286,9 @@ function setupPanelFunctionality(panel, shots, currentShot, updateStatus, update
   
   // Setup close button
   setupCloseButton(panel);
+  
+  // Setup keyboard shortcuts
+  setupKeyboardShortcuts(panel, currentShot, shots, updateStatus, updateShotList);
 }
 
 /**
@@ -395,6 +422,74 @@ function setupShotMarkingButtons(panel, currentShot, shots, updateStatus, update
 }
 
 /**
+ * Sets up keyboard shortcuts for the panel
+ */
+function setupKeyboardShortcuts(panel, currentShot, shots, updateStatus, updateShotList) {
+  const handleKeydown = (event) => {
+    // Only handle shortcuts when panel is active and not in an input field
+    if (!panel || !document.contains(panel)) return;
+    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') return;
+    
+    switch (event.code) {
+      case KEYBOARD_SHORTCUTS.MARK_START:
+        if (event.ctrlKey || event.metaKey) {
+          event.preventDefault();
+          const markStartBtn = panel.querySelector(`#${UI_IDS.MARK_START}`);
+          if (markStartBtn) markStartBtn.click();
+        }
+        break;
+        
+      case KEYBOARD_SHORTCUTS.MARK_END:
+        if (event.ctrlKey || event.metaKey) {
+          event.preventDefault();
+          const markEndBtn = panel.querySelector(`#${UI_IDS.MARK_END}`);
+          if (markEndBtn) markEndBtn.click();
+        }
+        break;
+        
+      case KEYBOARD_SHORTCUTS.TOGGLE_OVERLAY:
+        if (event.ctrlKey || event.metaKey) {
+          event.preventDefault();
+          const overlayBtn = panel.querySelector(`#${UI_IDS.CUSTOM_ACTION_BTN}`);
+          if (overlayBtn) overlayBtn.click();
+        }
+        break;
+        
+      case KEYBOARD_SHORTCUTS.CLOSE_PANEL:
+        event.preventDefault();
+        const closeBtn = panel.querySelector(`#${UI_IDS.CLOSE_BTN}`);
+        if (closeBtn) closeBtn.click();
+        break;
+    }
+  };
+  
+  // Add event listener
+  document.addEventListener('keydown', handleKeydown);
+  
+  // Add visual indication of keyboard shortcuts to buttons
+  const markStartBtn = panel.querySelector(`#${UI_IDS.MARK_START}`);
+  const markEndBtn = panel.querySelector(`#${UI_IDS.MARK_END}`);
+  const overlayBtn = panel.querySelector(`#${UI_IDS.CUSTOM_ACTION_BTN}`);
+  const closeBtn = panel.querySelector(`#${UI_IDS.CLOSE_BTN}`);
+  
+  if (markStartBtn) {
+    addTooltip(markStartBtn, 'Mark shot start time (Ctrl+S)');
+  }
+  if (markEndBtn) {
+    addTooltip(markEndBtn, 'Mark shot end time and save (Ctrl+E)');
+  }
+  if (overlayBtn) {
+    addTooltip(overlayBtn, 'Toggle pose overlay (Ctrl+O)');
+  }
+  if (closeBtn) {
+    addTooltip(closeBtn, 'Close panel (Esc)');
+  }
+  
+  // Store reference to remove listener when panel is destroyed
+  panel._keydownHandler = handleKeydown;
+}
+
+/**
  * Sets up the panel close button
  */
 function setupCloseButton(panel) {
@@ -412,6 +507,11 @@ function setupCloseButton(panel) {
     });
     
     closeBtn.onclick = () => {
+      // Clean up keyboard event listener
+      if (panel._keydownHandler) {
+        document.removeEventListener('keydown', panel._keydownHandler);
+      }
+      
       // Add closing animation
       panel.style.transform = 'scale(0.9)';
       panel.style.opacity = '0';
