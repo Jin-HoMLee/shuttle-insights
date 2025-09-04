@@ -66,11 +66,11 @@ export function createLabelerPanel() {
   document.body.appendChild(panel);
 
   // Trigger entrance animation
-  requestAnimationFrame(() => {
+  setTimeout(() => {
     panel.style.transition = 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
     panel.style.opacity = '1';
     panel.style.transform = 'scale(1) translateY(0)';
-  });
+  }, 16);
 
   // Initialize display
   updateStatus();
