@@ -11,7 +11,7 @@
  * - Event handling for shot marking and labeling
  */
 
-import { formatDateTime, sanitize, getVideoTitle } from './ui-utils.js';
+import { formatDateTime, sanitize, getVideoTitle, styleButton, addTooltip, showButtonLoading, hideButtonLoading, showWarning, showSuccess } from './ui-utils.js';
 import { getVideo } from './video-utils.js';
 import { addResizeHandles } from './resize.js';
 import { addDragBehavior } from './drag.js';
@@ -118,14 +118,20 @@ export function createLabelerPanel() {
 function createPanelElement(dateTimeStr, videoTitle, videoUrl) {
   const panel = document.createElement('div');
   panel.id = UI_IDS.PANEL;
+  panel.setAttribute('role', 'dialog');
+  panel.setAttribute('aria-label', 'YouTube Badminton Shot Labeler');
   panel.innerHTML = `
-    <div id="${UI_IDS.HEADER}" class="${CSS_CLASSES.SECTION_TITLE}">
-      <button id="${UI_IDS.CLOSE_BTN}" title="Close" style="float:right;background:transparent;border:none;font-size:18px;cursor:pointer;">×</button>
-      <strong style="font-size:16px;">YouTube Badminton Shot Labeler</strong>
+    <div id="${UI_IDS.HEADER}" class="${CSS_CLASSES.SECTION_TITLE}" style="background: linear-gradient(135deg, #1976d2, #42a5f5); color: white; margin: 0; padding: 16px; border-radius: 8px 8px 0 0;">
+      <button id="${UI_IDS.CLOSE_BTN}" class="yt-shot-labeler-tooltip" data-tooltip="Close panel" aria-label="Close panel" 
+              style="float:right;background:rgba(255,255,255,0.2);border:none;color:white;font-size:18px;cursor:pointer;border-radius:4px;padding:4px 8px;transition:background 0.2s;">×</button>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span style="font-size: 20px;">🏸</span>
+        <strong style="font-size: 16px; font-weight: 600;">YouTube Badminton Shot Labeler</strong>
+      </div>
     </div>
     <div id="${UI_IDS.CONTENT}">
       <div class="${CSS_CLASSES.SECTION}">
-        <div class="${CSS_CLASSES.SECTION_TITLE}">Video Details</div>
+        <div class="${CSS_CLASSES.SECTION_TITLE}">📊 Video Details</div>
         <div class="${CSS_CLASSES.INFO}">
           <div><b>Date/Time:</b> <span id="${UI_IDS.DATETIME}">${dateTimeStr}</span></div>
           <div><b>Video Title:</b> <span id="${UI_IDS.VIDEO_TITLE}">${videoTitle}</span></div>
@@ -133,36 +139,48 @@ function createPanelElement(dateTimeStr, videoTitle, videoUrl) {
         </div>
       </div>
       <div class="${CSS_CLASSES.SECTION}">
-        <div class="${CSS_CLASSES.SECTION_TITLE}">Overlay Poses</div>
-        <button id="${UI_IDS.CUSTOM_ACTION_BTN}" style="margin-bottom:10px;">Custom Action</button>
+        <div class="${CSS_CLASSES.SECTION_TITLE}">🎯 Pose Overlay</div>
+        <button id="${UI_IDS.CUSTOM_ACTION_BTN}" class="yt-shot-labeler-btn yt-shot-labeler-tooltip" 
+                data-tooltip="Toggle pose detection overlay on video" aria-label="Toggle pose overlay">
+          <span>👤</span> Toggle Pose Overlay
+        </button>
         <span id="${UI_IDS.OVERLAY_STATUS}" class="${CSS_CLASSES.STATUS_MESSAGE}"></span>
       </div>
-      <hr>
       <div class="${CSS_CLASSES.SECTION}">
-        <div class="${CSS_CLASSES.SECTION_TITLE}">Load Existing Labels</div>
-        <button id="${UI_IDS.LOAD_CSV}" style="margin-bottom:10px;">Load existing CSV</button>
-        <input type="file" id="${UI_IDS.CSV_FILE_INPUT}" accept=".csv" style="display:none;">
+        <div class="${CSS_CLASSES.SECTION_TITLE}">📂 Load Data</div>
+        <button id="${UI_IDS.LOAD_CSV}" class="yt-shot-labeler-btn yt-shot-labeler-tooltip" 
+                data-tooltip="Load previously saved shot labels from CSV file" aria-label="Load existing CSV">
+          <span>📁</span> Load Existing CSV
+        </button>
+        <input type="file" id="${UI_IDS.CSV_FILE_INPUT}" accept=".csv" style="display:none;" aria-label="CSV file input">
       </div>
-      <hr>
       <div class="${CSS_CLASSES.SECTION}">
-        <div class="${CSS_CLASSES.SECTION_TITLE}">Label a Shot</div>
-        <div style="margin:8px 0;">
-          <button id="${UI_IDS.MARK_START}">Mark Start</button>
-          <span id="${UI_IDS.SHOT_STATUS}" style="margin-left:10px;"></span>
+        <div class="${CSS_CLASSES.SECTION_TITLE}">🎬 Label Shot</div>
+        <div style="margin:12px 0; display: flex; align-items: center; gap: 12px;">
+          <button id="${UI_IDS.MARK_START}" class="yt-shot-labeler-btn yt-shot-labeler-btn-primary yt-shot-labeler-tooltip" 
+                  data-tooltip="Mark the start time of a badminton shot" aria-label="Mark shot start">
+            <span>▶️</span> Mark Start
+          </button>
+          <span id="${UI_IDS.SHOT_STATUS}" style="flex: 1;"></span>
         </div>
-        <div id="${UI_IDS.LABEL_BUTTONS}" style="margin-bottom:10px;"></div>
-        <div id="${UI_IDS.DIMENSION_CONTROLS}" style="margin-bottom:10px;"></div>
-        <button id="${UI_IDS.MARK_END}" style="margin-bottom:10px;">Mark End</button>
+        <div id="${UI_IDS.LABEL_BUTTONS}" style="margin-bottom:12px;"></div>
+        <div id="${UI_IDS.DIMENSION_CONTROLS}" style="margin-bottom:12px;"></div>
+        <button id="${UI_IDS.MARK_END}" class="yt-shot-labeler-btn yt-shot-labeler-btn-success yt-shot-labeler-tooltip" 
+                data-tooltip="Mark the end time and save the labeled shot" aria-label="Mark shot end and save">
+          <span>⏹️</span> Mark End & Save
+        </button>
       </div>
-      <hr>
       <div class="${CSS_CLASSES.SECTION}">
-        <div class="${CSS_CLASSES.SECTION_TITLE}">Labeled Shots</div>
-        <div id="${UI_IDS.LABEL_LIST}" style="max-height:120px;overflow:auto;font-size:13px;margin-bottom:10px;"></div>
+        <div class="${CSS_CLASSES.SECTION_TITLE}">📋 Labeled Shots</div>
+        <div id="${UI_IDS.LABEL_LIST}" style="max-height:120px;overflow:auto;font-size:13px;margin-bottom:12px;" 
+             role="list" aria-label="List of labeled shots"></div>
       </div>
-      <hr>
       <div class="${CSS_CLASSES.SECTION}">
-        <div class="${CSS_CLASSES.SECTION_TITLE}">Export Labels</div>
-        <button id="${UI_IDS.SAVE_LABELS}" style="margin-bottom:2px;">Download CSV</button>
+        <div class="${CSS_CLASSES.SECTION_TITLE}">💾 Export</div>
+        <button id="${UI_IDS.SAVE_LABELS}" class="yt-shot-labeler-btn yt-shot-labeler-btn-success yt-shot-labeler-tooltip" 
+                data-tooltip="Download all labeled shots as CSV file" aria-label="Download CSV file">
+          <span>⬇️</span> Download CSV
+        </button>
       </div>
     </div>
   `;
@@ -178,17 +196,17 @@ function stylePanelElement(panel) {
     top: PANEL_CONFIG.DEFAULT_POSITION.top, 
     right: PANEL_CONFIG.DEFAULT_POSITION.right, 
     zIndex: PANEL_CONFIG.Z_INDEX,
-    background: "#fff", 
-    border: "1px solid #222", 
+    background: "white", 
+    border: "1px solid var(--border-color)", 
     padding: "0",
-    borderRadius: "8px", 
-    boxShadow: "0 4px 16px #0002", 
+    borderRadius: "12px", 
+    boxShadow: "0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)", 
     width: PANEL_CONFIG.DEFAULT_SIZE.width,
     fontSize: "14px", 
-    fontFamily: "Arial, sans-serif", 
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", 
     lineHeight: "1.5",
     userSelect: "none", 
-    transition: "box-shadow 0.2s", 
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", 
     overflow: "hidden",
     backgroundClip: "padding-box", 
     display: "flex", 
@@ -196,7 +214,20 @@ function stylePanelElement(panel) {
     maxHeight: "90vh", 
     minWidth: PANEL_CONFIG.DEFAULT_SIZE.minWidth, 
     minHeight: PANEL_CONFIG.DEFAULT_SIZE.minHeight, 
-    resize: "none"
+    resize: "none",
+    backdropFilter: "blur(10px)",
+    WebkitBackdropFilter: "blur(10px)"
+  });
+  
+  // Add enhanced hover effect
+  panel.addEventListener('mouseenter', () => {
+    panel.style.transform = 'translateY(-2px)';
+    panel.style.boxShadow = '0 12px 40px rgba(0,0,0,0.16), 0 4px 12px rgba(0,0,0,0.12)';
+  });
+  
+  panel.addEventListener('mouseleave', () => {
+    panel.style.transform = 'translateY(0)';
+    panel.style.boxShadow = '0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)';
   });
 }
 
@@ -240,22 +271,36 @@ function setupOverlayButton(panel) {
   const customBtn = panel.querySelector(`#${UI_IDS.CUSTOM_ACTION_BTN}`);
   if (!customBtn) return;
 
-  customBtn.textContent = 'Start Overlay';
+  customBtn.innerHTML = '<span>👤</span> Start Pose Overlay';
   customBtn.dataset.state = 'stopped';
   
   customBtn.onclick = () => {
     if (customBtn.dataset.state === 'stopped') {
+      showButtonLoading(customBtn, 'Starting...');
+      
       window.dispatchEvent(new CustomEvent(EVENTS.POSE_OVERLAY_CONTROL, { 
         detail: { action: 'start' } 
       }));
-      customBtn.textContent = 'Stop Overlay';
-      customBtn.dataset.state = 'started';
+      
+      setTimeout(() => {
+        hideButtonLoading(customBtn);
+        customBtn.innerHTML = '<span>🛑</span> Stop Pose Overlay';
+        customBtn.dataset.state = 'started';
+        customBtn.classList.add('yt-shot-labeler-btn-danger');
+      }, 500);
     } else {
+      showButtonLoading(customBtn, 'Stopping...');
+      
       window.dispatchEvent(new CustomEvent(EVENTS.POSE_OVERLAY_CONTROL, { 
         detail: { action: 'stop' } 
       }));
-      customBtn.textContent = 'Start Overlay';
-      customBtn.dataset.state = 'stopped';
+      
+      setTimeout(() => {
+        hideButtonLoading(customBtn);
+        customBtn.innerHTML = '<span>👤</span> Start Pose Overlay';
+        customBtn.dataset.state = 'stopped';
+        customBtn.classList.remove('yt-shot-labeler-btn-danger');
+      }, 300);
     }
   };
 }
@@ -269,9 +314,26 @@ function setupShotMarkingButtons(panel, currentShot, shots, updateStatus, update
   if (markStartBtn) {
     markStartBtn.onclick = () => {
       const video = getVideo();
-      if (!video) return;
+      if (!video) {
+        showWarning('Video not found. Please reload the page.', panel);
+        return;
+      }
+      
+      // Add visual feedback
+      markStartBtn.style.transform = 'scale(0.95)';
       currentShot.start = video.currentTime;
       updateStatus();
+      
+      // Success feedback
+      const originalContent = markStartBtn.innerHTML;
+      markStartBtn.innerHTML = '<span>✅</span> Start Marked';
+      markStartBtn.classList.add('yt-shot-labeler-btn-success');
+      
+      setTimeout(() => {
+        markStartBtn.innerHTML = originalContent;
+        markStartBtn.classList.remove('yt-shot-labeler-btn-success');
+        markStartBtn.style.transform = '';
+      }, 1000);
     };
   }
 
@@ -280,34 +342,54 @@ function setupShotMarkingButtons(panel, currentShot, shots, updateStatus, update
   if (markEndBtn) {
     markEndBtn.onclick = () => {
       const video = getVideo();
-      if (!video) return;
+      if (!video) {
+        showWarning('Video not found. Please reload the page.', panel);
+        return;
+      }
       
-      // Validation
+      // Validation with better error messages
       if (currentShot.start === null) {
-        alert("Please mark the start first!");
+        showWarning("Please mark the start time first!", panel);
+        markStartBtn.style.animation = 'pulse 0.5s ease-in-out';
+        setTimeout(() => { markStartBtn.style.animation = ''; }, 500);
         return;
       }
       if (!currentShot.label) {
-        alert("Please select a shot label!");
+        showWarning("Please select a shot type first!", panel);
+        const labelButtons = panel.querySelector('#label-buttons');
+        if (labelButtons) {
+          labelButtons.style.animation = 'pulse 0.5s ease-in-out';
+          setTimeout(() => { labelButtons.style.animation = ''; }, 500);
+        }
         return;
       }
       
       currentShot.end = video.currentTime;
       if (currentShot.end <= currentShot.start) {
-        alert("End time must be after start time!");
+        showWarning("End time must be after start time!", panel);
         return;
       }
       
-      // Save current shot and reset
-      shots.push({ ...currentShot });
-      updateShotList();
+      // Show loading state
+      showButtonLoading(markEndBtn, 'Saving...');
       
-      // Reset current shot
-      Object.assign(currentShot, DEFAULT_SHOT);
-      updateStatus();
-      
-      // Re-render glossary buttons for fresh state
-      setupGlossaryButtons(panel, () => currentShot, updateStatus);
+      // Simulate processing time for smooth UX
+      setTimeout(() => {
+        // Save current shot and reset
+        shots.push({ ...currentShot });
+        updateShotList();
+        
+        // Reset current shot
+        Object.assign(currentShot, DEFAULT_SHOT);
+        updateStatus();
+        
+        // Success feedback
+        hideButtonLoading(markEndBtn);
+        showSuccess(`Shot labeled successfully! (${shots.length} total shots)`, panel);
+        
+        // Re-render glossary buttons for fresh state
+        setupGlossaryButtons(panel, () => currentShot, updateStatus);
+      }, 300);
     };
   }
 }
@@ -318,11 +400,28 @@ function setupShotMarkingButtons(panel, currentShot, shots, updateStatus, update
 function setupCloseButton(panel) {
   const closeBtn = panel.querySelector(`#${UI_IDS.CLOSE_BTN}`);
   if (closeBtn) {
+    // Enhanced hover effects
+    closeBtn.addEventListener('mouseenter', () => {
+      closeBtn.style.background = 'rgba(255,255,255,0.3)';
+      closeBtn.style.transform = 'scale(1.1)';
+    });
+    
+    closeBtn.addEventListener('mouseleave', () => {
+      closeBtn.style.background = 'rgba(255,255,255,0.2)';
+      closeBtn.style.transform = 'scale(1)';
+    });
+    
     closeBtn.onclick = () => {
-      window.dispatchEvent(new CustomEvent(EVENTS.POSE_OVERLAY_CONTROL, { 
-        detail: { action: 'stop' } 
-      }));
-      panel.remove();
+      // Add closing animation
+      panel.style.transform = 'scale(0.9)';
+      panel.style.opacity = '0';
+      
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent(EVENTS.POSE_OVERLAY_CONTROL, { 
+          detail: { action: 'stop' } 
+        }));
+        panel.remove();
+      }, 200);
     };
   }
 }
