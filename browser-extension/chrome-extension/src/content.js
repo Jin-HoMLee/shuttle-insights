@@ -90,7 +90,7 @@ async function poseOverlayLoop(video, detector, overlay, ctx) {
  */
 async function startPoseOverlay() {
   // Set status: loading
-  const statusEl = document.getElementById('overlay-status');
+  const statusEl = document.getElementById(UI_IDS.OVERLAY_STATUS);
   if (statusEl) statusEl.textContent = 'Overlay loading...';
 
   const video = getVideo();
