@@ -38,7 +38,8 @@ export const CSS_CLASSES = {
   DIMENSION_BTN: 'yt-shot-labeler-dimension-btn',
   DIMENSION_BUTTONS: 'yt-shot-labeler-dimension-buttons',
   DELETE_BTN: 'yt-shot-labeler-delete',
-  RESIZE_HANDLE: 'yt-shot-labeler-resize-handle'
+  RESIZE_HANDLE: 'yt-shot-labeler-resize-handle',
+  STATUS_MESSAGE: 'yt-shot-labeler-status-message'
 };
 
 // YouTube Video Selectors
