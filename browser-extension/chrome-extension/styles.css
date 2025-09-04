@@ -104,3 +104,9 @@
   background: #e14;
   border-radius: 3px;
 }
+
+.yt-shot-labeler-status-message {
+  margin-left: 12px;
+  color: #1976d2;
+  font-weight: 500;
+}

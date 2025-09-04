@@ -135,6 +135,7 @@ function createPanelElement(dateTimeStr, videoTitle, videoUrl) {
       <div class="${CSS_CLASSES.SECTION}">
         <div class="${CSS_CLASSES.SECTION_TITLE}">Overlay Poses</div>
         <button id="${UI_IDS.CUSTOM_ACTION_BTN}" style="margin-bottom:10px;">Custom Action</button>
+        <span id="${UI_IDS.OVERLAY_STATUS}" class="${CSS_CLASSES.STATUS_MESSAGE}"></span>
       </div>
       <hr>
       <div class="${CSS_CLASSES.SECTION}">
