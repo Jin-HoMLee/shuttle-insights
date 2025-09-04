@@ -136,55 +136,6 @@ export function safeRemoveElement(elementOrId) {
   }
 }
 
-/**
- * Applies consistent styling to button elements
- * @param {HTMLElement} button - Button element to style
- * @param {string} variant - Style variant ('primary', 'secondary', 'danger', 'success')
- * @param {string} tooltip - Optional tooltip text
- * @param {string} icon - Optional icon text/emoji
- */
-export function styleButton(button, variant = 'primary', tooltip = '', icon = '') {
-  if (!button) return;
-  
-  // Add base classes
-  button.classList.add('yt-shot-labeler-btn');
-  
-  // Add variant class
-  if (variant !== 'primary') {
-    button.classList.add(`yt-shot-labeler-btn-${variant}`);
-  }
-  
-  // Add tooltip if provided
-  if (tooltip) {
-    button.classList.add('yt-shot-labeler-tooltip');
-    button.setAttribute('data-tooltip', tooltip);
-    button.setAttribute('aria-label', tooltip);
-  }
-  
-  // Add icon if provided
-  if (icon) {
-    const originalText = button.textContent;
-    button.innerHTML = `<span>${icon}</span><span>${originalText}</span>`;
-  }
-  
-  // Add ARIA role if not present
-  if (!button.getAttribute('role')) {
-    button.setAttribute('role', 'button');
-  }
-  
-  // Add keyboard support
-  if (!button.hasAttribute('tabindex')) {
-    button.setAttribute('tabindex', '0');
-  }
-  
-  // Add keyboard event listener
-  button.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      button.click();
-    }
-  });
-}
 
 /**
  * Creates a loading spinner element

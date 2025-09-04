@@ -11,7 +11,7 @@
  * - Event handling for shot marking and labeling
  */
 
-import { formatDateTime, sanitize, getVideoTitle, styleButton, addTooltip, showButtonLoading, hideButtonLoading, showWarning, showSuccess } from './ui-utils.js';
+import { formatDateTime, sanitize, getVideoTitle, addTooltip, showButtonLoading, hideButtonLoading, showWarning, showSuccess } from './ui-utils.js';
 import { getVideo } from './video-utils.js';
 import { addResizeHandles } from './resize.js';
 import { addDragBehavior } from './drag.js';
