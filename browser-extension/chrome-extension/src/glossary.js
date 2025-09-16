@@ -1,15 +1,35 @@
 /**
  * Glossary Management
- * 
- * This module handles the setup and management of shot glossary buttons and 
+ *
+ * This module handles the setup and management of shot glossary buttons and
  * dimension controls. It loads shot definitions and dimensions from a JSON file
  * and creates interactive UI elements for shot labeling.
- * 
+ *
  * Features:
  * - Dynamic button generation from glossary data
  * - Collapsible dimension controls
  * - Shot type selection with visual feedback
  * - Advanced shot dimension annotation (position, timing, intention, etc.)
+ *
+ * ---
+ * IMPORTANT: Shot State Management Pattern
+ *
+ * The glossary UI does not manage its own shot state. Instead, it expects a callback
+ * function (getCurrentShot) to be passed in by the caller (typically panel.js).
+ *
+ * Example usage from panel.js:
+ *   let currentShot = { ...DEFAULT_SHOT };
+ *   setupGlossaryButtons(panel, () => currentShot, updateStatus);
+ *
+ * The getCurrentShot parameter is an arrow function that always returns the currentShot
+ * object managed by the parent module. This allows glossary.js to update the correct shot
+ * object without direct knowledge of its scope or lifecycle.
+ *
+ * Whenever glossary.js needs to update shot data (label, dimensions, etc.), it calls
+ * getCurrentShot(), which returns the current shot object from panel.js.
+ *
+ * This pattern avoids global state and keeps shot management centralized in the parent module.
+ * ---
  */
 
 import { CSS_CLASSES, EXTENSION_CONFIG } from './constants.js';
