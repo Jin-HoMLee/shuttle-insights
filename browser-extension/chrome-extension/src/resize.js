@@ -133,17 +133,10 @@ export function addResizeHandles(panel) {
     const deltaY = e.clientY - startY;
     
     // Calculate size constraints
-    // Debug: log types and values
-    // logConfigTypesAndValues(PANEL_CONFIG.MIN_SIZE, ['width', 'height'], { startWidth, startHeight }, 'PANEL_CONFIG.MIN_SIZE');
     const minW = PANEL_CONFIG.MIN_SIZE.width;
     const minH = PANEL_CONFIG.MIN_SIZE.height;
-    // Defensive: assert MAX_SIZE.width/height are functions
-    // assertConfigFunctions(PANEL_CONFIG.MAX_SIZE, ['width', 'height'], 'PANEL_CONFIG.MAX_SIZE');
-    // Debug: log types and values
-    // logConfigTypesAndValues(PANEL_CONFIG.MAX_SIZE, ['width', 'height'], {}, 'PANEL_CONFIG.MAX_SIZE (types)');
     const maxW = PANEL_CONFIG.MAX_SIZE.width();
     const maxH = PANEL_CONFIG.MAX_SIZE.height();
-    // logConfigTypesAndValues({ maxW, maxH }, ['maxW', 'maxH'], {}, 'PANEL_CONFIG.MAX_SIZE (values)');
         
     // Initialize new dimensions and position
     let newWidth = startWidth;
