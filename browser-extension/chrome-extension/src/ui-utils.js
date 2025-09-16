@@ -56,17 +56,18 @@ export function showError(message, container) {
   if (!container) return;
   
   const errorDiv = document.createElement('div');
-  errorDiv.style.cssText = `
-    color: #d32f2f;
-    background: #ffebee;
-    border: 1px solid #f8bbd9;
-    padding: 8px;
-    border-radius: 4px;
-    margin: 4px 0;
-    font-size: 12px;
-  `;
-  errorDiv.textContent = message;
-  
+  errorDiv.className = 'yt-shot-labeler-message yt-shot-labeler-message-error';
+
+  // Create icon and message elements separately for XSS safety
+  const iconSpan = document.createElement('span');
+  iconSpan.textContent = '⚠️';
+
+  const messageSpan = document.createElement('span');
+  messageSpan.textContent = message; // Safe: prevents HTML injection
+
+  errorDiv.appendChild(iconSpan);
+  errorDiv.appendChild(messageSpan);
+
   container.appendChild(errorDiv);
   
   // Auto-remove after 5 seconds
@@ -86,17 +87,17 @@ export function showSuccess(message, container) {
   if (!container) return;
   
   const successDiv = document.createElement('div');
-  successDiv.style.cssText = `
-    color: #2e7d32;
-    background: #e8f5e8;
-    border: 1px solid #c8e6c9;
-    padding: 8px;
-    border-radius: 4px;
-    margin: 4px 0;
-    font-size: 12px;
-  `;
-  successDiv.textContent = message;
-  
+  successDiv.className = 'yt-shot-labeler-message yt-shot-labeler-message-success';
+
+  const iconSpan = document.createElement('span');
+  iconSpan.textContent = '✅';
+
+  const messageSpan = document.createElement('span');
+  messageSpan.textContent = message;
+
+  successDiv.appendChild(iconSpan);
+  successDiv.appendChild(messageSpan);
+
   container.appendChild(successDiv);
   
   // Auto-remove after 3 seconds
@@ -105,6 +106,36 @@ export function showSuccess(message, container) {
       successDiv.parentElement.removeChild(successDiv);
     }
   }, 3000);
+}
+
+/**
+ * Creates a standardized warning message display
+ * @param {string} message - Warning message to display  
+ * @param {HTMLElement} container - Container element to show message in
+ */
+export function showWarning(message, container) {
+  if (!container) return;
+  
+  const warningDiv = document.createElement('div');
+  warningDiv.className = 'yt-shot-labeler-message yt-shot-labeler-message-warning';
+
+  const iconSpan = document.createElement('span');
+  iconSpan.textContent = '⚠️';
+
+  const messageSpan = document.createElement('span');
+  messageSpan.textContent = message;
+
+  warningDiv.appendChild(iconSpan);
+  warningDiv.appendChild(messageSpan);
+
+  container.appendChild(warningDiv);
+  
+  // Auto-remove after 4 seconds
+  setTimeout(() => {
+    if (warningDiv.parentElement) {
+      warningDiv.parentElement.removeChild(warningDiv);
+    }
+  }, 4000);
 }
 
 /**
@@ -121,48 +152,86 @@ export function safeRemoveElement(elementOrId) {
   }
 }
 
+
 /**
- * Applies consistent styling to button elements
- * @param {HTMLElement} button - Button element to style
- * @param {string} variant - Style variant ('primary', 'secondary', 'danger')
+ * Creates a loading spinner element
+ * @param {string} text - Optional loading text
+ * @returns {HTMLElement} Loading spinner element
  */
-export function styleButton(button, variant = 'primary') {
-  if (!button) return;
-  
-  const baseStyles = `
-    border: none;
-    border-radius: 4px;
-    padding: 6px 12px;
+export function createLoadingSpinner(text = 'Loading...') {
+  const spinner = document.createElement('div');
+  spinner.style.cssText = `
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 13px;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-    outline: none;
+    color: var(--text-secondary);
   `;
   
-  const variants = {
-    primary: `
-      background: #1976d2;
-      color: white;
-    `,
-    secondary: `
-      background: #f5f5f5;
-      color: #333;
-      border: 1px solid #ddd;
-    `,
-    danger: `
-      background: #d32f2f;
-      color: white;
-    `
-  };
+  // Create spinner icon and text safely
+  const spinnerIcon = document.createElement('div');
+  spinnerIcon.className = 'yt-shot-labeler-spinner';
+
+  const spinnerText = document.createElement('span');
+  spinnerText.textContent = text;
+
+  spinner.appendChild(spinnerIcon);
+  spinner.appendChild(spinnerText);
+
+  return spinner;
+}
+
+/**
+ * Shows a loading state on a button
+ * @param {HTMLElement} button - Button to show loading on
+ * @param {string} loadingText - Text to show while loading
+ */
+export function showButtonLoading(button, loadingText = 'Loading...') {
+  if (!button) return;
   
-  button.style.cssText = baseStyles + (variants[variant] || variants.primary);
+  button.dataset.originalText = button.textContent;
+  button.dataset.originalDisabled = button.disabled;
+
+  // Remove all children
+  while (button.firstChild) {
+    button.removeChild(button.firstChild);
+  }
+
+  const spinnerIcon = document.createElement('div');
+  spinnerIcon.className = 'yt-shot-labeler-spinner';
+
+  const spinnerText = document.createElement('span');
+  spinnerText.textContent = loadingText;
+
+  button.appendChild(spinnerIcon);
+  button.appendChild(spinnerText);
+
+  button.disabled = true;
+}
+
+/**
+ * Hides loading state on a button
+ * @param {HTMLElement} button - Button to hide loading from
+ */
+export function hideButtonLoading(button) {
+  if (!button || !button.dataset.originalText) return;
   
-  // Add hover effects
-  button.addEventListener('mouseenter', () => {
-    button.style.transform = 'translateY(-1px)';
-  });
+  button.textContent = button.dataset.originalText;
+  button.disabled = button.dataset.originalDisabled === 'true';
   
-  button.addEventListener('mouseleave', () => {
-    button.style.transform = 'translateY(0)';
-  });
+  delete button.dataset.originalText;
+  delete button.dataset.originalDisabled;
+}
+
+/**
+ * Adds tooltip to an element
+ * @param {HTMLElement} element - Element to add tooltip to
+ * @param {string} tooltipText - Tooltip text
+ */
+export function addTooltip(element, tooltipText) {
+  if (!element || !tooltipText) return;
+  
+  element.classList.add('yt-shot-labeler-tooltip');
+  element.setAttribute('data-tooltip', tooltipText);
+  element.setAttribute('aria-label', tooltipText);
 }

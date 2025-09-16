@@ -113,5 +113,21 @@ export const EXTENSION_CONFIG = {
   DEFAULT_CSV_PATH: 'YouTube Shot Labeler'
 };
 
+// Keyboard shortcuts
+export const KEYBOARD_SHORTCUTS = {
+  MARK_START: 'KeyS',
+  MARK_END: 'KeyE', 
+  TOGGLE_OVERLAY: 'KeyO',
+  CLOSE_PANEL: 'Escape'
+};
+
+// UI Configuration
+export const UI_CONFIG = {
+  ANIMATION_DURATION: 300,
+  TOAST_DURATION: 3000,
+  TOOLTIP_DELAY: 500,
+  BUTTON_FEEDBACK_DURATION: 150
+};
+
 // Maximum allowed shot duration in seconds (5 minutes)
 export const MAX_SHOT_DURATION_SECONDS = 300;

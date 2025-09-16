@@ -13,6 +13,7 @@
  */
 
 import { CSS_CLASSES, EXTENSION_CONFIG } from './constants.js';
+import { addTooltip } from './ui-utils.js';
 
 /**
  * Sets up glossary buttons and dimension controls for the panel
@@ -107,7 +108,10 @@ function createShotButton(shot, getCurrentShot, updateStatus, container) {
   const button = document.createElement('button');
   button.textContent = shot.term;
   button.className = CSS_CLASSES.LABEL_BTN;
-  button.title = shot.definition;
+  
+  // Add enhanced tooltip with definition
+  addTooltip(button, `${shot.term}: ${shot.definition}`);
+  button.setAttribute('aria-label', `Select ${shot.term} shot type`);
 
   button.onclick = () => {
     const currentShot = getCurrentShot();
@@ -116,6 +120,12 @@ function createShotButton(shot, getCurrentShot, updateStatus, container) {
     // Update button selection state
     updateButtonSelection(container, button);
     updateStatus();
+    
+    // Add visual feedback
+    button.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+      button.style.transform = '';
+    }, 150);
   };
 
   return button;

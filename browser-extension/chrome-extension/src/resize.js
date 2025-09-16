@@ -1,18 +1,29 @@
 /**
  * Panel Resizing Functionality
- * 
+ *
  * This module provides interactive resizing capabilities for the panel.
  * It adds resize handles to all corners and edges, allowing users to adjust
  * panel dimensions while maintaining minimum/maximum size constraints.
- * 
+ *
  * Features:
  * - 8-direction resize handles (corners + edges)
  * - Minimum and maximum size constraints
  * - Smooth resize interaction with visual feedback
  * - Cursor changes to indicate resize direction
+ *
+ * Configuration Requirements:
+ * - PANEL_CONFIG.MAX_SIZE.width and PANEL_CONFIG.MAX_SIZE.height must be functions returning numbers.
+ *   This allows dynamic calculation of max panel size based on viewport.
+ * - Defensive assertions and debug logging are used to catch config errors early.
+ *
+ * Debugging Strategy:
+ * - Types and values of all critical variables are logged before calculations.
+ * - If config values are not functions, an error is thrown to prevent silent bugs.
+ * - Automated tests (see test/resize.test.js) validate config and calculation logic.
  */
 
 import { PANEL_CONFIG, CSS_CLASSES } from './constants.js';
+import { assertConfigFunctions, logConfigTypesAndValues } from './config-utils.js';
 
 /**
  * Adds interactive resize handles to a panel element
@@ -124,9 +135,9 @@ export function addResizeHandles(panel) {
     // Calculate size constraints
     const minW = PANEL_CONFIG.MIN_SIZE.width;
     const minH = PANEL_CONFIG.MIN_SIZE.height;
-    const maxW = PANEL_CONFIG.MAX_SIZE.width;
-    const maxH = PANEL_CONFIG.MAX_SIZE.height;
-    
+    const maxW = PANEL_CONFIG.MAX_SIZE.width();
+    const maxH = PANEL_CONFIG.MAX_SIZE.height();
+        
     // Initialize new dimensions and position
     let newWidth = startWidth;
     let newHeight = startHeight;
