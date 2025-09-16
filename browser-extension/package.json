@@ -1,6 +1,11 @@
 {
   "devDependencies": {
-    "esbuild": "^0.25.5"
+    "@babel/preset-env": "^7.28.3",
+    "@babel/preset-typescript": "^7.27.1",
+    "babel-jest": "^30.1.2",
+    "esbuild": "^0.25.5",
+    "jest": "^30.1.3",
+    "jest-environment-jsdom": "^30.1.2"
   },
   "scripts": {
     "build": "esbuild chrome-extension/src/content.js --bundle --outfile=chrome-extension/dist/content.js"
