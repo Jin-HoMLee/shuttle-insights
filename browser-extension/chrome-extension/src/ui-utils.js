@@ -57,11 +57,17 @@ export function showError(message, container) {
   
   const errorDiv = document.createElement('div');
   errorDiv.className = 'yt-shot-labeler-message yt-shot-labeler-message-error';
-  errorDiv.innerHTML = `
-    <span>⚠️</span>
-    <span>${message}</span>
-  `;
-  
+
+  // Create icon and message elements separately for XSS safety
+  const iconSpan = document.createElement('span');
+  iconSpan.textContent = '⚠️';
+
+  const messageSpan = document.createElement('span');
+  messageSpan.textContent = message; // Safe: prevents HTML injection
+
+  errorDiv.appendChild(iconSpan);
+  errorDiv.appendChild(messageSpan);
+
   container.appendChild(errorDiv);
   
   // Auto-remove after 5 seconds
@@ -82,11 +88,16 @@ export function showSuccess(message, container) {
   
   const successDiv = document.createElement('div');
   successDiv.className = 'yt-shot-labeler-message yt-shot-labeler-message-success';
-  successDiv.innerHTML = `
-    <span>✅</span>
-    <span>${message}</span>
-  `;
-  
+
+  const iconSpan = document.createElement('span');
+  iconSpan.textContent = '✅';
+
+  const messageSpan = document.createElement('span');
+  messageSpan.textContent = message;
+
+  successDiv.appendChild(iconSpan);
+  successDiv.appendChild(messageSpan);
+
   container.appendChild(successDiv);
   
   // Auto-remove after 3 seconds
@@ -107,11 +118,16 @@ export function showWarning(message, container) {
   
   const warningDiv = document.createElement('div');
   warningDiv.className = 'yt-shot-labeler-message yt-shot-labeler-message-warning';
-  warningDiv.innerHTML = `
-    <span>⚠️</span>
-    <span>${message}</span>
-  `;
-  
+
+  const iconSpan = document.createElement('span');
+  iconSpan.textContent = '⚠️';
+
+  const messageSpan = document.createElement('span');
+  messageSpan.textContent = message;
+
+  warningDiv.appendChild(iconSpan);
+  warningDiv.appendChild(messageSpan);
+
   container.appendChild(warningDiv);
   
   // Auto-remove after 4 seconds
@@ -152,11 +168,16 @@ export function createLoadingSpinner(text = 'Loading...') {
     color: var(--text-secondary);
   `;
   
-  spinner.innerHTML = `
-    <div class="yt-shot-labeler-spinner"></div>
-    <span>${text}</span>
-  `;
-  
+  // Create spinner icon and text safely
+  const spinnerIcon = document.createElement('div');
+  spinnerIcon.className = 'yt-shot-labeler-spinner';
+
+  const spinnerText = document.createElement('span');
+  spinnerText.textContent = text;
+
+  spinner.appendChild(spinnerIcon);
+  spinner.appendChild(spinnerText);
+
   return spinner;
 }
 
@@ -170,11 +191,21 @@ export function showButtonLoading(button, loadingText = 'Loading...') {
   
   button.dataset.originalText = button.textContent;
   button.dataset.originalDisabled = button.disabled;
-  
-  button.innerHTML = `
-    <div class="yt-shot-labeler-spinner"></div>
-    <span>${loadingText}</span>
-  `;
+
+  // Remove all children
+  while (button.firstChild) {
+    button.removeChild(button.firstChild);
+  }
+
+  const spinnerIcon = document.createElement('div');
+  spinnerIcon.className = 'yt-shot-labeler-spinner';
+
+  const spinnerText = document.createElement('span');
+  spinnerText.textContent = loadingText;
+
+  button.appendChild(spinnerIcon);
+  button.appendChild(spinnerText);
+
   button.disabled = true;
 }
 
