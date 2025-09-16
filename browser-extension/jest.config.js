@@ -4,6 +4,6 @@ module.exports = {
   transform: {
     '^.+\\.[jt]s$': 'babel-jest',
   },
-  moduleFileExtensions: ['js', 'json'],
+  moduleFileExtensions: ['js', 'json', 'ts'],
   setupFilesAfterEnv: [],
 };
