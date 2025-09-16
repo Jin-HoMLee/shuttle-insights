@@ -167,7 +167,12 @@ function mapCSVColumns(headers) {
     timing: headers.indexOf('timing'),
     intention: headers.indexOf('intention'),
     impact: headers.indexOf('impact'),
-    direction: headers.indexOf('direction')
+    direction: headers.indexOf('direction'),
+    // New coach workflow fields
+    player: headers.indexOf('player'),
+    score: headers.indexOf('score'),
+    rallyContext: headers.indexOf('rally_context'),
+    coachingNotes: headers.indexOf('coaching_notes')
   };
 }
 
@@ -242,6 +247,16 @@ function extractShotFromRow(fields, indices) {
     }
   });
   
+  // Add new coach workflow fields if present
+  const coachFields = ['player', 'score', 'rallyContext', 'coachingNotes'];
+  
+  coachFields.forEach(field => {
+    const index = indices[field];
+    if (index >= 0 && fields[index]) {
+      shot[field] = cleanFieldValue(fields[index]) || null;
+    }
+  });
+  
   return shot;
 }
 
@@ -267,7 +282,12 @@ function generateCSVContent(shots, videoUrl) {
       escapeCSVField(shot.timing || ''),
       escapeCSVField(shot.intention || ''),
       escapeCSVField(shot.impact || ''),
-      escapeCSVField(shot.direction || '')
+      escapeCSVField(shot.direction || ''),
+      // New coach workflow fields
+      escapeCSVField(shot.player || ''),
+      escapeCSVField(shot.score || ''),
+      escapeCSVField(shot.rallyContext || ''),
+      escapeCSVField(shot.coachingNotes || '')
     ];
     
     csv += row.join(',') + '\n';

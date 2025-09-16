@@ -23,7 +23,18 @@ export const UI_IDS = {
   CONTENT: 'yt-shot-labeler-content',
   DATETIME: 'yt-shot-labeler-datetime',
   VIDEO_TITLE: 'yt-shot-labeler-videotitle',
-  URL: 'yt-shot-labeler-url'
+  URL: 'yt-shot-labeler-url',
+  // New UI elements for coach workflow
+  CUSTOM_LABELS_SECTION: 'custom-labels-section',
+  CUSTOM_LABELS_LIST: 'custom-labels-list',
+  ADD_CUSTOM_LABEL: 'add-custom-label',
+  CUSTOM_LABEL_INPUT: 'custom-label-input',
+  CONTEXT_FORM: 'context-form',
+  PLAYER_INPUT: 'player-input',
+  SCORE_INPUT: 'score-input',
+  RALLY_SELECT: 'rally-select',
+  NOTES_TEXTAREA: 'notes-textarea',
+  QUICK_SHOTS: 'quick-shots'
 };
 
 // CSS Classes
@@ -39,7 +50,14 @@ export const CSS_CLASSES = {
   DIMENSION_BUTTONS: 'yt-shot-labeler-dimension-buttons',
   DELETE_BTN: 'yt-shot-labeler-delete',
   RESIZE_HANDLE: 'yt-shot-labeler-resize-handle',
-  STATUS_MESSAGE: 'yt-shot-labeler-status-message'
+  STATUS_MESSAGE: 'yt-shot-labeler-status-message',
+  // New CSS classes for coach workflow
+  QUICK_SHOT_BTN: 'yt-shot-labeler-quick-shot-btn',
+  CUSTOM_LABEL_ITEM: 'yt-shot-labeler-custom-label-item',
+  CONTEXT_FORM: 'yt-shot-labeler-context-form',
+  FORM_ROW: 'yt-shot-labeler-form-row',
+  FORM_INPUT: 'yt-shot-labeler-form-input',
+  SHORTCUT_HINT: 'yt-shot-labeler-shortcut-hint'
 };
 
 // YouTube Video Selectors
@@ -88,7 +106,12 @@ export const DEFAULT_SHOT = {
   timing: null,
   intention: null,
   impact: null,
-  direction: null
+  direction: null,
+  // New fields for coach workflow
+  player: null,
+  score: null,
+  rallyContext: null,
+  coachingNotes: null
 };
 
 // CSV Headers
@@ -103,7 +126,12 @@ export const CSV_HEADERS = [
   'timing',
   'intention',
   'impact',
-  'direction'
+  'direction',
+  // New coach workflow fields
+  'player',
+  'score',
+  'rally_context',
+  'coaching_notes'
 ];
 
 // Chrome Extension Configuration
@@ -118,7 +146,17 @@ export const KEYBOARD_SHORTCUTS = {
   MARK_START: 'KeyS',
   MARK_END: 'KeyE', 
   TOGGLE_OVERLAY: 'KeyO',
-  CLOSE_PANEL: 'Escape'
+  CLOSE_PANEL: 'Escape',
+  // Quick shot selection shortcuts (1-9)
+  SHOT_1: 'Digit1',
+  SHOT_2: 'Digit2',
+  SHOT_3: 'Digit3',
+  SHOT_4: 'Digit4',
+  SHOT_5: 'Digit5',
+  SHOT_6: 'Digit6',
+  SHOT_7: 'Digit7',
+  SHOT_8: 'Digit8',
+  SHOT_9: 'Digit9'
 };
 
 // UI Configuration
@@ -131,3 +169,27 @@ export const UI_CONFIG = {
 
 // Maximum allowed shot duration in seconds (5 minutes)
 export const MAX_SHOT_DURATION_SECONDS = 300;
+
+// Quick shot types for coaches (mapped to number keys 1-9)
+export const QUICK_SHOT_TYPES = [
+  { key: '1', label: 'Smash', description: 'Hard attacking shot' },
+  { key: '2', label: 'Clear', description: 'High deep shot' },
+  { key: '3', label: 'Drop', description: 'Soft shot to front court' },
+  { key: '4', label: 'Drive', description: 'Fast horizontal shot' },
+  { key: '5', label: 'Net Shot', description: 'Close to net shot' },
+  { key: '6', label: 'Lift', description: 'Defensive lob shot' },
+  { key: '7', label: 'Serve', description: 'Service shot' },
+  { key: '8', label: 'Half Smash', description: 'Medium power attack' },
+  { key: '9', label: 'Block', description: 'Defensive return' }
+];
+
+// Rally context options
+export const RALLY_CONTEXTS = [
+  'Opening rally',
+  'Mid-rally',
+  'Game point',
+  'Set point',
+  'Match point',
+  'Service game',
+  'Pressure situation'
+];

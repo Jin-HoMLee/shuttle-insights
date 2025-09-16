@@ -17,13 +17,16 @@ import { addResizeHandles } from './resize.js';
 import { addDragBehavior } from './drag.js';
 import { setupCSV } from './csv.js';
 import { setupGlossaryButtons } from './glossary.js';
+import { setupCustomLabels } from './custom-labels.js';
 import { 
   UI_IDS, 
   CSS_CLASSES, 
   PANEL_CONFIG, 
   DEFAULT_SHOT, 
   EVENTS,
-  KEYBOARD_SHORTCUTS 
+  KEYBOARD_SHORTCUTS,
+  QUICK_SHOT_TYPES,
+  RALLY_CONTEXTS
 } from './constants.js';
 
 /**
@@ -86,6 +89,7 @@ export function createLabelerPanel() {
     if (currentShot.longitudinalPosition) dimensions.push(`Pos: ${currentShot.longitudinalPosition}`);
     if (currentShot.timing) dimensions.push(`Time: ${currentShot.timing}`);
     if (currentShot.intention) dimensions.push(`Intent: ${currentShot.intention}`);
+    if (currentShot.player) dimensions.push(`Player: ${currentShot.player}`);
     
     const dimensionText = dimensions.length > 0 ? ` | ${dimensions.join(' | ')}` : '';
     status.textContent = `Start: ${currentShot.start !== null ? currentShot.start.toFixed(2) + 's' : "-"} | End: ${currentShot.end !== null ? currentShot.end.toFixed(2) + 's' : "-"} | Label: ${currentShot.label ?? '-'}${dimensionText}`;
@@ -105,11 +109,22 @@ export function createLabelerPanel() {
           if (shot.intention) dimensions.push(shot.intention);
           if (shot.longitudinalPosition) dimensions.push(shot.longitudinalPosition);
           
-          const dimensionText = dimensions.length > 0 ? ` (${dimensions.join(', ')})` : '';
+          const contextInfo = [];
+          if (shot.player) contextInfo.push(`Player: ${shot.player}`);
+          if (shot.score) contextInfo.push(`Score: ${shot.score}`);
+          if (shot.rallyContext) contextInfo.push(`Context: ${shot.rallyContext}`);
           
-          return `<div style="display:flex;align-items:center;gap:6px;">
-            <div style="flex:1;">#${i + 1}: <b>${shot.label}</b>${dimensionText} [${shot.start.toFixed(2)}s - ${shot.end.toFixed(2)}s]</div>
-            <button title="Delete" class="${CSS_CLASSES.DELETE_BTN}" data-index="${i}" style="background:transparent;border:none;cursor:pointer;font-size:15px;">🗑️</button>
+          const dimensionText = dimensions.length > 0 ? ` (${dimensions.join(', ')})` : '';
+          const contextText = contextInfo.length > 0 ? `<div style="font-size:11px;color:#666;margin-top:2px;">${contextInfo.join(' | ')}</div>` : '';
+          const notesText = shot.coachingNotes ? `<div style="font-size:11px;color:#555;margin-top:2px;font-style:italic;">"${shot.coachingNotes}"</div>` : '';
+          
+          return `<div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:8px;">
+            <div style="flex:1;">
+              <div>#${i + 1}: <b>${shot.label}</b>${dimensionText} [${shot.start.toFixed(2)}s - ${shot.end.toFixed(2)}s]</div>
+              ${contextText}
+              ${notesText}
+            </div>
+            <button title="Delete" class="${CSS_CLASSES.DELETE_BTN}" data-index="${i}" style="background:transparent;border:none;cursor:pointer;font-size:15px;margin-top:2px;">🗑️</button>
           </div>`;
         }).join("");
         
@@ -167,6 +182,13 @@ function createPanelElement(dateTimeStr, videoTitle, videoUrl) {
         <input type="file" id="${UI_IDS.CSV_FILE_INPUT}" accept=".csv" style="display:none;" aria-label="CSV file input">
       </div>
       <div class="${CSS_CLASSES.SECTION}">
+        <div class="${CSS_CLASSES.SECTION_TITLE}">⚡ Quick Shot Selection</div>
+        <div class="${CSS_CLASSES.INFO}" style="font-size: 12px; margin-bottom: 8px;">
+          Use number keys 1-9 for instant shot labeling
+        </div>
+        <div id="${UI_IDS.QUICK_SHOTS}" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 8px;"></div>
+      </div>
+      <div class="${CSS_CLASSES.SECTION}">
         <div class="${CSS_CLASSES.SECTION_TITLE}">🎬 Label Shot</div>
         <div style="margin:12px 0; display: flex; align-items: center; gap: 12px;">
           <button id="${UI_IDS.MARK_START}" class="yt-shot-labeler-btn yt-shot-labeler-btn-primary yt-shot-labeler-tooltip" 
@@ -181,6 +203,33 @@ function createPanelElement(dateTimeStr, videoTitle, videoUrl) {
                 data-tooltip="Mark the end time and save the labeled shot" aria-label="Mark shot end and save">
           <span>⏹️</span> Mark End & Save
         </button>
+      </div>
+      <div class="${CSS_CLASSES.SECTION}">
+        <div class="${CSS_CLASSES.SECTION_TITLE}">🏷️ Custom Labels</div>
+        <div id="${UI_IDS.CUSTOM_LABELS_SECTION}"></div>
+      </div>
+      <div class="${CSS_CLASSES.SECTION}">
+        <div class="${CSS_CLASSES.SECTION_TITLE}">📝 Context & Notes</div>
+        <form id="${UI_IDS.CONTEXT_FORM}" class="${CSS_CLASSES.CONTEXT_FORM}">
+          <div class="${CSS_CLASSES.FORM_ROW}" style="display: flex; gap: 8px; margin-bottom: 6px;">
+            <input type="text" id="${UI_IDS.PLAYER_INPUT}" class="${CSS_CLASSES.FORM_INPUT}"
+                   placeholder="Player name" style="flex: 1; padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px;">
+            <input type="text" id="${UI_IDS.SCORE_INPUT}" class="${CSS_CLASSES.FORM_INPUT}"
+                   placeholder="Score (e.g. 21-18)" style="flex: 1; padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px;">
+          </div>
+          <div class="${CSS_CLASSES.FORM_ROW}" style="margin-bottom: 6px;">
+            <select id="${UI_IDS.RALLY_SELECT}" class="${CSS_CLASSES.FORM_INPUT}"
+                    style="width: 100%; padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px;">
+              <option value="">Select rally context...</option>
+              ${RALLY_CONTEXTS.map(context => `<option value="${context}">${context}</option>`).join('')}
+            </select>
+          </div>
+          <div class="${CSS_CLASSES.FORM_ROW}">
+            <textarea id="${UI_IDS.NOTES_TEXTAREA}" class="${CSS_CLASSES.FORM_INPUT}"
+                      placeholder="Coaching notes..." rows="3"
+                      style="width: 100%; padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; resize: vertical; box-sizing: border-box;"></textarea>
+          </div>
+        </form>
       </div>
       <div class="${CSS_CLASSES.SECTION}">
         <div class="${CSS_CLASSES.SECTION_TITLE}">📋 Labeled Shots</div>
@@ -201,9 +250,10 @@ function createPanelElement(dateTimeStr, videoTitle, videoUrl) {
           <div>• Ctrl+S: Mark start time</div>
           <div>• Ctrl+E: Mark end time & save</div>
           <div>• Ctrl+O: Toggle pose overlay</div>
+          <div>• 1-9: Quick shot selection</div>
           <div>• Esc: Close panel</div>
           <div style="margin-top: 8px;"><b>Workflow:</b></div>
-          <div>1. Mark shot start → 2. Select shot type → 3. Mark end & save</div>
+          <div>1. Mark shot start → 2. Select shot type → 3. Add context → 4. Mark end & save</div>
         </div>
       </div>
     </div>
@@ -278,11 +328,20 @@ function setupPanelFunctionality(panel, shots, currentShot, updateStatus, update
   // Setup overlay toggle button
   setupOverlayButton(panel);
   
+  // Setup quick shot buttons
+  setupQuickShotButtons(panel, currentShot, updateStatus);
+  
   // Setup shot marking buttons
   setupShotMarkingButtons(panel, currentShot, shots, updateStatus, updateShotList);
   
   // Setup glossary and dimension controls
   setupGlossaryButtons(panel, () => currentShot, updateStatus);
+  
+  // Setup custom labels
+  setupCustomLabels(panel.querySelector(`#${UI_IDS.CUSTOM_LABELS_SECTION}`), () => currentShot, updateStatus);
+  
+  // Setup context form
+  setupContextForm(panel, currentShot);
   
   // Setup close button
   setupCloseButton(panel);
@@ -292,8 +351,66 @@ function setupPanelFunctionality(panel, shots, currentShot, updateStatus, update
 }
 
 /**
- * Sets up the overlay start/stop button
+ * Sets up quick shot selection buttons (1-9 keyboard shortcuts)
  */
+function setupQuickShotButtons(panel, currentShot, updateStatus) {
+  const quickShotsContainer = panel.querySelector(`#${UI_IDS.QUICK_SHOTS}`);
+  if (!quickShotsContainer) return;
+
+  QUICK_SHOT_TYPES.forEach((shotType) => {
+    const button = document.createElement('button');
+    button.className = `${CSS_CLASSES.QUICK_SHOT_BTN} yt-shot-labeler-btn`;
+    button.innerHTML = `<span class="${CSS_CLASSES.SHORTCUT_HINT}" style="font-size: 10px; color: #666;">${shotType.key}</span><br>${shotType.label}`;
+    button.title = `${shotType.description} (Press ${shotType.key})`;
+    
+    // Style the quick shot button
+    Object.assign(button.style, {
+      fontSize: '11px',
+      padding: '6px 4px',
+      textAlign: 'center',
+      lineHeight: '1.2',
+      borderRadius: '4px',
+      border: '1px solid #ddd',
+      background: '#f9f9f9',
+      cursor: 'pointer',
+      transition: 'all 0.2s ease'
+    });
+
+    button.onclick = () => {
+      currentShot.label = shotType.label;
+      
+      // Update button selection state
+      updateQuickShotSelection(quickShotsContainer, button);
+      updateStatus();
+      
+      // Add visual feedback
+      button.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        button.style.transform = '';
+      }, 150);
+    };
+
+    quickShotsContainer.appendChild(button);
+  });
+}
+
+/**
+ * Updates quick shot button selection states
+ */
+function updateQuickShotSelection(container, selectedButton) {
+  // Remove selection from all quick shot buttons
+  container.querySelectorAll(`.${CSS_CLASSES.QUICK_SHOT_BTN}`).forEach(btn => {
+    btn.classList.remove("selected");
+    btn.style.background = '#f9f9f9';
+    btn.style.borderColor = '#ddd';
+  });
+  
+  // Mark the clicked button as selected
+  selectedButton.classList.add("selected");
+  selectedButton.style.background = '#007cba';
+  selectedButton.style.borderColor = '#005a8b';
+  selectedButton.style.color = 'white';
+}
 function setupOverlayButton(panel) {
   const customBtn = panel.querySelector(`#${UI_IDS.CUSTOM_ACTION_BTN}`);
   if (!customBtn) return;
@@ -333,8 +450,54 @@ function setupOverlayButton(panel) {
 }
 
 /**
- * Sets up shot start/end marking buttons
+ * Sets up the context form for player, score, rally context, and notes
  */
+function setupContextForm(panel, currentShot) {
+  const playerInput = panel.querySelector(`#${UI_IDS.PLAYER_INPUT}`);
+  const scoreInput = panel.querySelector(`#${UI_IDS.SCORE_INPUT}`);
+  const rallySelect = panel.querySelector(`#${UI_IDS.RALLY_SELECT}`);
+  const notesTextarea = panel.querySelector(`#${UI_IDS.NOTES_TEXTAREA}`);
+
+  // Setup event listeners to sync form data with current shot
+  if (playerInput) {
+    playerInput.addEventListener('input', (e) => {
+      currentShot.player = e.target.value.trim() || null;
+    });
+  }
+
+  if (scoreInput) {
+    scoreInput.addEventListener('input', (e) => {
+      currentShot.score = e.target.value.trim() || null;
+    });
+  }
+
+  if (rallySelect) {
+    rallySelect.addEventListener('change', (e) => {
+      currentShot.rallyContext = e.target.value || null;
+    });
+  }
+
+  if (notesTextarea) {
+    notesTextarea.addEventListener('input', (e) => {
+      currentShot.coachingNotes = e.target.value.trim() || null;
+    });
+  }
+}
+
+/**
+ * Clears the context form fields when a shot is saved
+ */
+function clearContextForm(panel) {
+  const playerInput = panel.querySelector(`#${UI_IDS.PLAYER_INPUT}`);
+  const scoreInput = panel.querySelector(`#${UI_IDS.SCORE_INPUT}`);
+  const rallySelect = panel.querySelector(`#${UI_IDS.RALLY_SELECT}`);
+  const notesTextarea = panel.querySelector(`#${UI_IDS.NOTES_TEXTAREA}`);
+
+  if (playerInput) playerInput.value = '';
+  if (scoreInput) scoreInput.value = '';
+  if (rallySelect) rallySelect.value = '';
+  if (notesTextarea) notesTextarea.value = '';
+}
 function setupShotMarkingButtons(panel, currentShot, shots, updateStatus, updateShotList) {
   // Mark Start button
   const markStartBtn = panel.querySelector(`#${UI_IDS.MARK_START}`);
@@ -410,6 +573,9 @@ function setupShotMarkingButtons(panel, currentShot, shots, updateStatus, update
         Object.assign(currentShot, DEFAULT_SHOT);
         updateStatus();
         
+        // Clear context form
+        clearContextForm(panel);
+        
         // Success feedback
         hideButtonLoading(markEndBtn);
         showSuccess(`Shot labeled successfully! (${shots.length} total shots)`, panel);
@@ -433,8 +599,10 @@ function setupKeyboardShortcuts(panel, currentShot, shots, updateStatus, updateS
     if (
       event.target.tagName === 'INPUT' ||
       event.target.tagName === 'TEXTAREA' ||
+      event.target.tagName === 'SELECT' ||
       event.target.isContentEditable
     ) return;
+    
     switch (event.code) {
       case KEYBOARD_SHORTCUTS.MARK_START:
         if (event.ctrlKey || event.metaKey) {
@@ -461,6 +629,26 @@ function setupKeyboardShortcuts(panel, currentShot, shots, updateStatus, updateS
         event.preventDefault();
         const closeBtn = panel.querySelector(`#${UI_IDS.CLOSE_BTN}`);
         if (closeBtn) closeBtn.click();
+        break;
+      // Quick shot selection (1-9)
+      case KEYBOARD_SHORTCUTS.SHOT_1:
+      case KEYBOARD_SHORTCUTS.SHOT_2:
+      case KEYBOARD_SHORTCUTS.SHOT_3:
+      case KEYBOARD_SHORTCUTS.SHOT_4:
+      case KEYBOARD_SHORTCUTS.SHOT_5:
+      case KEYBOARD_SHORTCUTS.SHOT_6:
+      case KEYBOARD_SHORTCUTS.SHOT_7:
+      case KEYBOARD_SHORTCUTS.SHOT_8:
+      case KEYBOARD_SHORTCUTS.SHOT_9:
+        event.preventDefault();
+        const shotIndex = parseInt(event.key) - 1;
+        if (shotIndex >= 0 && shotIndex < QUICK_SHOT_TYPES.length) {
+          const quickShotsContainer = panel.querySelector(`#${UI_IDS.QUICK_SHOTS}`);
+          const quickShotButtons = quickShotsContainer?.querySelectorAll(`.${CSS_CLASSES.QUICK_SHOT_BTN}`);
+          if (quickShotButtons && quickShotButtons[shotIndex]) {
+            quickShotButtons[shotIndex].click();
+          }
+        }
         break;
     }
   };
