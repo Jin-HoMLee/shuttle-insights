@@ -1,0 +1,25 @@
+name: "Weekly Refactor Issue"
+on:
+  schedule:
+    - cron: '0 0 * * 1'  # Every Monday at midnight UTC
+
+jobs:
+  create-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create weekly refactor issue
+        uses: peter-evans/create-issue@v5
+        with:
+          title: "Weekly Refactor - ${{ github.run_id }}"
+          labels: refactor, recurring
+          assignees: Jin-HoMLee
+          body: |
+            ## Weekly Refactor Checklist
+
+            - [ ] Review code for maintainability (Python, JS, CSS, Notebooks)
+            - [ ] Remove unused or duplicate code
+            - [ ] Update README files and documentation
+            - [ ] Optimize dependencies (`requirements.txt`, `package.json`)
+            - [ ] Check for large files/artifacts and clean up if needed
+            - [ ] Validate browser extension build and Python imports
+            - [ ] Review MLflow and cloud configs for obsolete entries
