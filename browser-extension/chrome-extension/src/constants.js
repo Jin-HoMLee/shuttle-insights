@@ -55,13 +55,22 @@ export const VIDEO_SELECTORS = {
 
 // Panel Configuration
 export const PANEL_CONFIG = {
-  DEFAULT_POSITION: { top: '80px', right: '40px' },
-  DEFAULT_SIZE: { width: '360px', minWidth: '320px', minHeight: '200px' },
+  DEFAULT_POSITION: { 
+    right: () => window.innerWidth * 0.01, 
+    top: () => window.innerHeight * 0.01
+  },
+  DEFAULT_SIZE: { 
+    width: () => window.innerWidth * 0.33, 
+    height: () => window.innerHeight * 0.98
+  },
   MAX_SIZE: {
     width: () => window.innerWidth * 0.98,
     height: () => window.innerHeight * 0.98
   },
-  MIN_SIZE: { width: 280, height: 200 },
+  MIN_SIZE: { 
+    width: () => window.innerWidth * 0.10,
+    height: () => window.innerHeight * 0.10
+  },
   Z_INDEX: 99999
 };
 
