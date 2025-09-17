@@ -133,8 +133,8 @@ export function addResizeHandles(panel) {
     const deltaY = e.clientY - startY;
     
     // Calculate size constraints
-    const minW = PANEL_CONFIG.MIN_SIZE.width;
-    const minH = PANEL_CONFIG.MIN_SIZE.height;
+    const minW = PANEL_CONFIG.MIN_SIZE.width();
+    const minH = PANEL_CONFIG.MIN_SIZE.height();
     const maxW = PANEL_CONFIG.MAX_SIZE.width();
     const maxH = PANEL_CONFIG.MAX_SIZE.height();
         
