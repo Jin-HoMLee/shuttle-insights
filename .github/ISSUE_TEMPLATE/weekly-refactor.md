@@ -1,9 +1,5 @@
 ---
-name: "Weekly Refactor"
-about: "Track weekly refactoring tasks"
 title: "Weekly Refactor - {{date}}"
-labels: refactor, recurring
-assignees: Jin-HoMLee
 ---
 
 ## Weekly Refactor Checklist
@@ -15,3 +11,6 @@ assignees: Jin-HoMLee
 - [ ] Check for large files/artifacts and clean up if needed
 - [ ] Validate browser extension build and Python imports
 - [ ] Review MLflow and cloud configs for obsolete entries
+
+---
+This issue is to track a recurring weekly refactoring session for the repository. Please follow best practices for maintainability and code quality improvement. Coordinate with contributors as needed and update documentation after each session.
