@@ -17,8 +17,7 @@ shuttle-insights/
 ├── src/                          # Core Python scripts
 │   ├── download_video.py         # YouTube video downloader
 │   ├── extract_frames.py         # Frame extraction from videos
-│   ├── analyze_pose.py           # Pose estimation using MediaPipe
-│   └── utils.py                  # Utility functions
+│   └── analyze_pose.py           # Pose estimation using MediaPipe
 ├── notebooks/                    # Jupyter notebooks for analysis
 │   ├── 01_pose_overlay_video.ipynb        # Pose visualization
 │   ├── 02_manual_labeling_segmenting.ipynb # Data labeling tools
@@ -139,7 +138,6 @@ See [browser-extension/README.md](browser-extension/README.md) for detailed inst
 - **download_video.py**: Downloads YouTube videos using yt-dlp
 - **extract_frames.py**: Extracts frames from videos at specified intervals  
 - **analyze_pose.py**: Performs pose estimation using MediaPipe
-- **utils.py**: Common utility functions
 
 ### Jupyter Notebooks (notebooks/)
 - **01_pose_overlay_video.ipynb**: Demonstrates pose estimation and visualization overlays

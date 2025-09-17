@@ -8,7 +8,8 @@
     "jest-environment-jsdom": "^30.1.2"
   },
   "scripts": {
-    "build": "esbuild chrome-extension/src/content.js --bundle --outfile=chrome-extension/dist/content.js"
+    "build": "esbuild chrome-extension/src/content.js --bundle --outfile=chrome-extension/dist/content.js",
+    "test": "jest"
   },
   "dependencies": {
     "@tensorflow-models/pose-detection": "^2.1.3",
