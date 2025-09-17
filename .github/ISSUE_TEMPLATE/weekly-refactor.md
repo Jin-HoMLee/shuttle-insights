@@ -1,7 +1,3 @@
----
-title: "Weekly Refactor - {{date}}"
----
-
 ## Weekly Refactor Checklist
 
 - [ ] Review code for maintainability (Python, JS, CSS, Notebooks)
