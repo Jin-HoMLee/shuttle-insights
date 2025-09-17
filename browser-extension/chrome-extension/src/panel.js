@@ -168,24 +168,6 @@ function createPanelElement(dateTimeStr, videoTitle, videoUrl) {
           ">YouTube Badminton Shot Labeler</strong>
         </div>
         <div style="display: flex; align-items: center; gap: var(--md-sys-shape-corner-small);">
-          <button id="theme-toggle" class="yt-shot-labeler-tooltip" 
-                  data-tooltip="Toggle theme (follows system preference)" 
-                  aria-label="Toggle theme"
-                  style="
-                    background: rgba(255,255,255,0.1);
-                    border: 1px solid rgba(255,255,255,0.2);
-                    color: var(--md-sys-color-on-primary-container);
-                    font-size: 16px;
-                    cursor: pointer;
-                    border-radius: var(--md-sys-shape-corner-extra-large);
-                    padding: var(--md-sys-shape-corner-small);
-                    width: 32px;
-                    height: 32px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    transition: all var(--transition-fast);
-                  ">${prefersDark ? '☀️' : '🌙'}</button>
           <button id="${UI_IDS.CLOSE_BTN}" class="yt-shot-labeler-tooltip" 
                   data-tooltip="Close panel (Esc)" 
                   aria-label="Close panel"
@@ -671,37 +653,6 @@ function setupCloseButton(panel) {
       }, 200);
     };
     
-    // Setup theme toggle functionality
-    const themeToggle = panel.querySelector('#theme-toggle');
-    if (themeToggle) {
-      themeToggle.addEventListener('mouseenter', () => {
-        themeToggle.style.background = 'rgba(255,255,255,0.2)';
-        themeToggle.style.transform = 'scale(1.1)';
-      });
-      
-      themeToggle.addEventListener('mouseleave', () => {
-        themeToggle.style.background = 'rgba(255,255,255,0.1)';
-        themeToggle.style.transform = 'scale(1)';
-      });
-      
-      themeToggle.onclick = () => {
-        // Toggle between light and dark mode icons
-        const isDark = themeToggle.textContent === '☀️';
-        themeToggle.textContent = isDark ? '🌙' : '☀️';
-        themeToggle.setAttribute('data-tooltip', 
-          `Switch to ${isDark ? 'dark' : 'light'} mode (currently following system preference)`
-        );
-        
-        // Add visual feedback
-        themeToggle.style.transform = 'scale(0.9)';
-        setTimeout(() => {
-          themeToggle.style.transform = 'scale(1)';
-        }, 150);
-        
-        // Note: Actual theme switching happens via CSS prefers-color-scheme
-        // This is just visual feedback for user interaction
-      };
-    }
   }
 }
 
