@@ -132,14 +132,85 @@ function createPanelElement(dateTimeStr, videoTitle, videoUrl) {
   panel.id = UI_IDS.PANEL;
   panel.setAttribute('role', 'dialog');
   panel.setAttribute('aria-label', 'YouTube Badminton Shot Labeler');
+  panel.setAttribute('aria-modal', 'true');
+  
+  // Detect system theme preference
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
   panel.innerHTML = `
-    <div id="${UI_IDS.HEADER}" class="${CSS_CLASSES.SECTION_TITLE}" style="background: linear-gradient(135deg, #1976d2, #42a5f5); color: white; margin: 0; padding: 16px; border-radius: 8px 8px 0 0;">
-      <button id="${UI_IDS.CLOSE_BTN}" class="yt-shot-labeler-tooltip" data-tooltip="Close panel" aria-label="Close panel" 
-              style="float:right;background:rgba(255,255,255,0.2);border:none;color:white;font-size:18px;cursor:pointer;border-radius:4px;padding:4px 8px;transition:background 0.2s;">×</button>
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <span style="font-size: 20px;">🏸</span>
-        <strong style="font-size: 16px; font-weight: 600;">YouTube Badminton Shot Labeler</strong>
+    <div id="${UI_IDS.HEADER}" style="
+      background: var(--md-sys-color-primary-container); 
+      color: var(--md-sys-color-on-primary-container); 
+      margin: 0; 
+      padding: var(--md-sys-shape-corner-large); 
+      border-radius: var(--md-sys-shape-corner-large) var(--md-sys-shape-corner-large) 0 0;
+      position: relative;
+      overflow: hidden;
+    ">
+      <div style="position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--md-sys-color-primary);"></div>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--md-sys-shape-corner-small);">
+        <div style="display: flex; align-items: center; gap: var(--md-sys-shape-corner-medium);">
+          <div style="
+            width: 32px; 
+            height: 32px; 
+            background: var(--md-sys-color-primary); 
+            border-radius: var(--md-sys-shape-corner-small); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 16px;
+            box-shadow: var(--md-sys-elevation-level1);
+          ">🏸</div>
+          <strong style="
+            font-size: var(--md-sys-typescale-title-large-font-size); 
+            font-weight: var(--md-sys-typescale-title-large-font-weight);
+            line-height: var(--md-sys-typescale-title-large-line-height);
+          ">YouTube Badminton Shot Labeler</strong>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--md-sys-shape-corner-small);">
+          <button id="theme-toggle" class="yt-shot-labeler-tooltip" 
+                  data-tooltip="Toggle theme (follows system preference)" 
+                  aria-label="Toggle theme"
+                  style="
+                    background: rgba(255,255,255,0.1);
+                    border: 1px solid rgba(255,255,255,0.2);
+                    color: var(--md-sys-color-on-primary-container);
+                    font-size: 16px;
+                    cursor: pointer;
+                    border-radius: var(--md-sys-shape-corner-extra-large);
+                    padding: var(--md-sys-shape-corner-small);
+                    width: 32px;
+                    height: 32px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all var(--transition-fast);
+                  ">${prefersDark ? '☀️' : '🌙'}</button>
+          <button id="${UI_IDS.CLOSE_BTN}" class="yt-shot-labeler-tooltip" 
+                  data-tooltip="Close panel (Esc)" 
+                  aria-label="Close panel"
+                  style="
+                    background: rgba(255,255,255,0.1);
+                    border: 1px solid rgba(255,255,255,0.2);
+                    color: var(--md-sys-color-on-primary-container);
+                    font-size: 18px;
+                    cursor: pointer;
+                    border-radius: var(--md-sys-shape-corner-extra-large);
+                    padding: var(--md-sys-shape-corner-small);
+                    width: 32px;
+                    height: 32px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all var(--transition-fast);
+                  ">✕</button>
+        </div>
       </div>
+      <div style="
+        font-size: var(--md-sys-typescale-body-small-font-size);
+        opacity: 0.8;
+        font-weight: var(--md-sys-typescale-body-small-font-weight);
+      ">Advanced badminton video analysis and shot labeling</div>
     </div>
     <div id="${UI_IDS.CONTENT}">
       <div class="${CSS_CLASSES.SECTION}">
@@ -196,14 +267,54 @@ function createPanelElement(dateTimeStr, videoTitle, videoUrl) {
       </div>
       <div class="${CSS_CLASSES.SECTION}">
         <div class="${CSS_CLASSES.SECTION_TITLE}">❓ Quick Help</div>
-        <div class="${CSS_CLASSES.INFO}" style="font-size: 12px;">
-          <div><b>Keyboard Shortcuts:</b></div>
-          <div>• Ctrl+S: Mark start time</div>
-          <div>• Ctrl+E: Mark end time & save</div>
-          <div>• Ctrl+O: Toggle pose overlay</div>
-          <div>• Esc: Close panel</div>
-          <div style="margin-top: 8px;"><b>Workflow:</b></div>
-          <div>1. Mark shot start → 2. Select shot type → 3. Mark end & save</div>
+        <div class="${CSS_CLASSES.INFO}" style="font-size: var(--md-sys-typescale-body-small-font-size);">
+          <details style="margin-bottom: var(--md-sys-shape-corner-small);">
+            <summary style="cursor: pointer; font-weight: 500; padding: var(--md-sys-shape-corner-small); background: var(--md-sys-color-surface-container-low); border-radius: var(--md-sys-shape-corner-small); margin-bottom: var(--md-sys-shape-corner-small);">
+              <b>🎯 Getting Started</b>
+            </summary>
+            <div style="padding-left: var(--md-sys-shape-corner-medium);">
+              <div><b>1. Load Video:</b> Navigate to any YouTube video</div>
+              <div><b>2. Mark Shots:</b> Use "Mark Start" → Select shot type → "Mark End & Save"</div>
+              <div><b>3. Export Data:</b> Download your labeled data as CSV</div>
+              <div style="margin-top: var(--md-sys-shape-corner-small); padding: var(--md-sys-shape-corner-small); background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); border-radius: var(--md-sys-shape-corner-small); font-size: var(--md-sys-typescale-body-small-font-size);">
+                💡 <b>Tip:</b> Use pose overlay to better analyze player movements
+              </div>
+            </div>
+          </details>
+          
+          <details style="margin-bottom: var(--md-sys-shape-corner-small);">
+            <summary style="cursor: pointer; font-weight: 500; padding: var(--md-sys-shape-corner-small); background: var(--md-sys-color-surface-container-low); border-radius: var(--md-sys-shape-corner-small); margin-bottom: var(--md-sys-shape-corner-small);">
+              <b>⌨️ Keyboard Shortcuts</b>
+            </summary>
+            <div style="padding-left: var(--md-sys-shape-corner-medium);">
+              <div>• <kbd style="background: var(--md-sys-color-surface-container); padding: 2px 6px; border-radius: var(--md-sys-shape-corner-extra-small); font-family: monospace;">Ctrl+S</kbd> Mark start time</div>
+              <div>• <kbd style="background: var(--md-sys-color-surface-container); padding: 2px 6px; border-radius: var(--md-sys-shape-corner-extra-small); font-family: monospace;">Ctrl+E</kbd> Mark end time & save</div>
+              <div>• <kbd style="background: var(--md-sys-color-surface-container); padding: 2px 6px; border-radius: var(--md-sys-shape-corner-extra-small); font-family: monospace;">Ctrl+O</kbd> Toggle pose overlay</div>
+              <div>• <kbd style="background: var(--md-sys-color-surface-container); padding: 2px 6px; border-radius: var(--md-sys-shape-corner-extra-small); font-family: monospace;">Esc</kbd> Close panel</div>
+            </div>
+          </details>
+          
+          <details>
+            <summary style="cursor: pointer; font-weight: 500; padding: var(--md-sys-shape-corner-small); background: var(--md-sys-color-surface-container-low); border-radius: var(--md-sys-shape-corner-small); margin-bottom: var(--md-sys-shape-corner-small);">
+              <b>🔒 Privacy & Permissions</b>
+            </summary>
+            <div style="padding-left: var(--md-sys-shape-corner-medium);">
+              <div style="margin-bottom: var(--md-sys-shape-corner-small);">
+                <div style="display: flex; align-items: center; gap: var(--md-sys-shape-corner-small); margin-bottom: 4px;">
+                  <span style="color: var(--success-color);">✓</span>
+                  <span><b>Local Processing:</b> All analysis runs in your browser</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--md-sys-shape-corner-small); margin-bottom: 4px;">
+                  <span style="color: var(--success-color);">✓</span>
+                  <span><b>No Data Collection:</b> Your videos and labels stay private</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--md-sys-shape-corner-small);">
+                  <span style="color: var(--success-color);">✓</span>
+                  <span><b>Minimal Permissions:</b> Only YouTube access required</span>
+                </div>
+              </div>
+            </div>
+          </details>
         </div>
       </div>
     </div>
@@ -212,7 +323,7 @@ function createPanelElement(dateTimeStr, videoTitle, videoUrl) {
 }
 
 /**
- * Applies styling to the panel element
+ * Applies Material Design 3 styling to the panel element
  */
 function stylePanelElement(panel) {
   Object.assign(panel.style, {
@@ -220,39 +331,70 @@ function stylePanelElement(panel) {
     top: PANEL_CONFIG.DEFAULT_POSITION.top, 
     right: PANEL_CONFIG.DEFAULT_POSITION.right, 
     zIndex: PANEL_CONFIG.Z_INDEX,
-    background: "white", 
-    border: "1px solid var(--border-color)", 
+    background: "var(--md-sys-color-surface-container)", 
+    border: "1px solid var(--md-sys-color-outline-variant)", 
     padding: "0",
-    borderRadius: "12px", 
-    boxShadow: "0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)", 
+    borderRadius: "var(--md-sys-shape-corner-large)", 
+    boxShadow: "var(--md-sys-elevation-level3)", 
     width: PANEL_CONFIG.DEFAULT_SIZE.width,
-    fontSize: "14px", 
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", 
-    lineHeight: "1.5",
+    fontSize: "var(--md-sys-typescale-body-medium-font-size)", 
+    fontFamily: "'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif", 
+    lineHeight: "var(--md-sys-typescale-body-medium-line-height)",
     userSelect: "none", 
-    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", 
+    transition: "all var(--transition-emphasized)", 
     overflow: "hidden",
     backgroundClip: "padding-box", 
     display: "flex", 
     flexDirection: "column",
-    maxHeight: "90vh", 
+    maxHeight: "calc(100vh - 32px)", 
     minWidth: PANEL_CONFIG.DEFAULT_SIZE.minWidth, 
     minHeight: PANEL_CONFIG.DEFAULT_SIZE.minHeight, 
     resize: "none",
-    backdropFilter: "blur(10px)",
-    WebkitBackdropFilter: "blur(10px)"
+    backdropFilter: "blur(16px)",
+    WebkitBackdropFilter: "blur(16px)",
+    color: "var(--md-sys-color-on-surface)",
+    // Initial animation state
+    opacity: "0",
+    transform: "scale(0.9) translateY(8px)"
   });
   
-  // Add enhanced hover effect
+  // Enhanced hover and focus effects with Material Design 3 principles
   panel.addEventListener('mouseenter', () => {
-    panel.style.transform = 'translateY(-2px)';
-    panel.style.boxShadow = '0 12px 40px rgba(0,0,0,0.16), 0 4px 12px rgba(0,0,0,0.12)';
+    panel.style.transform = 'translateY(-2px) scale(1)';
+    panel.style.boxShadow = 'var(--md-sys-elevation-level4)';
   });
   
   panel.addEventListener('mouseleave', () => {
-    panel.style.transform = 'translateY(0)';
-    panel.style.boxShadow = '0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)';
+    panel.style.transform = 'translateY(0) scale(1)';
+    panel.style.boxShadow = 'var(--md-sys-elevation-level3)';
   });
+  
+  // Add focus management for accessibility
+  panel.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      const focusableElements = panel.querySelectorAll(
+        'button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      
+      if (e.shiftKey && document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      } else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    }
+  });
+  
+  // Set initial focus for accessibility
+  setTimeout(() => {
+    const firstButton = panel.querySelector('button');
+    if (firstButton) {
+      firstButton.focus();
+    }
+  }, 100);
 }
 
 /**
@@ -528,6 +670,38 @@ function setupCloseButton(panel) {
         panel.remove();
       }, 200);
     };
+    
+    // Setup theme toggle functionality
+    const themeToggle = panel.querySelector('#theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('mouseenter', () => {
+        themeToggle.style.background = 'rgba(255,255,255,0.2)';
+        themeToggle.style.transform = 'scale(1.1)';
+      });
+      
+      themeToggle.addEventListener('mouseleave', () => {
+        themeToggle.style.background = 'rgba(255,255,255,0.1)';
+        themeToggle.style.transform = 'scale(1)';
+      });
+      
+      themeToggle.onclick = () => {
+        // Toggle between light and dark mode icons
+        const isDark = themeToggle.textContent === '☀️';
+        themeToggle.textContent = isDark ? '🌙' : '☀️';
+        themeToggle.setAttribute('data-tooltip', 
+          `Switch to ${isDark ? 'dark' : 'light'} mode (currently following system preference)`
+        );
+        
+        // Add visual feedback
+        themeToggle.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+          themeToggle.style.transform = 'scale(1)';
+        }, 150);
+        
+        // Note: Actual theme switching happens via CSS prefers-color-scheme
+        // This is just visual feedback for user interaction
+      };
+    }
   }
 }
 
