@@ -142,3 +142,11 @@ models/*
 
 # macOS
 .DS_Store
+
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfvars
+terraform_outputs.json
+.terraform/
+.terraform.lock.hcl

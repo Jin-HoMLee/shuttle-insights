@@ -235,8 +235,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Credits
 
 - Badminton shots glossary adapted from [WorldBadminton.com](https://www.worldbadminton.com/glossary.htm)
-- Pose estimation powered by [MediaPipe](https://mediapipe.dev/)
-- Machine learning with [TensorFlow](https://tensorflow.org/)
+- Pose estimation powered by [MediaPipe](https://mediapipe.dev/) and [TensorFlow.js](https://tensorflow.org/js)
+- Machine learning with [TensorFlow](https://tensorflow.org/) and [scikit-learn](https://scikit-learn.org/)
 - Video downloading via [yt-dlp](https://github.com/yt-dlp/yt-dlp)
+- Browser extension built with [esbuild](https://esbuild.github.io/)
 
 Developed by [Jin-HoMLee](https://github.com/Jin-HoMLee) with assistance from GitHub Copilot.
+
+---
+
+Last updated: September 2025 - Dependencies optimized, deprecated code removed, documentation improved.
+
+---
