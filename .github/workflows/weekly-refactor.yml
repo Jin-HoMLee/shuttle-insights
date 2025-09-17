@@ -11,10 +11,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set date variable
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
       - name: Create weekly refactor issue from file
         uses: peter-evans/create-issue-from-file@v5
         with:
-          title: "Weekly Refactor - ${{ github.run_id }}"
+          title: "Weekly Refactor - ${{ env.date }}"
           labels: refactor, recurring
           assignees: Jin-HoMLee
           content-filepath: .github/ISSUE_TEMPLATE/weekly-refactor.md
