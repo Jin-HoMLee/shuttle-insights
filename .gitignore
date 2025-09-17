@@ -150,7 +150,3 @@ models/*
 terraform_outputs.json
 .terraform/
 .terraform.lock.hcl
-
-# Browser extension build artifacts
-browser-extension/chrome-extension/dist/
-browser-extension/node_modules/
