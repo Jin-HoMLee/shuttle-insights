@@ -247,5 +247,3 @@ Developed by [Jin-HoMLee](https://github.com/Jin-HoMLee) with assistance from Gi
 Last updated: September 2025 - Dependencies optimized, deprecated code removed, documentation improved.
 
 ---
-
-Last updated: September 2025 - Dependencies optimized, deprecated code removed, documentation improved.
