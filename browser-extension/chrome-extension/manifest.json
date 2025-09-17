@@ -2,8 +2,7 @@
   "manifest_version": 3,
   "name": "YouTube Badminton Shot Labeler",
   "version": "2.1.0",
-  "description": "Advanced badminton video analysis tool with AI-powered pose detection and shot labeling for YouTube videos. Export professional training data with Material Design 3 interface.",
-  "keywords": ["badminton", "sports", "analysis", "ai", "pose detection", "training"],
+  "description": "Advanced badminton video analysis tool with AI-powered pose detection and shot labeling for YouTube videos. ",
   "permissions": ["downloads", "scripting", "storage", "activeTab"],
   "host_permissions": [
     "https://www.youtube.com/*"
