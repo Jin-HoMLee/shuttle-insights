@@ -14,10 +14,10 @@
  */
 
 import { togglePanel } from './panel.js';
-import { getVideo } from './video-utils.js';
-import { removeOverlayCanvas, createOverlayCanvas } from './overlay-utils.js';
-import { setupDetector } from './pose-utils.js';
-import { drawKeypoints, drawSkeletonAndBoxes } from './poseDrawing.js';
+import { getVideo } from './utils/video-utils.js';
+import { removeOverlayCanvas, createOverlayCanvas } from './utils/overlay-utils.js';
+import { setupDetector } from './utils/pose-utils.js';
+import { drawKeypoints, drawSkeletonAndBoxes } from './components/poseDrawing.js';
 import { EVENTS, UI_IDS } from './constants.js';
 
 // State management

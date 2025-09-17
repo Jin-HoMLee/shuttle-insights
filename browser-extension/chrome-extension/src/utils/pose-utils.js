@@ -8,7 +8,7 @@ import * as poseDetection from '@tensorflow-models/pose-detection';
 import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
 
-import { POSE_CONFIG } from './constants.js';
+import { POSE_CONFIG } from '../constants.js';
 
 /**
  * Sets up and initializes the pose detector
