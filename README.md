@@ -138,7 +138,6 @@ See [browser-extension/README.md](browser-extension/README.md) for detailed inst
 - **download_video.py**: Downloads YouTube videos using yt-dlp
 - **extract_frames.py**: Extracts frames from videos at specified intervals  
 - **analyze_pose.py**: Performs pose estimation using MediaPipe
-- **utils.py**: Common utility functions
 
 ### Jupyter Notebooks (notebooks/)
 - **01_pose_overlay_video.ipynb**: Demonstrates pose estimation and visualization overlays
