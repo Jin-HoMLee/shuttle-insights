@@ -83,7 +83,7 @@ The extension has been modularized for improved maintainability and scalability:
 - **`config-utils.js`** - Configuration utilities and validation
 - **`csv-parser.js`** - CSV parsing and generation utilities
 
-#### Data Management (`data/`):
+#### Data Loading Modules (`loaders/`):
 
 - **`glossary-loader.js`** - Glossary data loading, caching, and validation
 
