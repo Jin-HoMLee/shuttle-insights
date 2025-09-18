@@ -97,7 +97,7 @@ The extension has been modularized for improved maintainability and scalability:
 #### Key Improvements:
 
 - **Modular Architecture**: Clear separation of concerns with focused, single-responsibility modules
-- **Organized Structure**: Logical grouping by components, features, utilities, and data
+- **Organized Structure**: Logical grouping by components, features, utilities, and data loading (loaders)
 - **Reduced Complexity**: Main files reduced from 1,269 lines to 105 lines (93% reduction)
 - **Enhanced Maintainability**: Easier navigation, debugging, and feature development
 - **Backward Compatibility**: Existing imports continue to work through legacy files
@@ -153,7 +153,7 @@ chrome-extension/
 │   │   ├── data-validation.js   # Data validation utilities
 │   │   ├── config-utils.js      # Configuration utilities
 │   │   └── csv-parser.js        # CSV parsing utilities
-│   └── data/                    # Data Management
+│   └── loaders/                 # Data Loading
 │       └── glossary-loader.js   # Glossary data loading and caching
 ├── dist/                        # Built files (generated)
 │   └── content.js               # Bundled content script
