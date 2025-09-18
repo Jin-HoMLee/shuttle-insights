@@ -12,7 +12,7 @@
 
 import { setupShotButtons } from './components/glossary-buttons.js';
 import { setupDimensionControls } from './components/dimension-controls.js';
-import { loadGlossaryData } from './data/glossary-loader.js';
+import { loadGlossaryData } from './loaders/glossary-loader.js';
 import { CSS_CLASSES } from './constants.js';
 
 /**
@@ -59,6 +59,6 @@ function showGlossaryError(container, message) {
 }
 
 // Re-export commonly used functions for backward compatibility
-export { loadGlossaryData, getShotTypes, getDimensions } from './data/glossary-loader.js';
+export { loadGlossaryData, getShotTypes, getDimensions } from './loaders/glossary-loader.js';
 export { setupShotButtons, clearShotButtonSelection } from './components/glossary-buttons.js';
 export { setupDimensionControls } from './components/dimension-controls.js';
