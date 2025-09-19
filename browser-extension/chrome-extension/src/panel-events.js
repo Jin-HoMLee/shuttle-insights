@@ -6,7 +6,7 @@
  * button clicks, and panel lifecycle events.
  */
 
-import { addTooltip } from './ui-utils.js';
+import { addTooltip, showButtonLoading, hideButtonLoading } from './ui-utils.js';
 import { UI_IDS, KEYBOARD_SHORTCUTS, EVENTS } from './constants.js';
 
 /**
@@ -138,36 +138,27 @@ export function setupOverlayButton(panel) {
   
   customBtn.onclick = () => {
     if (customBtn.dataset.state === 'stopped') {
-      // Import here to avoid circular dependency with ui-utils
-      import('./ui-utils.js').then(({ showButtonLoading, hideButtonLoading }) => {
-        showButtonLoading(customBtn, 'Starting...');
-        
-        window.dispatchEvent(new CustomEvent(EVENTS.POSE_OVERLAY_CONTROL, { 
-          detail: { action: 'start' } 
-        }));
-        
-        setTimeout(() => {
-          hideButtonLoading(customBtn);
-          customBtn.innerHTML = '<span>🛑</span> Stop Pose Overlay';
-          customBtn.dataset.state = 'started';
-          customBtn.classList.add('yt-shot-labeler-btn-danger');
-        }, 500);
-      });
+      showButtonLoading(customBtn, 'Starting...');
+      window.dispatchEvent(new CustomEvent(EVENTS.POSE_OVERLAY_CONTROL, { 
+        detail: { action: 'start' } 
+      }));
+      setTimeout(() => {
+        hideButtonLoading(customBtn);
+        customBtn.innerHTML = '<span>🛑</span> Stop Pose Overlay';
+        customBtn.dataset.state = 'started';
+        customBtn.classList.add('yt-shot-labeler-btn-danger');
+      }, 500);
     } else {
-      import('./ui-utils.js').then(({ showButtonLoading, hideButtonLoading }) => {
-        showButtonLoading(customBtn, 'Stopping...');
-        
-        window.dispatchEvent(new CustomEvent(EVENTS.POSE_OVERLAY_CONTROL, { 
-          detail: { action: 'stop' } 
-        }));
-        
-        setTimeout(() => {
-          hideButtonLoading(customBtn);
-          customBtn.innerHTML = '<span>👤</span> Start Pose Overlay';
-          customBtn.dataset.state = 'stopped';
-          customBtn.classList.remove('yt-shot-labeler-btn-danger');
-        }, 300);
-      });
+      showButtonLoading(customBtn, 'Stopping...');
+      window.dispatchEvent(new CustomEvent(EVENTS.POSE_OVERLAY_CONTROL, { 
+        detail: { action: 'stop' } 
+      }));
+      setTimeout(() => {
+        hideButtonLoading(customBtn);
+        customBtn.innerHTML = '<span>👤</span> Start Pose Overlay';
+        customBtn.dataset.state = 'stopped';
+        customBtn.classList.remove('yt-shot-labeler-btn-danger');
+      }, 300);
     }
   };
 }
