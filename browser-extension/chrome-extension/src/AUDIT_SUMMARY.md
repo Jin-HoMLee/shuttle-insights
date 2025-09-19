@@ -37,7 +37,7 @@ This audit reviewed all 14 JavaScript files in `browser-extension/chrome-extensi
 ## 🚀 Recommended Actions
 
 ### Immediate Priority (Month 1)
-**Split panel.js** from 548 lines into 4-5 focused modules:
+**Split panel.js** from 548 lines into 5 focused modules:
 ```
 panel.js → {
   panel-factory.js      // DOM creation & styling
