@@ -17,13 +17,16 @@ import { addResizeHandles } from './resize.js';
 import { addDragBehavior } from './drag.js';
 import { setupCSV } from './csv.js';
 import { setupGlossaryButtons } from './glossary.js';
+import { associatePoseDataWithShot, getPoseDataStatus } from './pose-data-collector.js';
+import { exportAllShotsPoseData, createPoseDataManifest } from './pose-data-export.js';
 import { 
   UI_IDS, 
   CSS_CLASSES, 
   PANEL_CONFIG, 
   DEFAULT_SHOT, 
   EVENTS,
-  KEYBOARD_SHORTCUTS 
+  KEYBOARD_SHORTCUTS,
+  POSE_UI_IDS 
 } from './constants.js';
 
 /**
@@ -61,6 +64,7 @@ export function createLabelerPanel() {
   // Set up functionality modules
   setupPanelFunctionality(panel, shots, currentShot, updateStatus, updateShotList);
   setupCSV(panel, shots, updateShotList, videoUrl, sanitizedTitle);
+  setupPoseDataExport(panel, shots, sanitizedTitle);
 
   // Add panel to DOM
   document.body.appendChild(panel);
@@ -193,6 +197,19 @@ function createPanelElement(dateTimeStr, videoTitle, videoUrl) {
                 data-tooltip="Download all labeled shots as CSV file" aria-label="Download CSV file">
           <span>⬇️</span> Download CSV
         </button>
+      </div>
+      <div class="${CSS_CLASSES.SECTION}">
+        <div class="${CSS_CLASSES.SECTION_TITLE}">🤖 Pose Data Export</div>
+        <div id="${POSE_UI_IDS.POSE_DATA_STATUS}" class="${CSS_CLASSES.STATUS_MESSAGE}" style="margin-bottom:8px;font-size:12px;"></div>
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <button id="${POSE_UI_IDS.POSE_EXPORT_BTN}" class="yt-shot-labeler-btn yt-shot-labeler-tooltip" 
+                  data-tooltip="Export pose keypoint data for all labeled shots" aria-label="Export pose data">
+            <span>🦴</span> Export Pose Data
+          </button>
+        </div>
+        <div style="font-size:11px;color:#666;line-height:1.3;">
+          Exports keypoint data collected during pose overlay sessions. Each labeled shot gets its own file.
+        </div>
       </div>
       <div class="${CSS_CLASSES.SECTION}">
         <div class="${CSS_CLASSES.SECTION_TITLE}">❓ Quick Help</div>
@@ -404,6 +421,15 @@ function setupShotMarkingButtons(panel, currentShot, shots, updateStatus, update
       setTimeout(() => {
         // Save current shot and reset
         shots.push({ ...currentShot });
+        const shotId = shots.length; // Use 1-based indexing for shot ID
+        
+        // Associate pose data with this shot if available
+        try {
+          associatePoseDataWithShot(currentShot, shotId);
+        } catch (error) {
+          console.warn('Failed to associate pose data with shot:', error);
+        }
+        
         updateShotList();
         
         // Reset current shot
@@ -544,5 +570,109 @@ export function togglePanel() {
     panel.remove();
   } else {
     createLabelerPanel();
+  }
+}
+
+/**
+ * Sets up pose data export functionality
+ * 
+ * @param {HTMLElement} panel - The main panel element
+ * @param {Array} shots - Array of shot data
+ * @param {string} sanitizedTitle - Sanitized video title
+ */
+function setupPoseDataExport(panel, shots, sanitizedTitle) {
+  const poseExportBtn = panel.querySelector(`#${POSE_UI_IDS.POSE_EXPORT_BTN}`);
+  const poseStatusEl = panel.querySelector(`#${POSE_UI_IDS.POSE_DATA_STATUS}`);
+  
+  if (!poseExportBtn) {
+    console.warn('Pose export button not found');
+    return;
+  }
+
+  // Update pose data status display
+  function updatePoseDataStatus() {
+    const status = getPoseDataStatus();
+    if (poseStatusEl) {
+      if (status.totalDataPoints === 0) {
+        poseStatusEl.textContent = 'No pose data collected yet. Start overlay to collect data.';
+        poseStatusEl.style.color = '#999';
+      } else {
+        poseStatusEl.textContent = `${status.totalDataPoints} pose points collected, ${status.shotsWithData} shots with data`;
+        poseStatusEl.style.color = '#2e7d32';
+      }
+    }
+  }
+
+  // Update status initially and set up periodic updates
+  updatePoseDataStatus();
+  const statusInterval = setInterval(updatePoseDataStatus, 2000);
+
+  // Clean up interval when panel is removed
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      mutation.removedNodes.forEach((node) => {
+        if (node === panel) {
+          clearInterval(statusInterval);
+          observer.disconnect();
+        }
+      });
+    });
+  });
+  observer.observe(document.body, { childList: true });
+
+  // Handle pose data export
+  poseExportBtn.onclick = async () => {
+    if (shots.length === 0) {
+      showWarning('No labeled shots to export pose data for!', panel);
+      return;
+    }
+
+    const status = getPoseDataStatus();
+    if (status.totalDataPoints === 0) {
+      showWarning('No pose data collected. Start the pose overlay and label some shots first.', panel);
+      return;
+    }
+
+    try {
+      showButtonLoading(poseExportBtn, 'Exporting...');
+      
+      // Export pose data for all shots
+      const exportSummary = await exportAllShotsPoseData(shots);
+      
+      // Create manifest file
+      await createPoseDataManifest(shots, sanitizedTitle);
+      
+      hideButtonLoading(poseExportBtn);
+      
+      if (exportSummary.successCount > 0) {
+        showSuccess(
+          `Exported pose data for ${exportSummary.successCount} shots. ` +
+          `${exportSummary.errorCount > 0 ? `${exportSummary.errorCount} shots had no data.` : ''}`,
+          panel
+        );
+      } else {
+        showWarning('No pose data was exported. Make sure pose overlay was active during shot labeling.', panel);
+      }
+      
+    } catch (error) {
+      console.error('Pose data export failed:', error);
+      hideButtonLoading(poseExportBtn);
+      showWarning(`Export failed: ${error.message}`, panel);
+    }
+  };
+}
+
+/**
+ * Associates pose data with a newly saved shot
+ * This should be called whenever a shot is saved
+ * 
+ * @param {Object} shot - The shot object that was just saved
+ * @param {number} shotId - The ID/index of the shot
+ */
+export function associatePoseDataWithNewShot(shot, shotId) {
+  try {
+    associatePoseDataWithShot(shot, shotId);
+  } catch (error) {
+    console.warn('Failed to associate pose data with shot:', error);
   }
 }
