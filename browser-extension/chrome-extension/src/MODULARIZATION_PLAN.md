@@ -193,7 +193,7 @@ ui-utils.js → {
 
 ### Quantitative
 - [ ] No single file exceeds 300 lines
-- [ ] panel.js reduced from 548 to ~120 lines average per split file
+- [ ] panel.js reduced from 548 to split files ranging from ~100 to ~150 lines each
 - [ ] Maintained build performance (≤2.2MB)
 - [ ] No increase in bundle complexity
 
