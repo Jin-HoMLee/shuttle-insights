@@ -19,6 +19,7 @@ import { removeOverlayCanvas, createOverlayCanvas } from './overlay-utils.js';
 import { setupDetector } from './pose-utils.js';
 import { drawKeypoints, drawSkeletonAndBoxes } from './poseDrawing.js';
 import { EVENTS, UI_IDS } from './constants.js';
+import { startPoseDataCollection, stopPoseDataCollection, collectPoseData } from './pose-data-collector.js';
 
 // State management
 let detector = null; // Pose detector instance (needed for pose estimation)
@@ -70,6 +71,9 @@ async function poseOverlayLoop(video, detector, overlay, ctx) {
     // Estimate poses from current video frame
     const poses = await detector.estimatePoses(video, { maxPoses: 6 });
     
+    // Collect pose data for later export (only when overlay is active)
+    collectPoseData(poses);
+    
     // Draw the detected poses on the overlay canvas
     drawKeypoints(ctx, poses);
     drawSkeletonAndBoxes(ctx, poses);
@@ -120,6 +124,9 @@ async function startPoseOverlay() {
   // Set status: online
   if (statusEl) statusEl.textContent = 'Overlay online';
 
+  // Start pose data collection
+  startPoseDataCollection();
+
   // Start the pose detection and rendering loop
   poseOverlayLoop(video, detector, overlay, ctx);
 }
@@ -132,6 +139,9 @@ function stopPoseOverlay() {
   // Set status: offline
   const statusEl = document.getElementById(UI_IDS.OVERLAY_STATUS);
   if (statusEl) statusEl.textContent = 'Overlay offline';
+
+  // Stop pose data collection
+  stopPoseDataCollection();
 
   // Cancel the pose detection loop
   if (poseLoopId) {

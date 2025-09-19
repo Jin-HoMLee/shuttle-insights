@@ -129,5 +129,24 @@ export const UI_CONFIG = {
   BUTTON_FEEDBACK_DURATION: 150
 };
 
+// Pose Data Collection Configuration
+export const POSE_DATA_CONFIG = {
+  KEYPOINT_NAMES: [
+    'nose', 'left eye', 'right eye', 'left ear', 'right ear',
+    'left shoulder', 'right shoulder', 'left elbow', 'right elbow',
+    'left wrist', 'right wrist', 'left hip', 'right hip',
+    'left knee', 'right knee', 'left ankle', 'right ankle'
+  ],
+  EXPORT_FORMAT: 'parquet',
+  FOLDER_STRUCTURE: 'train_keypoint_files'
+};
+
+// UI Element IDs for pose data export
+export const POSE_UI_IDS = {
+  POSE_EXPORT_BTN: 'pose-export-btn',
+  POSE_DATA_STATUS: 'pose-data-status',
+  POSE_SECTION: 'pose-data-section'
+};
+
 // Maximum allowed shot duration in seconds (5 minutes)
 export const MAX_SHOT_DURATION_SECONDS = 300;
