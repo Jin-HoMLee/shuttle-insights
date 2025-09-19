@@ -61,7 +61,6 @@ export function createLabelerPanel() {
     workflowState.removeShot
   );
   // Update the reference for recursive calls
-  updateShotList.updateShotList = updateShotList;
 
   // Create glossary setup function
   const setupGlossary = () => {
