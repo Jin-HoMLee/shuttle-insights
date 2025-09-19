@@ -49,7 +49,7 @@ The browser extension contains 14 JavaScript files totaling 3,135 lines of code.
 **Complexity Indicators:**
 - Single largest file (17.5% of codebase)
 - Multiple distinct responsibilities
-- 400+ line createPanelElement function with extensive inline HTML
+- 212-line createPanelElement function with extensive inline HTML
 - Mixed concerns: UI creation, event handling, state management
 - Deep nesting in HTML template string
 
