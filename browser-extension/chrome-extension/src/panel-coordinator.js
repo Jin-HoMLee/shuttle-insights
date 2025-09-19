@@ -58,8 +58,7 @@ export function createLabelerPanel() {
   const updateShotList = createShotListUpdater(
     panel, 
     workflowState.getShots, 
-    workflowState.removeShot, 
-    null // Will be set after function creation
+    workflowState.removeShot
   );
   // Update the reference for recursive calls
   updateShotList.updateShotList = updateShotList;

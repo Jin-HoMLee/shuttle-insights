@@ -154,11 +154,10 @@ export function createStatusUpdater(panel, getCurrentShot) {
  * @param {HTMLElement} panel - The panel element
  * @param {Function} getShots - Function to get shots array
  * @param {Function} removeShot - Function to remove a shot by index
- * @param {Function} updateShotList - Reference to this function for recursive calls
  * @returns {Function} Shot list update function
  */
-export function createShotListUpdater(panel, getShots, removeShot, updateShotList) {
-  return function updateShotListImpl() {
+export function createShotListUpdater(panel, getShots, removeShot) {
+  function updateShotListImpl() {
     const listDiv = panel.querySelector(`#${UI_IDS.LABEL_LIST}`);
     if (!listDiv) return;
 
@@ -183,10 +182,11 @@ export function createShotListUpdater(panel, getShots, removeShot, updateShotLis
       btn.onclick = function () {
         const idx = parseInt(btn.getAttribute('data-index'));
         removeShot(idx);
-        updateShotList();
+        updateShotListImpl();
       };
     });
-  };
+  }
+  return updateShotListImpl;
 }
 
 /**
