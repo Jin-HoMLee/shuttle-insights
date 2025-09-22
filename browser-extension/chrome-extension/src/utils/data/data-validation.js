@@ -11,7 +11,7 @@
  * - Input validation helpers
  */
 
-import { DEFAULT_SHOT, MAX_SHOT_DURATION_SECONDS } from './constants.js';
+import { DEFAULT_SHOT, MAX_SHOT_DURATION_SECONDS } from '../../constants.js';
 
 /**
  * Validates a shot object for completeness and data integrity

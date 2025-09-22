@@ -23,7 +23,7 @@
  */
 
 import { PANEL_CONFIG, CSS_CLASSES } from './constants.js';
-import { assertConfigFunctions, logConfigTypesAndValues } from './config-utils.js';
+import { assertConfigFunctions, logConfigTypesAndValues } from './utils/config/config-utils.js';
 
 /**
  * Adds interactive resize handles to a panel element

@@ -5,7 +5,7 @@
  * This module contains common functions used by both import and export modules.
  */
 
-import { CSV_HEADERS } from './constants.js';
+import { CSV_HEADERS } from '../../constants.js';
 
 /**
  * Maps CSV headers to column indices

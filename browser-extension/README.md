@@ -57,14 +57,17 @@ The extension has been refactored for improved maintainability and scalability:
 - **`panel.js`** - Panel UI creation and shot labeling workflow
 - **`background.js`** - Service worker for extension-level functionality
 
-#### Utility Modules:
+#### Utility Modules (in `src/utils/`):
 
 - **`constants.js`** - Centralized configuration and magic strings
-- **`ui-utils.js`** - UI-related utilities (formatting, sanitization, error handling)
-- **`video-utils.js`** - Video element utilities and state management
-- **`pose-utils.js`** - TensorFlow.js pose detection utilities
-- **`overlay-utils.js`** - Canvas overlay management and positioning
-- **`data-validation.js`** - Data validation and integrity checks
+- **`utils/ui/ui-utils.js`** - UI-related utilities (formatting, sanitization, error handling)
+- **`utils/video/video-utils.js`** - Video element utilities and state management
+- **`utils/pose/pose-utils.js`** - TensorFlow.js pose detection utilities
+- **`utils/canvas/overlay-utils.js`** - Canvas overlay management and positioning
+- **`utils/data/data-validation.js`** - Data validation and integrity checks
+- **`utils/data/csv-utils.js`** - CSV parsing and formatting utilities
+- **`utils/config/config-utils.js`** - Configuration validation and debugging
+- **`utils/glossary/glossary-utils.js`** - Glossary dimension mapping helpers
 
 #### Feature Modules:
 
@@ -108,17 +111,27 @@ chrome-extension/
 │   ├── content.js               # Main content script
 │   ├── panel.js                 # Panel UI management
 │   ├── constants.js             # Configuration constants
-│   ├── ui-utils.js              # UI utilities
-│   ├── video-utils.js           # Video handling utilities
-│   ├── pose-utils.js            # Pose detection utilities
-│   ├── overlay-utils.js         # Canvas overlay utilities
-│   ├── data-validation.js       # Data validation utilities
-│   ├── csv.js                   # CSV import/export
+│   ├── utils/                   # Organized utility modules
+│   │   ├── ui/                  # UI-related utilities
+│   │   │   └── ui-utils.js      # Formatting, sanitization, error handling
+│   │   ├── video/               # Video handling utilities
+│   │   │   └── video-utils.js   # YouTube video element interaction
+│   │   ├── pose/                # Pose detection utilities
+│   │   │   └── pose-utils.js    # TensorFlow.js pose detection
+│   │   ├── canvas/              # Canvas/overlay utilities
+│   │   │   └── overlay-utils.js # Canvas overlay management
+│   │   ├── data/                # Data processing utilities
+│   │   │   ├── csv-utils.js     # CSV parsing and formatting
+│   │   │   └── data-validation.js # Data validation and integrity
+│   │   ├── config/              # Configuration utilities
+│   │   │   └── config-utils.js  # Config validation and debugging
+│   │   └── glossary/            # Glossary utilities
+│   │       └── glossary-utils.js # Dimension mapping helpers
+│   ├── csv.js                   # CSV import/export coordination
 │   ├── glossary.js              # Shot glossary management
 │   ├── poseDrawing.js           # Pose visualization
 │   ├── resize.js                # Panel resizing
-│   ├── drag.js                  # Panel dragging
-│   └── utils.js                 # Legacy compatibility layer
+│   └── drag.js                  # Panel dragging
 ├── dist/                        # Built files (generated)
 │   └── content.js               # Bundled content script
 ├── manifest.json                # Extension manifest

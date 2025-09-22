@@ -6,7 +6,7 @@
  */
 
 import { CSS_CLASSES } from './constants.js';
-import { addTooltip } from './ui-utils.js';
+import { addTooltip } from './utils/ui/ui-utils.js';
 
 /**
  * Sets up shot type selection buttons

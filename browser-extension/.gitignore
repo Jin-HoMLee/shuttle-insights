@@ -4,3 +4,6 @@ chrome-extension/dist/
 
 # Ignore zip files
 *.zip
+
+# This is an exception for the browser extension data directory
+!chrome-extension/src/utils/data/

@@ -3,7 +3,7 @@
  * Contains utilities for interacting with YouTube video elements
  */
 
-import { VIDEO_SELECTORS } from './constants.js';
+import { VIDEO_SELECTORS } from '../../constants.js';
 
 /**
  * Gets the current active YouTube video element

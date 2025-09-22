@@ -5,8 +5,8 @@
  * state management, and shot list operations.
  */
 
-import { getVideo } from './video-utils.js';
-import { showButtonLoading, hideButtonLoading, showWarning, showSuccess } from './ui-utils.js';
+import { getVideo } from './utils/video/video-utils.js';
+import { showButtonLoading, hideButtonLoading, showWarning, showSuccess } from './utils/ui/ui-utils.js';
 import { UI_IDS, DEFAULT_SHOT, CSS_CLASSES } from './constants.js';
 
 /**

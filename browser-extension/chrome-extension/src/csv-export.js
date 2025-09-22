@@ -6,8 +6,8 @@
  */
 
 import { CSV_HEADERS, EXTENSION_CONFIG } from './constants.js';
-import { showError, showSuccess } from './ui-utils.js';
-import { escapeCSVField } from './csv-utils.js';
+import { showError, showSuccess } from './utils/ui/ui-utils.js';
+import { escapeCSVField } from './utils/data/csv-utils.js';
 
 /**
  * Sets up CSV export functionality

@@ -6,7 +6,7 @@
  */
 
 import { CSS_CLASSES } from './constants.js';
-import { getDimensionKey } from './glossary-utils.js';
+import { getDimensionKey } from './utils/glossary/glossary-utils.js';
 
 /**
  * Sets up dimension control UI (collapsible section with value buttons)
