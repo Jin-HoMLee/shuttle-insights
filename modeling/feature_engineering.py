@@ -79,7 +79,6 @@ def transform_altitude(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-# Column management utility
 def drop_column(df: pd.DataFrame, col_name: str) -> pd.DataFrame:
     """
     Remove a column from DataFrame.
