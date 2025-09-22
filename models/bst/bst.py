@@ -1,4 +1,4 @@
-# Writen by Jing-Yuan Chang
+# Written by Jing-Yuan Chang
 
 import torch
 from torch import nn, Tensor
