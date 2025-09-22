@@ -1,3 +1,7 @@
+# Purpose
+
+This is the documentation index for Shuttle Insights. It provides links to detailed implementation guides, tutorials, and reference docs for users, developers, and researchers. For a project overview and quick start, see the root README.md.
+
 # Documentation Directory
 
 This directory contains comprehensive documentation for the Shuttle Insights badminton analysis project.

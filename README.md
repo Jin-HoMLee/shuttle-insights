@@ -1,3 +1,7 @@
+# Purpose
+
+This is the main project overview and quick start guide for Shuttle Insights. It provides a high-level summary, setup instructions, and links to component documentation. For detailed guides and implementation docs, see docs/README.md.
+
 # Shuttle Insights
 
 A comprehensive toolkit for analyzing badminton videos using pose estimation, machine learning, and data visualization. This project includes tools for video analysis, manual shot labeling, predictive modeling, and cloud deployment.
