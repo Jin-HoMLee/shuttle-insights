@@ -150,7 +150,7 @@ function createDimensionControl(dimension, getCurrentShot, updateStatus) {
  * @param {HTMLElement} buttonGroup - Parent button group for state management
  * @returns {HTMLElement} Value button element
  */
-export function createDimensionValueButton(value, dimension, getCurrentShot, updateStatus, buttonGroup) {
+function createDimensionValueButton(value, dimension, getCurrentShot, updateStatus, buttonGroup) {
   const button = document.createElement('button');
   button.textContent = value.term;
   button.className = CSS_CLASSES.DIMENSION_BTN;
