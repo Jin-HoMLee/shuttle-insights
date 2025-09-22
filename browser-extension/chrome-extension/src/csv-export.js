@@ -80,7 +80,7 @@ function generateCSVContent(shots, videoUrl) {
  * @param {string} csvContent - CSV content to download
  * @param {string} sanitizedTitle - Base filename
  */
-export function downloadCSV(csvContent, sanitizedTitle) {
+function downloadCSV(csvContent, sanitizedTitle) {
   const blob = new Blob([csvContent], { type: 'text/csv' });
   const reader = new FileReader();
   
