@@ -3,7 +3,7 @@
  * Contains utilities for formatting, sanitization, and UI-related operations
  */
 
-import { VIDEO_SELECTORS } from './constants.js';
+import { VIDEO_SELECTORS } from '../../constants.js';
 
 /**
  * Formats a Date object into YYYY-MM-DD HH:MM:SS format

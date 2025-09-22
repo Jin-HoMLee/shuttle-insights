@@ -6,7 +6,7 @@
  * button clicks, and panel lifecycle events.
  */
 
-import { addTooltip, showButtonLoading, hideButtonLoading } from './ui-utils.js';
+import { addTooltip, showButtonLoading, hideButtonLoading } from './utils/ui/ui-utils.js';
 import { UI_IDS, KEYBOARD_SHORTCUTS, EVENTS } from './constants.js';
 
 /**

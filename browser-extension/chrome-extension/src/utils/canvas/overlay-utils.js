@@ -3,9 +3,9 @@
  * Contains utilities for managing the pose overlay canvas and resize observers
  */
 
-import { UI_IDS, POSE_CONFIG } from './constants.js';
-import { getVideoContainerRect, getVideoDimensions } from './video-utils.js';
-import { safeRemoveElement } from './ui-utils.js';
+import { UI_IDS, POSE_CONFIG } from '../../constants.js';
+import { getVideoContainerRect, getVideoDimensions } from '../video/video-utils.js';
+import { safeRemoveElement } from '../ui/ui-utils.js';
 
 /**
  * Creates and positions an overlay canvas for pose visualization

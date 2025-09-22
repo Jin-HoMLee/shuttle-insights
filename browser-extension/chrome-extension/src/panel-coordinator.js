@@ -6,7 +6,7 @@
  * and integration between different panel modules.
  */
 
-import { formatDateTime, sanitize, getVideoTitle } from './ui-utils.js';
+import { formatDateTime, sanitize, getVideoTitle } from './utils/ui/ui-utils.js';
 import { addResizeHandles } from './resize.js';
 import { addDragBehavior } from './drag.js';
 import { setupCSV } from './csv.js';
