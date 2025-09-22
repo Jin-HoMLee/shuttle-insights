@@ -1,3 +1,45 @@
+"""
+Model Training Module
+
+This module provides machine learning model training functionality with MLflow tracking.
+Currently contains a template training pipeline using linear regression as an example.
+
+Key Features:
+- MLflow experiment tracking and logging
+- Model training with cross-validation
+- Automated metric computation and logging
+- Model persistence and versioning
+
+Usage Example:
+    from modeling.train import run_training
+    
+    run_training()  # Trains model and logs to MLflow
+
+Dependencies:
+    - scikit-learn: For machine learning algorithms
+    - MLflow: For experiment tracking
+    - pandas: For data manipulation
+    - logging: For training progress tracking
+
+Note:
+    This module contains template training code using coffee quality data.
+    For badminton shot prediction, adapt this to:
+    
+    1. Load pose sequence data from analyze_pose.py output
+    2. Implement LSTM or CNN models for temporal pattern recognition
+    3. Add badminton-specific metrics (shot accuracy, timing precision)
+    4. Update data loading to handle pose landmark sequences
+    
+    Consider implementing:
+    - Sequence-to-sequence models for shot prediction
+    - Multi-class classification for shot types
+    - Temporal feature extraction from pose sequences
+    - Video frame-to-shot mapping
+
+Author: Jin-HoMLee
+Last Updated: September 2024
+"""
+
 from logging import getLogger
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -24,6 +66,22 @@ logger = getLogger(__name__)
 
 
 def __get_data():
+    """
+    Load and prepare training data.
+    
+    Template function that loads coffee quality data for demonstration.
+    For badminton analysis, replace this with pose data loading.
+    
+    Returns:
+        tuple: (X_train, X_test, y_train, y_test) training and test sets
+        
+    Note:
+        For badminton shot prediction, adapt this to:
+        - Load pose sequence data from CSV files
+        - Handle temporal sequences of pose landmarks
+        - Load corresponding shot labels from manual annotation
+        - Split data maintaining temporal consistency
+    """
     logger.info("Getting the data")
     # coffee data
     url = "https://github.com/jldbc/coffee-quality-database/raw/master/data/robusta_data_cleaned.csv"
@@ -66,6 +124,26 @@ def __get_data():
 def __compute_and_log_metrics(
     y_true: pd.Series, y_pred: pd.Series, prefix: str = "train"
 ):
+    """
+    Compute and log performance metrics to MLflow.
+    
+    Calculates regression metrics and logs them to the current MLflow run.
+    For classification tasks, adapt to use appropriate metrics.
+    
+    Args:
+        y_true (pd.Series): True target values
+        y_pred (pd.Series): Predicted values
+        prefix (str): Metric name prefix (e.g., "train", "test", "val")
+        
+    Returns:
+        tuple: (mse, r2) computed metrics
+        
+    Note:
+        For badminton shot classification, consider metrics like:
+        - Accuracy, Precision, Recall for shot type prediction
+        - Temporal alignment metrics for shot timing
+        - Confusion matrices for shot type analysis
+    """
     mse = mean_squared_error(y_true, y_pred)
     r2 = r2_score(y_true, y_pred)
 
@@ -81,6 +159,31 @@ def __compute_and_log_metrics(
 
 
 def run_training():
+    """
+    Execute the complete training pipeline with MLflow tracking.
+    
+    Template training function that demonstrates:
+    - Data loading and preprocessing
+    - Model training with parameter logging
+    - Metric computation and tracking
+    - Model evaluation on test set
+    
+    For badminton shot prediction, adapt this to:
+    - Load pose sequence data and shot labels
+    - Train LSTM/CNN models for temporal pattern recognition
+    - Evaluate on shot prediction accuracy
+    - Log badminton-specific hyperparameters
+    
+    Example:
+        >>> run_training()  # Trains model and logs to MLflow
+        
+    Note:
+        This function uses template data. For production badminton analysis:
+        1. Replace data loading with pose sequence data
+        2. Implement appropriate model architecture (LSTM, CNN)
+        3. Add badminton-specific evaluation metrics
+        4. Configure model saving for inference
+    """
     logger.info(f"Getting the data")
     X_train, X_test, y_train, y_test = __get_data()
 
