@@ -188,7 +188,7 @@ function createDimensionValueButton(value, dimension, getCurrentShot, updateStat
  * @param {HTMLElement} buttonGroup - Container with dimension value buttons
  * @param {HTMLElement} selectedButton - Button to mark as selected
  */
-export function updateDimensionButtonStates(buttonGroup, selectedButton) {
+function updateDimensionButtonStates(buttonGroup, selectedButton) {
   // Reset all buttons in this group
   buttonGroup.querySelectorAll('button').forEach(btn => {
     btn.style.background = "#f9f9f9";
