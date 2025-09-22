@@ -83,7 +83,7 @@ function createShotButton(shot, getCurrentShot, updateStatus, container) {
  * @param {HTMLElement} container - Container element
  * @param {HTMLElement} selectedButton - Button to mark as selected
  */
-export function updateButtonSelection(container, selectedButton) {
+function updateButtonSelection(container, selectedButton) {
   // Remove selection from all buttons in container
   container.querySelectorAll('button').forEach(btn => {
     btn.classList.remove("selected");
