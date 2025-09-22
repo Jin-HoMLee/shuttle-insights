@@ -53,7 +53,7 @@ export function setupDimensionControls(container, dimensions, getCurrentShot, up
  * 
  * @returns {HTMLElement} Header element with collapse indicator
  */
-export function createDimensionHeader() {
+function createDimensionHeader() {
   const header = document.createElement('div');
   header.className = CSS_CLASSES.CATEGORY_TITLE;
   header.style.marginTop = "10px";
