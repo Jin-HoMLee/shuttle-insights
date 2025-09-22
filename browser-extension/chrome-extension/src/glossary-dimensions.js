@@ -77,7 +77,7 @@ function createDimensionHeader() {
  * @param {HTMLElement} header - Header element to make clickable
  * @param {HTMLElement} content - Content element to show/hide
  */
-export function setupDimensionCollapse(header, content) {
+function setupDimensionCollapse(header, content) {
   const icon = header.querySelector('.collapse-icon');
   
   header.onclick = () => {
