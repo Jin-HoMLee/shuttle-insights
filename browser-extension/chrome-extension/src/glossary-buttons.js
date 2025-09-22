@@ -50,7 +50,7 @@ export function setupShotButtons(container, shots, getCurrentShot, updateStatus)
  * @param {HTMLElement} container - Container for managing button states
  * @returns {HTMLElement} Created button element
  */
-export function createShotButton(shot, getCurrentShot, updateStatus, container) {
+function createShotButton(shot, getCurrentShot, updateStatus, container) {
   const button = document.createElement('button');
   button.textContent = shot.term;
   button.className = CSS_CLASSES.LABEL_BTN;
