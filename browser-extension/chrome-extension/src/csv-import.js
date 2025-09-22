@@ -65,7 +65,7 @@ export function setupCSVImport(panel, shots, updateShotList) {
  * @returns {Array} Array of parsed shot objects
  * @throws {Error} If CSV format is invalid
  */
-export function parseCSVContent(csvText) {
+function parseCSVContent(csvText) {
   const lines = validateCSVFormat(csvText);
   
   const headers = lines[0].split(',').map(header => header.trim());
