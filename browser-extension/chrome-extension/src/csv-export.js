@@ -50,7 +50,7 @@ export function setupCSVExport(panel, shots, videoUrl, sanitizedTitle) {
  * @param {string} videoUrl - Video URL for metadata
  * @returns {string} CSV content string
  */
-export function generateCSVContent(shots, videoUrl) {
+function generateCSVContent(shots, videoUrl) {
   let csv = CSV_HEADERS.join(',') + '\n';
   
   shots.forEach((shot, index) => {
