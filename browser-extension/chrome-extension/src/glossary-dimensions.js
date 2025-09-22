@@ -101,7 +101,7 @@ function setupDimensionCollapse(header, content) {
  * @param {Function} updateStatus - Status update callback
  * @returns {HTMLElement} Dimension control container
  */
-export function createDimensionControl(dimension, getCurrentShot, updateStatus) {
+function createDimensionControl(dimension, getCurrentShot, updateStatus) {
   const container = document.createElement('div');
   container.className = CSS_CLASSES.DIMENSION_SECTION;
   container.style.marginBottom = "8px";
