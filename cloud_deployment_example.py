@@ -22,7 +22,7 @@ def create_dummy_data(seq_len: int = 100, batch_size: int = 1, seed: int = 42) -
     Args:
         seq_len: Sequence length for the video
         batch_size: Batch size for inference
-        seed: Optional random seed for reproducibility. Default is 42. Set to None for non-deterministic data.
+        seed: Random seed for reproducibility. Default is 42. Set to None for non-deterministic data.
         
     Returns:
         Dictionary containing input tensors
