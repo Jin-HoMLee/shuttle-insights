@@ -23,7 +23,7 @@ def test_import_availability():
     
     required_modules = [
         'torch',
-        'positional_encodings',
+        'positional_encodings',  # Provides positional encoding layers for PyTorch models. Install via: pip install positional-encodings
         'torchinfo'
     ]
     
