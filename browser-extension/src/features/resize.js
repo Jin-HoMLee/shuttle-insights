@@ -22,8 +22,8 @@
  * - Automated tests (see test/resize.test.js) validate config and calculation logic.
  */
 
-import { PANEL_CONFIG, CSS_CLASSES } from './constants.js';
-import { assertConfigFunctions, logConfigTypesAndValues } from './utils/config/config-utils.js';
+import { PANEL_CONFIG, CSS_CLASSES } from '../constants.js';
+import { assertConfigFunctions, logConfigTypesAndValues } from '../utils/config/config-utils.js';
 
 /**
  * Adds interactive resize handles to a panel element

@@ -17,8 +17,8 @@ jest.mock('../src/utils/ui/ui-utils.js', () => ({
   getVideoTitle: jest.fn(() => 'Test Video Title')
 }));
 
-jest.mock('../src/resize.js', () => ({ addResizeHandles: jest.fn() }));
-jest.mock('../src/drag.js', () => ({ addDragBehavior: jest.fn() }));
+jest.mock('../src/features/resize.js', () => ({ addResizeHandles: jest.fn() }));
+jest.mock('../src/features/drag.js', () => ({ addDragBehavior: jest.fn() }));
 jest.mock('../src/csv.js', () => ({ setupCSV: jest.fn() }));
 jest.mock('../src/glossary.js', () => ({ setupGlossaryButtons: jest.fn() }));
 jest.mock('../src/panel-factory.js', () => ({

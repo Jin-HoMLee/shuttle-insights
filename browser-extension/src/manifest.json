@@ -17,7 +17,7 @@
     {
       "matches": ["https://www.youtube.com/*"],
       "js": [
-        "dist/content.js"
+        "content.js"
       ],
       "css": ["styles.css"],
       "run_at": "document_idle"
@@ -25,7 +25,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["badminton_shots_glossary.json"],
+      "resources": ["assets/badminton_shots_glossary.json"],
       "matches": ["<all_urls>"]
     }
   ]

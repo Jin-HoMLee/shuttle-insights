@@ -9,7 +9,7 @@
  * 17 keypoints for major body joints connected in a specific pattern.
  */
 
-import { POSE_CONFIG } from './constants.js';
+import { POSE_CONFIG } from '../constants.js';
 
 /**
  * MoveNet keypoint connections map for drawing skeleton lines

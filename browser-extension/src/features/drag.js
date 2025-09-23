@@ -12,7 +12,7 @@
  * - Automatic positioning cleanup
  */
 
-import { UI_IDS, CSS_CLASSES } from './constants.js';
+import { UI_IDS, CSS_CLASSES } from '../constants.js';
 
 /**
  * Adds drag behavior to a panel element

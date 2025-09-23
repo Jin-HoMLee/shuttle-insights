@@ -18,8 +18,8 @@
  * - Handles both basic shot data and advanced dimension annotations
  */
 
-import { setupCSVImport } from './csv-import.js';
-import { setupCSVExport } from './csv-export.js';
+import { setupCSVImport } from './features/csv-import.js';
+import { setupCSVExport } from './features/csv-export.js';
 
 /**
  * Sets up CSV import and export functionality for the panel

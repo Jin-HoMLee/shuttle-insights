@@ -6,4 +6,4 @@ chrome-extension/dist/
 *.zip
 
 # This is an exception for the browser extension data directory
-!chrome-extension/src/utils/data/
+!**/src/utils/data/
