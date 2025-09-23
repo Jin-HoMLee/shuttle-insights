@@ -4,8 +4,8 @@
  * Validates CSV import parsing and export generation
  */
 
-import { setupCSVImport } from '../src/csv-import.js';
-import { setupCSVExport } from '../src/csv-export.js';
+import { setupCSVImport } from '../src/features/csv-import.js';
+import { setupCSVExport } from '../src/features/csv-export.js';
 
 // Mock UI utilities
 jest.mock('../src/utils/ui/ui-utils.js', () => ({

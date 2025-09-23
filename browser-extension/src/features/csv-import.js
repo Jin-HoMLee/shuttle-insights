@@ -5,8 +5,8 @@
  * Manages file selection, parsing, and data validation for import operations.
  */
 
-import { showError, showSuccess } from './utils/ui/ui-utils.js';
-import { mapCSVColumns, parseCSVRow, extractShotFromRow, validateCSVFormat } from './utils/data/csv-utils.js';
+import { showError, showSuccess } from '../utils/ui/ui-utils.js';
+import { mapCSVColumns, parseCSVRow, extractShotFromRow, validateCSVFormat } from '../utils/data/csv-utils.js';
 
 /**
  * Sets up CSV import functionality

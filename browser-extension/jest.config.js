@@ -1,6 +1,6 @@
 export default {
   testEnvironment: 'jsdom',
-  roots: ['<rootDir>/chrome-extension/test'],
+  roots: ['<rootDir>/test'],
   transform: {
     '^.+\\.[jt]s$': 'babel-jest',
   },

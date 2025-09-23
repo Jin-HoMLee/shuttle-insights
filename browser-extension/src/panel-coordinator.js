@@ -7,8 +7,8 @@
  */
 
 import { formatDateTime, sanitize, getVideoTitle } from './utils/ui/ui-utils.js';
-import { addResizeHandles } from './resize.js';
-import { addDragBehavior } from './drag.js';
+import { addResizeHandles } from './features/resize.js';
+import { addDragBehavior } from './features/drag.js';
 import { setupCSV } from './csv.js';
 import { setupGlossaryButtons } from './glossary.js';
 import { createPanelElement, stylePanelElement, setupScrollableBehavior } from './panel-factory.js';

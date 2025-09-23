@@ -13,11 +13,11 @@ jest.mock('../src/panel-coordinator.js', () => ({
   togglePanel: jest.fn()
 }));
 
-jest.mock('../src/csv-import.js', () => ({
+jest.mock('../src/features/csv-import.js', () => ({
   setupCSVImport: jest.fn()
 }));
 
-jest.mock('../src/csv-export.js', () => ({
+jest.mock('../src/features/csv-export.js', () => ({
   setupCSVExport: jest.fn()
 }));
 
@@ -65,8 +65,8 @@ describe('Compatibility Layers', () => {
   describe('CSV Compatibility Layer', () => {
     
     it('should delegate to both import and export modules', () => {
-      const { setupCSVImport } = require('../src/csv-import.js');
-      const { setupCSVExport } = require('../src/csv-export.js');
+      const { setupCSVImport } = require('../src/features/csv-import.js');
+      const { setupCSVExport } = require('../src/features/csv-export.js');
       
       const mockPanel = {};
       const mockShots = [];
@@ -86,8 +86,8 @@ describe('Compatibility Layers', () => {
     });
     
     it('should pass parameters correctly to sub-modules', () => {
-      const { setupCSVImport } = require('../src/csv-import.js');
-      const { setupCSVExport } = require('../src/csv-export.js');
+      const { setupCSVImport } = require('../src/features/csv-import.js');
+      const { setupCSVExport } = require('../src/features/csv-export.js');
       
       const testParams = [
         { element: 'panel' },
@@ -131,8 +131,8 @@ describe('Compatibility Layers', () => {
     
     it('should provide transparent delegation', () => {
       const { createLabelerPanel: coordinatorCreate } = require('../src/panel-coordinator.js');
-      const { setupCSVImport } = require('../src/csv-import.js');
-      const { setupCSVExport } = require('../src/csv-export.js');
+      const { setupCSVImport } = require('../src/features/csv-import.js');
+      const { setupCSVExport } = require('../src/features/csv-export.js');
       
       // Call compatibility layer functions
       createLabelerPanel();

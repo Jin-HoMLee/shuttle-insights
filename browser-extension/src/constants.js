@@ -108,7 +108,7 @@ export const CSV_HEADERS = [
 
 // Chrome Extension Configuration
 export const EXTENSION_CONFIG = {
-  GLOSSARY_FILE: 'badminton_shots_glossary.json',
+  GLOSSARY_FILE: 'assets/badminton_shots_glossary.json',
   CSV_DOWNLOAD_ACTION: 'download-csv',
   DEFAULT_CSV_PATH: 'YouTube Shot Labeler'
 };
