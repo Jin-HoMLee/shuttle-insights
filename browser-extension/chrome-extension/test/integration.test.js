@@ -117,7 +117,7 @@ describe('Module Integration Validation', () => {
     
     it('should have successfully built the extension', () => {
       // Note: For this file system test, we keep require() as it's more 
-      // appropriate for Node.js file operations in test context
+      // appropriate for Node.js file operations in test context.
       const fs = require('fs');
       const path = require('path');
       
