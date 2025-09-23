@@ -165,20 +165,19 @@ describe('Compatibility Layers', () => {
   describe('Module Loading', () => {
     
     it('should successfully import all compatibility modules', () => {
-      // All imports should succeed without errors
+      // All imports should succeed without errors - modules already imported at top
       expect(() => {
-        require('../src/panel.js');
-        require('../src/csv.js');
+        expect(createLabelerPanel).toBeDefined();
+        expect(togglePanel).toBeDefined();
+        expect(setupCSV).toBeDefined();
       }).not.toThrow();
     });
     
     it('should have expected exports', () => {
-      const panelModule = require('../src/panel.js');
-      const csvModule = require('../src/csv.js');
-      
-      expect(panelModule).toHaveProperty('createLabelerPanel');
-      expect(panelModule).toHaveProperty('togglePanel');
-      expect(csvModule).toHaveProperty('setupCSV');
+      // Use the imported modules directly
+      expect(createLabelerPanel).toBeDefined();
+      expect(togglePanel).toBeDefined();
+      expect(setupCSV).toBeDefined();
     });
     
   });
