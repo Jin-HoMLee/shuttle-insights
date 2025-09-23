@@ -182,12 +182,9 @@ describe('Glossary Module Coordination', () => {
       expect(setupDimensionControls).toHaveBeenCalledTimes(1);
     });
     
-    it('should maintain consistency with legacy API', () => {
+    it('should maintain consistency with legacy API', async () => {
       // The function signature should remain compatible
-      expect(async () => {
-        await setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
-      }).not.toThrow();
-      
+      await expect(setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus)).resolves.not.toThrow();
       // Should accept the same parameters as before modularization
       expect(setupGlossaryButtons).toHaveLength(3); // 3 parameters
     });
