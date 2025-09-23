@@ -15,7 +15,7 @@ import tempfile
 from pathlib import Path
 
 # Add the models directory to the path
-sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'models'))
 
 def test_import_availability():
     """Test if required modules can be imported."""
