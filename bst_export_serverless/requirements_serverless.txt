@@ -18,3 +18,6 @@ functions-framework>=3.0.0
 
 # Optional: For AWS Lambda deployment
 # aws-lambda-powertools[pydantic]
+
+# For making HTTP requests (e.g., downloading models)
+requests==2.32.5

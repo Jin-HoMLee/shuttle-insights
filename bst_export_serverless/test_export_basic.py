@@ -48,7 +48,7 @@ def test_bst_model_imports():
     print("\nTesting BST model imports...")
     
     try:
-        from models.bst.model.bst import BST_0, BST, BST_CG, BST_AP, BST_CG_AP
+        from models.bst.bst import BST_0, BST, BST_CG, BST_AP, BST_CG_AP
         print("✓ BST model classes imported successfully")
         return True
     except Exception as e:
@@ -106,7 +106,7 @@ def test_create_dummy_model():
     
     try:
         import torch
-        from models.bst.model.bst import BST_CG_AP
+        from models.bst.bst import BST_CG_AP
         
         # Try to create a model with minimal parameters
         model = BST_CG_AP(
@@ -152,7 +152,7 @@ def test_export_functionality():
     print("\nTesting export functionality...")
     
     try:
-        from export_bst_model import BST_ModelExporter
+        from bst_export.export_bst_model import BST_ModelExporter
         
         # Test exporter initialization
         exporter = BST_ModelExporter('BST_CG_AP')

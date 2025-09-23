@@ -30,10 +30,8 @@ import torch
 import torch.jit
 from torch import nn, Tensor
 
-# Add the models directory to the path to import BST models
-sys.path.append(os.path.join(os.path.dirname(__file__), 'models', 'bst'))
-
-from models.bst.model.bst import BST_0, BST, BST_CG, BST_AP, BST_CG_AP
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from models.bst.bst import BST_0, BST, BST_CG, BST_AP, BST_CG_AP
 
 
 class BST_ModelExporter:
