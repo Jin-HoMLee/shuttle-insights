@@ -36,10 +36,12 @@ def create_dummy_data(seq_len: int = 100, batch_size: int = 1, seed: int = 42) -
     
     # Generate realistic-looking dummy data
     if seed is not None:
-        np.random.seed(seed)  # For reproducible results
+        rng = np.random.default_rng(seed)  # Local random generator for reproducible results
+    else:
+        rng = np.random.default_rng()
     
     # Joint and bone features (pose estimation output)
-    JnB = np.random.randn(batch_size, seq_len, n_people, pose_features).astype(np.float32)
+    JnB = rng.randn(batch_size, seq_len, n_people, pose_features).astype(np.float32)
     JnB = np.clip(JnB * 0.5 + 0.5, 0, 1)  # Normalize to [0, 1] range
     
     # Shuttlecock trajectory (x, y coordinates)
