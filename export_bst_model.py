@@ -6,7 +6,7 @@ This script exports BST (Badminton Stroke-type Transformer) models to TorchScrip
 for optimized cloud inference deployment.
 
 Usage:
-    python export_bst_model.py --model_type BST_CG_AP --weights_path weights/bst_model.pt --output_dir weights/exported/
+    python export_bst_model.py --model_type BST_CG_AP --weights_path weights/bst_model.pt --output_dir models/bst/weights/exported/
 
 Supported model types:
     - BST_0: Base BST backbone
@@ -54,7 +54,7 @@ class BST_ModelExporter:
     DEFAULT_PARAMS = {
         'in_dim': 72,  # (17 + 19 * 1) * 2 = 72 features for 2 people
         'seq_len': 100,  # Typical sequence length for badminton shots
-        'n_class': 35,   # Number of badminton shot classes
+        'n_class': 25,   # Number of badminton shot classes
         'n_people': 2,   # Two players
         'd_model': 100,  # Model dimension
         'd_head': 128,   # Attention head dimension
@@ -188,7 +188,7 @@ class BST_ModelExporter:
         
         return output_path
         
-    def export_to_onnx(self, output_path: str, opset_version: int = 11) -> str:
+    def export_to_onnx(self, output_path: str, opset_version: int = 13) -> str:
         """
         Export model to ONNX format.
         
@@ -364,14 +364,14 @@ def main():
     parser.add_argument('--weights_path', type=str, default=None,
                        help='Path to pre-trained weights file (.pt or .pth)')
     
-    parser.add_argument('--output_dir', type=str, default='weights/exported',
+    parser.add_argument('--output_dir', type=str, default='models/bst/weights/exported/',
                        help='Directory to save exported models')
     
     parser.add_argument('--formats', nargs='+', default=['torchscript', 'onnx'],
                        choices=['torchscript', 'onnx'],
                        help='Export formats to generate')
     
-    parser.add_argument('--opset_version', type=int, default=11,
+    parser.add_argument('--opset_version', type=int, default=13,
                        help='ONNX opset version')
     
     parser.add_argument('--benchmark', action='store_true',
