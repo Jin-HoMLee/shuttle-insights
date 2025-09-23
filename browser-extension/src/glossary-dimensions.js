@@ -44,6 +44,9 @@ export function setupDimensionControls(container, dimensions, getCurrentShot, up
     content.appendChild(dimensionControl);
   });
 
+  // Restore the visual state of dimension buttons based on current shot
+  restoreDimensionButtonStates(content, getCurrentShot);
+
   dimensionSection.appendChild(content);
   container.appendChild(dimensionSection);
 }
@@ -164,20 +167,63 @@ function createDimensionValueButton(value, dimension, getCurrentShot, updateStat
     borderRadius: "3px",
     background: "#f9f9f9",
     cursor: "pointer",
-    color: "#333"
+    color: "#333",
+    transition: "all 0.2s ease"
   });
+
+  // Add hover effects and accessibility
+  button.addEventListener('mouseenter', () => {
+    if (button.style.background !== "#007cba" && button.style.background !== "rgb(0, 124, 186)") {
+      button.style.background = "#e6f3ff";
+      button.style.borderColor = "#007cba";
+    } else {
+      // When selected, show hover state indicating it can be deselected
+      button.style.background = "#005a8b";
+    }
+  });
+
+  button.addEventListener('mouseleave', () => {
+    if (button.style.background === "#e6f3ff") {
+      button.style.background = "#f9f9f9";
+      button.style.borderColor = "#ccc";
+    } else if (button.style.background === "#005a8b") {
+      button.style.background = "#007cba";
+    }
+  });
+
+  // Add accessibility attributes
+  button.setAttribute('role', 'button');
+  button.setAttribute('tabindex', '0');
+  button.setAttribute('aria-pressed', 'false');
 
   button.onclick = () => {
     const currentShot = getCurrentShot();
     const dimensionKey = getDimensionKey(dimension.term);
     
-    // Set the dimension value on the current shot
-    currentShot[dimensionKey] = value.term;
+    // Check if this button is already selected
+    const isCurrentlySelected = button.style.background === "rgb(0, 124, 186)" || 
+                                button.style.background === "#007cba";
     
-    // Update button states within this dimension group
-    updateDimensionButtonStates(buttonGroup, button);
+    if (isCurrentlySelected) {
+      // Deselect - clear the dimension value and reset button state
+      currentShot[dimensionKey] = null;
+      resetDimensionButtonStates(buttonGroup);
+    } else {
+      // Select - set the dimension value and update button states
+      currentShot[dimensionKey] = value.term;
+      updateDimensionButtonStates(buttonGroup, button);
+    }
+    
     updateStatus();
   };
+
+  // Add keyboard navigation support
+  button.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      button.click();
+    }
+  });
 
   return button;
 }
@@ -193,9 +239,60 @@ function updateDimensionButtonStates(buttonGroup, selectedButton) {
   buttonGroup.querySelectorAll('button').forEach(btn => {
     btn.style.background = "#f9f9f9";
     btn.style.color = "#333";
+    btn.setAttribute('aria-pressed', 'false');
   });
   
   // Highlight selected button
   selectedButton.style.background = "#007cba";
   selectedButton.style.color = "white";
+  selectedButton.setAttribute('aria-pressed', 'true');
+}
+
+/**
+ * Resets all button states within a dimension button group to unselected
+ * 
+ * @param {HTMLElement} buttonGroup - Container with dimension value buttons
+ */
+function resetDimensionButtonStates(buttonGroup) {
+  buttonGroup.querySelectorAll('button').forEach(btn => {
+    btn.style.background = "#f9f9f9";
+    btn.style.color = "#333";
+    btn.setAttribute('aria-pressed', 'false');
+  });
+}
+
+/**
+ * Restores the visual state of dimension buttons based on current shot values
+ * 
+ * @param {HTMLElement} content - Content container with all dimension controls
+ * @param {Function} getCurrentShot - Function to get current shot object
+ */
+function restoreDimensionButtonStates(content, getCurrentShot) {
+  const currentShot = getCurrentShot();
+  
+  // Find all dimension buttons and restore their states
+  content.querySelectorAll(`.${CSS_CLASSES.DIMENSION_BUTTONS}`).forEach(buttonGroup => {
+    const buttons = buttonGroup.querySelectorAll('button');
+    
+    buttons.forEach(button => {
+      // Get the dimension and value from button context
+      const dimensionContainer = button.closest(`.${CSS_CLASSES.DIMENSION_SECTION}`);
+      if (!dimensionContainer) return;
+      
+      const dimensionLabel = dimensionContainer.querySelector('div').textContent.replace(':', '');
+      const dimensionKey = getDimensionKey(dimensionLabel);
+      const buttonValue = button.textContent;
+      
+      // Check if this button's value matches the current shot's dimension value
+      if (currentShot[dimensionKey] === buttonValue) {
+        button.style.background = "#007cba";
+        button.style.color = "white";
+        button.setAttribute('aria-pressed', 'true');
+      } else {
+        button.style.background = "#f9f9f9";
+        button.style.color = "#333";
+        button.setAttribute('aria-pressed', 'false');
+      }
+    });
+  });
 }
