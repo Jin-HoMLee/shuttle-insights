@@ -41,7 +41,7 @@ def create_dummy_data(seq_len: int = 100, batch_size: int = 1, seed: int = 42) -
         rng = np.random.default_rng()
     
     # Joint and bone features (pose estimation output)
-    JnB = rng.randn(batch_size, seq_len, n_people, pose_features).astype(np.float32)
+    JnB = rng.standard_normal((batch_size, seq_len, n_people, pose_features)).astype(np.float32)
     JnB = np.clip(JnB * 0.5 + 0.5, 0, 1)  # Normalize to [0, 1] range
     
     # Shuttlecock trajectory (x, y coordinates)
