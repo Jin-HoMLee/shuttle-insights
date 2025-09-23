@@ -16,12 +16,12 @@ import { UI_IDS, CSS_CLASSES } from './constants.js';
  */
 export function getPanelTemplate(dateTimeStr, videoTitle, videoUrl) {
   return `
-    <div id="${UI_IDS.HEADER}" class="${CSS_CLASSES.SECTION_TITLE}" style="background: linear-gradient(135deg, #1976d2, #42a5f5); color: white; margin: 0; padding: 16px; border-radius: 8px 8px 0 0;">
-      <button id="${UI_IDS.CLOSE_BTN}" class="yt-shot-labeler-tooltip" data-tooltip="Close panel" aria-label="Close panel" 
-              style="float:right;background:rgba(255,255,255,0.2);border:none;color:white;font-size:18px;cursor:pointer;border-radius:4px;padding:4px 8px;transition:background 0.2s;">×</button>
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <span style="font-size: 20px;">🏸</span>
-        <strong style="font-size: 16px; font-weight: 600;">YouTube Badminton Shot Labeler</strong>
+    <div id="${UI_IDS.HEADER}" class="${CSS_CLASSES.SECTION_TITLE}" style="background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); margin: 0; padding: 20px; border-radius: var(--md-sys-shape-corner-large) var(--md-sys-shape-corner-large) 0 0; border-bottom: 1px solid var(--md-sys-color-outline-variant);">
+      <button id="${UI_IDS.CLOSE_BTN}" class="yt-shot-labeler-tooltip yt-shot-labeler-btn-text" data-tooltip="Close panel" aria-label="Close panel" 
+              style="float:right;background:transparent;border:none;color:var(--md-sys-color-on-primary-container);font-size:24px;cursor:pointer;border-radius:var(--md-sys-shape-corner-full);padding:8px;min-width:40px;height:40px;display:flex;align-items:center;justify-content:center;transition:background var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);">×</button>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="font-size: 24px;">🏸</span>
+        <strong style="font-family: var(--md-sys-typescale-title-large-font); font-size: var(--md-sys-typescale-title-large-size); font-weight: var(--md-sys-typescale-title-large-weight); line-height: var(--md-sys-typescale-title-large-line-height);">YouTube Badminton Shot Labeler</strong>
       </div>
     </div>
     <div id="${UI_IDS.CONTENT}">
@@ -91,15 +91,15 @@ function getLabelShotSection() {
   return `
     <div class="${CSS_CLASSES.SECTION}">
       <div class="${CSS_CLASSES.SECTION_TITLE}">🎬 Label Shot</div>
-      <div style="margin:12px 0; display: flex; align-items: center; gap: 12px;">
+      <div style="margin:16px 0; display: flex; align-items: center; gap: 16px;">
         <button id="${UI_IDS.MARK_START}" class="yt-shot-labeler-btn yt-shot-labeler-btn-primary yt-shot-labeler-tooltip" 
                 data-tooltip="Mark the start time of a badminton shot" aria-label="Mark shot start">
           <span>▶️</span> Mark Start
         </button>
         <span id="${UI_IDS.SHOT_STATUS}" style="flex: 1;"></span>
       </div>
-      <div id="${UI_IDS.LABEL_BUTTONS}" style="margin-bottom:12px;"></div>
-      <div id="${UI_IDS.DIMENSION_CONTROLS}" style="margin-bottom:12px;"></div>
+      <div id="${UI_IDS.LABEL_BUTTONS}" style="margin-bottom:16px;"></div>
+      <div id="${UI_IDS.DIMENSION_CONTROLS}" style="margin-bottom:16px;"></div>
       <button id="${UI_IDS.MARK_END}" class="yt-shot-labeler-btn yt-shot-labeler-btn-success yt-shot-labeler-tooltip" 
               data-tooltip="Mark the end time and save the labeled shot" aria-label="Mark shot end and save">
         <span>⏹️</span> Mark End & Save
@@ -115,7 +115,7 @@ function getLabeledShotsSection() {
   return `
     <div class="${CSS_CLASSES.SECTION}">
       <div class="${CSS_CLASSES.SECTION_TITLE}">📋 Labeled Shots</div>
-      <div id="${UI_IDS.LABEL_LIST}" style="max-height:120px;overflow:auto;font-size:13px;margin-bottom:12px;" 
+      <div id="${UI_IDS.LABEL_LIST}" style="max-height:140px;overflow:auto;margin-bottom:16px;" 
            role="list" aria-label="List of labeled shots"></div>
     </div>
   `;
@@ -143,13 +143,13 @@ function getQuickHelpSection() {
   return `
     <div class="${CSS_CLASSES.SECTION}">
       <div class="${CSS_CLASSES.SECTION_TITLE}">❓ Quick Help</div>
-      <div class="${CSS_CLASSES.INFO}" style="font-size: 12px;">
+      <div class="${CSS_CLASSES.INFO}">
         <div><b>Keyboard Shortcuts:</b></div>
         <div>• Ctrl+S: Mark start time</div>
         <div>• Ctrl+E: Mark end time & save</div>
         <div>• Ctrl+O: Toggle pose overlay</div>
         <div>• Esc: Close panel</div>
-        <div style="margin-top: 8px;"><b>Workflow:</b></div>
+        <div style="margin-top: 12px;"><b>Workflow:</b></div>
         <div>1. Mark shot start → 2. Select shot type → 3. Mark end & save</div>
       </div>
     </div>
