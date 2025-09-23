@@ -4,38 +4,58 @@
  * Validates that the modular structure properly integrates
  */
 
+import * as panel from '../src/panel.js';
+import * as csv from '../src/csv.js';
+import * as glossary from '../src/glossary.js';
+import * as panelCoordinator from '../src/panel-coordinator.js';
+import * as uiUtils from '../src/utils/ui/ui-utils.js';
+import * as csvUtils from '../src/utils/data/csv-utils.js';
+import * as constants from '../src/constants.js';
+import * as csvImport from '../src/csv-import.js';
+import * as csvExport from '../src/csv-export.js';
+import * as glossaryLoader from '../src/glossary-loader.js';
+import * as glossaryButtons from '../src/glossary-buttons.js';
+import * as glossaryDimensions from '../src/glossary-dimensions.js';
+import * as panelFactory from '../src/panel-factory.js';
+import * as panelEvents from '../src/panel-events.js';
+import * as panelWorkflow from '../src/panel-workflow.js';
+import * as panelTemplates from '../src/panel-templates.js';
+
 describe('Module Integration Validation', () => {
   
   describe('Import Structure', () => {
     
     it('should allow importing all main modules', () => {
       expect(() => {
-        require('../src/panel.js');
-        require('../src/csv.js');
-        require('../src/glossary.js');
-        require('../src/panel-coordinator.js');
+        // Modules already imported at top of file
+        expect(panel).toBeDefined();
+        expect(csv).toBeDefined();
+        expect(glossary).toBeDefined();
+        expect(panelCoordinator).toBeDefined();
       }).not.toThrow();
     });
     
     it('should allow importing all utility modules', () => {
       expect(() => {
-        require('../src/utils/ui/ui-utils.js');
-        require('../src/utils/data/csv-utils.js');
-        require('../src/constants.js');
+        // Modules already imported at top of file
+        expect(uiUtils).toBeDefined();
+        expect(csvUtils).toBeDefined();
+        expect(constants).toBeDefined();
       }).not.toThrow();
     });
     
     it('should allow importing all sub-modules', () => {
       expect(() => {
-        require('../src/csv-import.js');
-        require('../src/csv-export.js');
-        require('../src/glossary-loader.js');
-        require('../src/glossary-buttons.js');
-        require('../src/glossary-dimensions.js');
-        require('../src/panel-factory.js');
-        require('../src/panel-events.js');
-        require('../src/panel-workflow.js');
-        require('../src/panel-templates.js');
+        // Modules already imported at top of file
+        expect(csvImport).toBeDefined();
+        expect(csvExport).toBeDefined();
+        expect(glossaryLoader).toBeDefined();
+        expect(glossaryButtons).toBeDefined();
+        expect(glossaryDimensions).toBeDefined();
+        expect(panelFactory).toBeDefined();
+        expect(panelEvents).toBeDefined();
+        expect(panelWorkflow).toBeDefined();
+        expect(panelTemplates).toBeDefined();
       }).not.toThrow();
     });
     
@@ -44,20 +64,13 @@ describe('Module Integration Validation', () => {
   describe('Export Validation', () => {
     
     it('should export expected functions from main modules', () => {
-      const panelModule = require('../src/panel.js');
-      const csvModule = require('../src/csv.js');
-      const glossaryModule = require('../src/glossary.js');
-      
-      expect(panelModule.createLabelerPanel).toBeDefined();
-      expect(panelModule.togglePanel).toBeDefined();
-      expect(csvModule.setupCSV).toBeDefined();
-      expect(glossaryModule.setupGlossaryButtons).toBeDefined();
+      expect(panel.createLabelerPanel).toBeDefined();
+      expect(panel.togglePanel).toBeDefined();
+      expect(csv.setupCSV).toBeDefined();
+      expect(glossary.setupGlossaryButtons).toBeDefined();
     });
     
     it('should export expected functions from utility modules', () => {
-      const csvUtils = require('../src/utils/data/csv-utils.js');
-      const uiUtils = require('../src/utils/ui/ui-utils.js');
-      
       expect(csvUtils.parseCSVRow).toBeDefined();
       expect(csvUtils.escapeCSVField).toBeDefined();
       expect(uiUtils.formatDateTime).toBeDefined();
@@ -69,7 +82,8 @@ describe('Module Integration Validation', () => {
   describe('Modular Architecture Validation', () => {
     
     it('should have split large files into smaller modules', () => {
-      // Verify that main modules are now coordination layers
+      // Note: For this file system test, we keep require() as it's more 
+      // appropriate for Node.js file operations in test context
       const fs = require('fs');
       const path = require('path');
       
@@ -91,14 +105,10 @@ describe('Module Integration Validation', () => {
     
     it('should maintain backward compatibility', () => {
       // Main modules should still work as before
-      const { createLabelerPanel, togglePanel } = require('../src/panel.js');
-      const { setupCSV } = require('../src/csv.js');
-      const { setupGlossaryButtons } = require('../src/glossary.js');
-      
-      expect(typeof createLabelerPanel).toBe('function');
-      expect(typeof togglePanel).toBe('function');
-      expect(typeof setupCSV).toBe('function');
-      expect(typeof setupGlossaryButtons).toBe('function');
+      expect(typeof panel.createLabelerPanel).toBe('function');
+      expect(typeof panel.togglePanel).toBe('function');
+      expect(typeof csv.setupCSV).toBe('function');
+      expect(typeof glossary.setupGlossaryButtons).toBe('function');
     });
     
   });
@@ -106,6 +116,8 @@ describe('Module Integration Validation', () => {
   describe('Build Integration', () => {
     
     it('should have successfully built the extension', () => {
+      // Note: For this file system test, we keep require() as it's more 
+      // appropriate for Node.js file operations in test context.
       const fs = require('fs');
       const path = require('path');
       

@@ -5,6 +5,9 @@
  */
 
 import { setupGlossaryButtons } from '../src/glossary.js';
+import { loadGlossaryData, showGlossaryError } from '../src/glossary-loader.js';
+import { setupShotButtons } from '../src/glossary-buttons.js';
+import { setupDimensionControls } from '../src/glossary-dimensions.js';
 
 // Mock the glossary sub-modules
 jest.mock('../src/glossary-loader.js', () => ({
@@ -57,17 +60,11 @@ describe('Glossary Module Coordination', () => {
   describe('setupGlossaryButtons', () => {
     
     it('should set up glossary UI successfully', async () => {
-      const { loadGlossaryData } = require('../src/glossary-loader.js');
-      const { setupShotButtons } = require('../src/glossary-buttons.js');
-      const { setupDimensionControls } = require('../src/glossary-dimensions.js');
       
       // Mock successful data loading
       loadGlossaryData.mockResolvedValue(mockGlossaryData);
       
       await setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
-      
-      // Wait for async operations
-      await new Promise(resolve => setTimeout(resolve, 0));
       
       expect(loadGlossaryData).toHaveBeenCalled();
       expect(setupShotButtons).toHaveBeenCalledWith(
@@ -84,21 +81,20 @@ describe('Glossary Module Coordination', () => {
       );
     });
     
-    it('should handle missing container elements', () => {
+    it('should handle missing container elements', async () => {
       const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
       
       const badPanel = {
         querySelector: jest.fn(() => null)
       };
       
-      setupGlossaryButtons(badPanel, mockGetCurrentShot, mockUpdateStatus);
+      await setupGlossaryButtons(badPanel, mockGetCurrentShot, mockUpdateStatus);
       
       expect(consoleSpy).toHaveBeenCalledWith('Glossary container elements not found');
       consoleSpy.mockRestore();
     });
     
     it('should clear existing content before setup', async () => {
-      const { loadGlossaryData } = require('../src/glossary-loader.js');
       loadGlossaryData.mockResolvedValue(mockGlossaryData);
       
       const labelDiv = { innerHTML: 'old content' };
@@ -110,24 +106,21 @@ describe('Glossary Module Coordination', () => {
         return null;
       });
       
-      setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
+      await setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
       
       expect(labelDiv.innerHTML).toBe('');
       expect(dimensionDiv.innerHTML).toBe('');
     });
     
+    
     it('should handle glossary data loading errors', async () => {
-      const { loadGlossaryData, showGlossaryError } = require('../src/glossary-loader.js');
       const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
-      
+  
       // Mock failed data loading
       const testError = new Error('Failed to load glossary');
       loadGlossaryData.mockRejectedValue(testError);
       
       await setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
-      
-      
-      
       
       expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to load glossary data:', testError);
       expect(showGlossaryError).toHaveBeenCalledWith(
@@ -143,16 +136,10 @@ describe('Glossary Module Coordination', () => {
   describe('Shot State Management Pattern', () => {
     
     it('should pass getCurrentShot callback to sub-modules', async () => {
-      const { loadGlossaryData } = require('../src/glossary-loader.js');
-      const { setupShotButtons } = require('../src/glossary-buttons.js');
-      const { setupDimensionControls } = require('../src/glossary-dimensions.js');
       
       loadGlossaryData.mockResolvedValue(mockGlossaryData);
       
       await setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
-      
-      // Wait for async operations
-      await new Promise(resolve => setTimeout(resolve, 0));
       
       // Verify callbacks are passed correctly
       expect(setupShotButtons).toHaveBeenCalledWith(
@@ -170,10 +157,9 @@ describe('Glossary Module Coordination', () => {
     });
     
     it('should not manage shot state directly', async () => {
-      const { loadGlossaryData } = require('../src/glossary-loader.js');
       loadGlossaryData.mockResolvedValue(mockGlossaryData);
       
-      setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
+      await setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
       
       // The module should not create or manage shot objects directly
       // It should only coordinate sub-modules and pass callbacks
@@ -185,16 +171,10 @@ describe('Glossary Module Coordination', () => {
   describe('Module Integration', () => {
     
     it('should coordinate all glossary sub-modules', async () => {
-      const { loadGlossaryData } = require('../src/glossary-loader.js');
-      const { setupShotButtons } = require('../src/glossary-buttons.js');
-      const { setupDimensionControls } = require('../src/glossary-dimensions.js');
       
       loadGlossaryData.mockResolvedValue(mockGlossaryData);
       
-      setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
-      
-      // Wait for async operations
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
       
       // Verify all modules are set up
       expect(loadGlossaryData).toHaveBeenCalledTimes(1);
@@ -202,12 +182,9 @@ describe('Glossary Module Coordination', () => {
       expect(setupDimensionControls).toHaveBeenCalledTimes(1);
     });
     
-    it('should maintain consistency with legacy API', () => {
+    it('should maintain consistency with legacy API', async () => {
       // The function signature should remain compatible
-      expect(() => {
-        setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
-      }).not.toThrow();
-      
+      await expect(setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus)).resolves.toBeUndefined();
       // Should accept the same parameters as before modularization
       expect(setupGlossaryButtons).toHaveLength(3); // 3 parameters
     });
