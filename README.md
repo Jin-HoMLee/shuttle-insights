@@ -165,6 +165,38 @@ Notebooks and configuration for deploying trained models to Google Cloud VertexA
 - VertexAI endpoint deployment
 - Terraform infrastructure setup
 
+### BST Model Export and Optimization
+Tools for exporting and optimizing BST (Badminton Stroke-type Transformer) models for cloud inference:
+
+#### Quick Start
+```bash
+# Export BST model to TorchScript and ONNX formats
+python export_bst_model.py --model_type BST_CG_AP --weights_path weights/bst_model.pt
+
+# Test exported models for cloud deployment
+python cloud_deployment_example.py --model_path weights/exported/bst_cg_ap_seq100_scripted.pt
+
+# Run basic functionality tests
+python test_export_basic.py
+```
+
+#### Makefile Commands
+```bash
+make export-bst        # Export BST model with default settings
+make export-bst-all    # Export to all formats with benchmarking
+make test-export       # Test export functionality
+make test-cloud        # Test cloud deployment simulation
+```
+
+#### Key Features
+- **Multiple Model Variants**: BST_0, BST, BST_CG, BST_AP, BST_CG_AP
+- **Dual Export Formats**: TorchScript (.pt) and ONNX (.onnx)
+- **Cloud Optimization**: Memory and inference speed optimization
+- **Deployment Examples**: Google Cloud Functions, AWS Lambda, ONNX Runtime
+- **Performance Benchmarking**: Inference speed and memory usage testing
+
+See [docs/BST_MODEL_EXPORT_GUIDE.md](docs/BST_MODEL_EXPORT_GUIDE.md) for comprehensive documentation.
+
 ### Experiments (experiments/)
 Experimental notebooks for testing new approaches:
 - **multipose_movenet_test/**: Testing MoveNet models for multi-person pose detection
