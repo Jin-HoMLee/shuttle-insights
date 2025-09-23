@@ -184,7 +184,7 @@ describe('Glossary Module Coordination', () => {
     
     it('should maintain consistency with legacy API', async () => {
       // The function signature should remain compatible
-      await expect(setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus)).resolves.not.toThrow();
+      await expect(setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus)).resolves.toBeUndefined();
       // Should accept the same parameters as before modularization
       expect(setupGlossaryButtons).toHaveLength(3); // 3 parameters
     });
