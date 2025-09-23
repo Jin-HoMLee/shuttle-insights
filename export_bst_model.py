@@ -15,7 +15,7 @@ Supported model types:
     - BST_AP: BST with Aim Player
     - BST_CG_AP: BST with Clean Gate and Aim Player (most advanced)
 
-Author: Jin-HoMLee
+Author: Jin-Ho M. Lee
 Created for Issue #65: Export and Optimize BST PyTorch Model for Cloud Inference
 """
 
