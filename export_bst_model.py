@@ -54,7 +54,7 @@ class BST_ModelExporter:
     DEFAULT_PARAMS = {
         'in_dim': 72,  # (17 + 19 * 1) * 2 = 72 features for 2 people
         'seq_len': 100,  # Typical sequence length for badminton shots
-        'n_class': 25,   # Default number of badminton shot classes; adjust as needed for your trained model or dataset, as different BST models or datasets may have different class counts.
+        'n_class': 25,   # Default number of badminton shot classes (adjust based on your dataset)
         'n_people': 2,   # Two players
         'd_model': 100,  # Model dimension
         'd_head': 128,   # Attention head dimension
