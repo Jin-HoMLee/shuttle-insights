@@ -640,7 +640,7 @@ class BST_AP(nn.Module):
         p1_conclusion = p1_cls + p1_shuttle_cls
         p2_conclusion = p2_cls + p2_shuttle_cls
 
-        # Compute Cosine Simularities
+        # Compute Cosine Similarities
         p1_shuttle_sim = self.cos_sim(p1_shuttle_cls, shuttle_cls)
         p2_shuttle_sim = self.cos_sim(p2_shuttle_cls, shuttle_cls)
         alpha: Tensor = (p1_shuttle_sim - p2_shuttle_sim + 2) / 4
