@@ -171,10 +171,10 @@ Tools for exporting BST (Badminton Stroke-type Transformer) models and deploying
 #### Quick Start
 ```bash
 # Export BST model to TorchScript and ONNX formats
-python export_bst_model.py --model_type BST_CG_AP --weights_path weights/bst_model.pt
+python export_bst_model.py --model_type BST_CG_AP --weights_path models/bst/weights/bst_CG_AP_JnB_bone_between_2_hits_with_max_limits_seq_100_merged_2.pt
 
 # Test exported models for cloud deployment
-python cloud_deployment_example.py --model_path weights/exported/bst_cg_ap_seq100_scripted.pt
+python cloud_deployment_example.py --model_path models/bst/weights/exported/bst_cg_ap_seq100_scripted.pt
 
 # Run basic functionality tests
 python test_export_basic.py
