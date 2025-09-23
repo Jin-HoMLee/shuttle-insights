@@ -156,6 +156,27 @@ After making changes, rebuild the extension using `npm run build`.
 - **esbuild**: For building and bundling the extension
 - **Chrome Extensions API**: For browser integration
 
+## Running Tests
+
+To run unit and integration tests for the extension:
+
+1. Install dependencies:
+   ```bash
+   cd browser-extension
+   npm install
+   ```
+
+2. Run tests (runs the test script defined in your package.json):
+   ```bash
+   npm test
+   ```
+   or (runs the Jest test runner directly)
+   ```bash
+   npx jest
+   ```
+
+Test files are located in `chrome-extension/test/`.
+
 ---
 
 **Enjoy!**
