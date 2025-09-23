@@ -88,10 +88,10 @@ class MultiHeadAttention(nn.Module):
             dots = dots.masked_fill(mask == 0.0, -torch.inf)
         
         coef = self.attend(dots)
-        attension: Tensor = coef @ v.contiguous()
-        # attension: (bn, h, t, d_head)
+        attention: Tensor = coef @ v.contiguous()
+        # attention: (bn, h, t, d_head)
         
-        out = attension.transpose(1, 2).reshape(bn, t, -1)
+        out = attention.transpose(1, 2).reshape(bn, t, -1)
         # out: (bn, t, h*d_head)
         out = self.tail(out)
         return out  # (bn, t, d_model)
