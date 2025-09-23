@@ -688,7 +688,7 @@ class BST_CG_AP(nn.Module):
         self.embedding_inter = nn.Parameter(torch.empty(1, 1+seq_len, d_model))
         self.encoder_inter = TransformerEncoder(d_model, d_head, n_head, depth_inter, d_model * mlp_d_scale, drop_p)
         
-        # Cosine Simularity
+        # Cosine Similarity
         self.cos_sim = nn.CosineSimilarity()
 
         # Clean Gate
