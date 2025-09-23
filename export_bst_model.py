@@ -206,7 +206,7 @@ class BST_ModelExporter:
             import onnx
             import onnxruntime
         except ImportError:
-            raise ImportError("ONNX export requires 'onnx' and 'onnxruntime' packages")
+            raise ImportError("ONNX export requires 'onnx' and 'onnxruntime' packages. Install with: pip install onnx onnxruntime")
             
         print(f"Exporting to ONNX format (opset version {opset_version})...")
         
