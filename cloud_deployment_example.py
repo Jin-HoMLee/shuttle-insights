@@ -15,22 +15,28 @@ import time
 import numpy as np
 from typing import Dict, List, Any, Tuple
 
-def create_dummy_data(seq_len: int = 100, batch_size: int = 1) -> Dict[str, Any]:
+def create_dummy_data(seq_len: int = 100, batch_size: int = 1, seed: int = 42) -> Dict[str, Any]:
     """
     Create dummy input data for testing BST model inference.
     
     Args:
         seq_len: Sequence length for the video
         batch_size: Batch size for inference
+        seed: Optional random seed for reproducibility. Default is 42. Set to None for non-deterministic data.
         
     Returns:
         Dictionary containing input tensors
+    
+    Note:
+        Using a fixed seed makes dummy data generation reproducible, which is useful for debugging and regression testing.
+        For more comprehensive testing, set seed=None to allow random data generation.
     """
     n_people = 2
     pose_features = 72  # (17 + 19 * 1) * 2
     
     # Generate realistic-looking dummy data
-    np.random.seed(42)  # For reproducible results
+    if seed is not None:
+        np.random.seed(seed)  # For reproducible results
     
     # Joint and bone features (pose estimation output)
     JnB = np.random.randn(batch_size, seq_len, n_people, pose_features).astype(np.float32)
