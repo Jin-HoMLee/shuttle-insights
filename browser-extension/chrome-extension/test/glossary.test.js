@@ -66,9 +66,6 @@ describe('Glossary Module Coordination', () => {
       
       await setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
       
-      // Wait for async operations
-      await new Promise(resolve => setTimeout(resolve, 0));
-      
       expect(loadGlossaryData).toHaveBeenCalled();
       expect(setupShotButtons).toHaveBeenCalledWith(
         mockPanel.querySelector('#label-buttons'),
@@ -84,14 +81,14 @@ describe('Glossary Module Coordination', () => {
       );
     });
     
-    it('should handle missing container elements', () => {
+    it('should handle missing container elements', async () => {
       const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
       
       const badPanel = {
         querySelector: jest.fn(() => null)
       };
       
-      setupGlossaryButtons(badPanel, mockGetCurrentShot, mockUpdateStatus);
+      await setupGlossaryButtons(badPanel, mockGetCurrentShot, mockUpdateStatus);
       
       expect(consoleSpy).toHaveBeenCalledWith('Glossary container elements not found');
       consoleSpy.mockRestore();
@@ -109,23 +106,21 @@ describe('Glossary Module Coordination', () => {
         return null;
       });
       
-      setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
+      await setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
       
       expect(labelDiv.innerHTML).toBe('');
       expect(dimensionDiv.innerHTML).toBe('');
     });
     
+    
     it('should handle glossary data loading errors', async () => {
       const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
-      
+  
       // Mock failed data loading
       const testError = new Error('Failed to load glossary');
       loadGlossaryData.mockRejectedValue(testError);
       
       await setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
-      
-      
-      
       
       expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to load glossary data:', testError);
       expect(showGlossaryError).toHaveBeenCalledWith(
@@ -146,9 +141,6 @@ describe('Glossary Module Coordination', () => {
       
       await setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
       
-      // Wait for async operations
-      await new Promise(resolve => setTimeout(resolve, 0));
-      
       // Verify callbacks are passed correctly
       expect(setupShotButtons).toHaveBeenCalledWith(
         expect.any(Object),
@@ -167,7 +159,7 @@ describe('Glossary Module Coordination', () => {
     it('should not manage shot state directly', async () => {
       loadGlossaryData.mockResolvedValue(mockGlossaryData);
       
-      setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
+      await setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
       
       // The module should not create or manage shot objects directly
       // It should only coordinate sub-modules and pass callbacks
@@ -182,10 +174,7 @@ describe('Glossary Module Coordination', () => {
       
       loadGlossaryData.mockResolvedValue(mockGlossaryData);
       
-      setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
-      
-      // Wait for async operations
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
       
       // Verify all modules are set up
       expect(loadGlossaryData).toHaveBeenCalledTimes(1);
@@ -195,8 +184,8 @@ describe('Glossary Module Coordination', () => {
     
     it('should maintain consistency with legacy API', () => {
       // The function signature should remain compatible
-      expect(() => {
-        setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
+      expect(async () => {
+        await setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
       }).not.toThrow();
       
       // Should accept the same parameters as before modularization

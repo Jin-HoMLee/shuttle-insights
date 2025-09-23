@@ -49,7 +49,7 @@ import { setupDimensionControls } from './glossary-dimensions.js';
  * @param {Function} getCurrentShot - Function that returns the current shot object
  * @param {Function} updateStatus - Callback to update the status display
  */
-export function setupGlossaryButtons(panel, getCurrentShot, updateStatus) {
+export async function setupGlossaryButtons(panel, getCurrentShot, updateStatus) {
   const labelDiv = panel.querySelector('#label-buttons');
   const dimensionDiv = panel.querySelector('#dimension-controls');
   
@@ -63,14 +63,13 @@ export function setupGlossaryButtons(panel, getCurrentShot, updateStatus) {
   dimensionDiv.innerHTML = "";
 
   // Load glossary data and setup UI
-  loadGlossaryData()
-    .then(glossaryData => {
-      setupShotButtons(labelDiv, glossaryData.shots, getCurrentShot, updateStatus);
-      setupDimensionControls(dimensionDiv, glossaryData.dimensions, getCurrentShot, updateStatus);
-    })
-    .catch(error => {
-      console.error('Failed to load glossary data:', error);
-      showGlossaryError(labelDiv, 'Failed to load shot glossary');
-    });
+  try {
+    const glossaryData = await loadGlossaryData();
+    setupShotButtons(labelDiv, glossaryData.shots, getCurrentShot, updateStatus);
+    setupDimensionControls(dimensionDiv, glossaryData.dimensions, getCurrentShot, updateStatus);
+  } catch (error) {
+    console.error('Failed to load glossary data:', error);
+    showGlossaryError(labelDiv, 'Failed to load shot glossary');
+  }
 }
 
