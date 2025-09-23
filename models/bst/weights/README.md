@@ -20,7 +20,7 @@ weights/
 
 2. **Export models**: Use the export script to convert weights to optimized formats:
    ```bash
-   python export_bst_model.py --model_type BST_CG_AP --weights_path weights/your_weights.pt
+   python export_bst_model.py --model_type BST_CG_AP --weights_path models/bst/weights/bst_CG_AP_JnB_bone_between_2_hits_with_max_limits_seq_100_merged_2.pt
    ```
 
 3. **Deploy**: Use the exported models in `exported/` directory for cloud inference
