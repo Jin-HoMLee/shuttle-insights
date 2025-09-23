@@ -165,57 +165,9 @@ Notebooks and configuration for deploying trained models to Google Cloud VertexA
 - VertexAI endpoint deployment
 - Terraform infrastructure setup
 
+
 ### BST Model Export and Serverless API
-Tools for exporting BST (Badminton Stroke-type Transformer) models and deploying as serverless API for cloud inference:
-
-#### Quick Start
-```bash
-# Export BST model to TorchScript and ONNX formats
-python export_bst_model.py --model_type BST_CG_AP --weights_path models/bst/weights/bst_CG_AP_JnB_bone_between_2_hits_with_max_limits_seq_100_merged_2.pt
-
-# Test exported models for cloud deployment
-python cloud_deployment_example.py --model_path models/bst/weights/exported/bst_cg_ap_seq100_scripted.pt
-
-# Run basic functionality tests
-python test_export_basic.py
-
-# Test serverless API structure
-python test_structure.py
-```
-
-#### Serverless API
-```bash
-# Install API dependencies
-pip install -r requirements_serverless.txt
-
-# Local development
-python serverless_api.py
-# or
-uvicorn serverless_api:app --reload --port 8000
-
-# Google Cloud Functions deployment
-./deploy_gcf.sh
-
-# Test API
-python api_client_example.py --api-url http://localhost:8000
-```
-
-#### Makefile Commands
-```bash
-make export-bst        # Export BST model with default settings
-make export-bst-all    # Export to all formats with benchmarking
-make test-export       # Test export functionality
-make test-cloud        # Test cloud deployment simulation
-```
-
-#### Key Features
-- **Multiple Model Variants**: BST_0, BST, BST_CG, BST_AP, BST_CG_AP
-- **Dual Export Formats**: TorchScript (.pt) and ONNX (.onnx)
-- **Cloud Optimization**: Memory and inference speed optimization
-- **Deployment Examples**: Google Cloud Functions, AWS Lambda, ONNX Runtime
-- **Performance Benchmarking**: Inference speed and memory usage testing
-
-See [docs/BST_MODEL_EXPORT_GUIDE.md](docs/BST_MODEL_EXPORT_GUIDE.md) for comprehensive documentation.
+See [bst_export/README.md](bst_export/README.md) for all details on exporting BST models and deploying the serverless API.
 
 ### Experiments (experiments/)
 Experimental notebooks for testing new approaches:
