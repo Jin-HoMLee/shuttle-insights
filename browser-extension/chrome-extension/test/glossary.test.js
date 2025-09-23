@@ -124,10 +124,10 @@ describe('Glossary Module Coordination', () => {
       const testError = new Error('Failed to load glossary');
       loadGlossaryData.mockRejectedValue(testError);
       
-      setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
+      await setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
       
-      // Wait for async operations
-      await new Promise(resolve => setTimeout(resolve, 10));
+      
+      
       
       expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to load glossary data:', testError);
       expect(showGlossaryError).toHaveBeenCalledWith(
