@@ -794,7 +794,7 @@ class BST_CG_AP(nn.Module):
         p1_shuttle_cls = p1_shuttle[:, 0, :].contiguous()
         p2_shuttle_cls = p2_shuttle[:, 0, :].contiguous()
 
-        # Compute Cosine Simularities
+        # Compute Cosine Similarities
         p1_shuttle_sim = self.cos_sim(p1_shuttle_cls, shuttle_cls)
         p2_shuttle_sim = self.cos_sim(p2_shuttle_cls, shuttle_cls)
         alpha: Tensor = (p1_shuttle_sim - p2_shuttle_sim + 2) / 4
