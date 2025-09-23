@@ -2,10 +2,10 @@ SHELL := /bin/bash
 
 .PHONY: setup
 setup:
-	pyenv local 3.11.3
+	pyenv local 3.13.5
 	python -m venv .venv
 	.venv/bin/python -m pip install --upgrade pip
-	.venv/bin/python -m pip install -r requirements_dev.txt
+	.venv/bin/python -m pip install -r requirements.txt
 
 # BST Model Export targets
 .PHONY: export-bst export-bst-all test-export test-cloud clean-exports
