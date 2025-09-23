@@ -21,9 +21,11 @@ def test_import_availability():
     """Test if required modules can be imported."""
     print("Testing import availability...")
     
+    # 'positional_encodings' provides positional encoding layers for PyTorch models.
+    # Install via: pip install positional-encodings
     required_modules = [
         'torch',
-        'positional_encodings',  # Provides positional encoding layers for PyTorch models. Install via: pip install positional-encodings
+        'positional_encodings',
         'torchinfo'
     ]
     
