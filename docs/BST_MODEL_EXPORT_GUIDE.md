@@ -76,7 +76,7 @@ python export_bst_model.py \
 | `--formats` | Export formats | `torchscript onnx` | `torchscript`, `onnx` |
 | `--seq_len` | Sequence length | `100` | Positive integer |
 | `--in_dim` | Input dimension | `72` | Features per person × n_people |
-| `--opset_version` | ONNX opset version | `11` | 9, 10, 11, 12+ |
+| `--opset_version` | ONNX opset version | `13` | 9, 10, 11, 12, 13+ |
 | `--benchmark` | Run performance benchmark | False | Flag |
 
 ### Model Variants
