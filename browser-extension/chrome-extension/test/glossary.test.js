@@ -5,6 +5,9 @@
  */
 
 import { setupGlossaryButtons } from '../src/glossary.js';
+import { loadGlossaryData, showGlossaryError } from '../src/glossary-loader.js';
+import { setupShotButtons } from '../src/glossary-buttons.js';
+import { setupDimensionControls } from '../src/glossary-dimensions.js';
 
 // Mock the glossary sub-modules
 jest.mock('../src/glossary-loader.js', () => ({
@@ -57,9 +60,6 @@ describe('Glossary Module Coordination', () => {
   describe('setupGlossaryButtons', () => {
     
     it('should set up glossary UI successfully', async () => {
-      const { loadGlossaryData } = require('../src/glossary-loader.js');
-      const { setupShotButtons } = require('../src/glossary-buttons.js');
-      const { setupDimensionControls } = require('../src/glossary-dimensions.js');
       
       // Mock successful data loading
       loadGlossaryData.mockResolvedValue(mockGlossaryData);
@@ -98,7 +98,6 @@ describe('Glossary Module Coordination', () => {
     });
     
     it('should clear existing content before setup', async () => {
-      const { loadGlossaryData } = require('../src/glossary-loader.js');
       loadGlossaryData.mockResolvedValue(mockGlossaryData);
       
       const labelDiv = { innerHTML: 'old content' };
@@ -117,7 +116,6 @@ describe('Glossary Module Coordination', () => {
     });
     
     it('should handle glossary data loading errors', async () => {
-      const { loadGlossaryData, showGlossaryError } = require('../src/glossary-loader.js');
       const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
       
       // Mock failed data loading
@@ -143,9 +141,6 @@ describe('Glossary Module Coordination', () => {
   describe('Shot State Management Pattern', () => {
     
     it('should pass getCurrentShot callback to sub-modules', async () => {
-      const { loadGlossaryData } = require('../src/glossary-loader.js');
-      const { setupShotButtons } = require('../src/glossary-buttons.js');
-      const { setupDimensionControls } = require('../src/glossary-dimensions.js');
       
       loadGlossaryData.mockResolvedValue(mockGlossaryData);
       
@@ -170,7 +165,6 @@ describe('Glossary Module Coordination', () => {
     });
     
     it('should not manage shot state directly', async () => {
-      const { loadGlossaryData } = require('../src/glossary-loader.js');
       loadGlossaryData.mockResolvedValue(mockGlossaryData);
       
       setupGlossaryButtons(mockPanel, mockGetCurrentShot, mockUpdateStatus);
@@ -185,9 +179,6 @@ describe('Glossary Module Coordination', () => {
   describe('Module Integration', () => {
     
     it('should coordinate all glossary sub-modules', async () => {
-      const { loadGlossaryData } = require('../src/glossary-loader.js');
-      const { setupShotButtons } = require('../src/glossary-buttons.js');
-      const { setupDimensionControls } = require('../src/glossary-dimensions.js');
       
       loadGlossaryData.mockResolvedValue(mockGlossaryData);
       
