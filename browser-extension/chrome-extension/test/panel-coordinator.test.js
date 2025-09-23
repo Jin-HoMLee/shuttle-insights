@@ -5,6 +5,10 @@
  */
 
 import { createLabelerPanel, togglePanel } from '../src/panel-coordinator.js';
+import { setupCSV } from '../src/csv.js';
+import { setupGlossaryButtons } from '../src/glossary.js';
+import { createPanelElement } from '../src/panel-factory.js';
+
 
 // Simplified mocks for testing module structure
 jest.mock('../src/utils/ui/ui-utils.js', () => ({
@@ -96,9 +100,6 @@ describe('Panel Coordinator Module Structure', () => {
   describe('Module Integration Pattern', () => {
     
     it('should coordinate multiple modules', () => {
-      const { setupCSV } = require('../src/csv.js');
-      const { setupGlossaryButtons } = require('../src/glossary.js');
-      const { createPanelElement } = require('../src/panel-factory.js');
       
       createLabelerPanel();
       
