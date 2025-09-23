@@ -84,7 +84,9 @@ describe('Module Integration Validation', () => {
       // These should be small coordination files (less than 5KB each)
       expect(panelSize).toBeLessThan(5000);
       expect(csvSize).toBeLessThan(5000);
-      expect(glossarySize).toBeLessThan(10000); // Glossary has more comments
+      // Glossary may have more comments, but should not be much larger than other modules
+      const maxMainModuleSize = Math.max(panelSize, csvSize);
+      expect(glossarySize).toBeLessThan(maxMainModuleSize * 2); // Allow up to 2x the largest main module
     });
     
     it('should maintain backward compatibility', () => {
