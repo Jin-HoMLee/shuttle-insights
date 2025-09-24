@@ -313,9 +313,16 @@ def predict_with_onnx(preprocessed_data: Dict[str, Any]) -> Dict[str, Any]:
         exp_predictions = np.exp(predictions - np.max(predictions, axis=-1, keepdims=True))
         probabilities = exp_predictions / np.sum(exp_predictions, axis=-1, keepdims=True)
         
-        # Get top 5 predictions
-        top_indices = np.argsort(probabilities, axis=-1)[..., -5:][:, ::-1]
-        top_probs = np.take_along_axis(probabilities, top_indices, axis=-1)
+        # Get top 5 predictions efficiently using argpartition
+        top_k = 5
+        # Get indices of top 5 probabilities (unsorted)
+        partitioned_indices = np.argpartition(probabilities, -top_k, axis=-1)[..., -top_k:]
+        # Gather the top 5 probabilities
+        top_probs_unsorted = np.take_along_axis(probabilities, partitioned_indices, axis=-1)
+        # Now sort these top 5 in descending order
+        sorted_order = np.argsort(top_probs_unsorted, axis=-1)[:, ::-1]
+        top_indices = np.take_along_axis(partitioned_indices, sorted_order, axis=-1)
+        top_probs = np.take_along_axis(top_probs_unsorted, sorted_order, axis=-1)
         
         return {
             'success': True,
