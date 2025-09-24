@@ -6,11 +6,11 @@ This document provides a comprehensive audit of the YouTube Badminton Shot Label
 ## UI Architecture
 
 ### Design System
-**Type**: Custom CSS Design System (No Material Design Components)
+**Type**: Custom CSS Design System (inspired by Material Design principles, but no Material Design components used)
 - **CSS Variables**: Modern CSS custom properties for consistent theming
-- **Color Palette**: Material Design-inspired color scheme with custom implementation
+- **Color Palette**: Inspired by Material Design, implemented with custom CSS (no Material Design components)
 - **Typography**: System fonts (Segoe UI, Tahoma, Geneva, Verdana, sans-serif)
-- **Component Library**: Custom-built components with no external UI framework dependencies
+- **Component Library**: Custom-built components with no external UI framework dependencies or Material Design components
 
 ### Design Tokens (CSS Custom Properties)
 Located in `src/styles.css`:
