@@ -247,7 +247,7 @@ function restoreDimensionButtonStates(content, getCurrentShot) {
       const dimensionKey = getDimensionKey(dimensionLabel);
       const buttonValue = button.textContent;
       // Check if this button's value matches the current shot's dimension value
-      if (currentShot[dimensionKey] === buttonValue) {
+      if (currentShot[dimensionKey] === buttonValue.trim()) {
         button.classList.add('selected');
         button.setAttribute('aria-pressed', 'true');
       } else {
