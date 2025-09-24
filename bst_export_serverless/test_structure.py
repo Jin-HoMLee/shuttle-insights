@@ -59,7 +59,6 @@ def test_import_structure():
     """Test import structure without actually importing dependencies."""
     try:
         # Check if serverless_api can be loaded without external deps
-        spec = importlib.util.spec_from_file_location("serverless_api", "serverless_api.py")
         
         # Just validate the module structure
         with open('serverless_api.py', 'r') as f:
