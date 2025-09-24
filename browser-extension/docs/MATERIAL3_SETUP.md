@@ -1,3 +1,5 @@
+# Material 3 Setup Guide
+
 ### Purpose
 Provide step-by-step instructions and best practices for installing and setting up Material Design 3 (Material You) in the browser extension, to assist with the migration effort.
 
