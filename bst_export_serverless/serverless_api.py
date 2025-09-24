@@ -309,9 +309,14 @@ def predict_with_onnx(preprocessed_data: Dict[str, Any]) -> Dict[str, Any]:
         # Extract predictions (assuming single output)
         predictions = ort_outputs[0]
         
-        # Convert to probabilities using softmax
-        exp_predictions = np.exp(predictions - np.max(predictions, axis=-1, keepdims=True))
-        probabilities = exp_predictions / np.sum(exp_predictions, axis=-1, keepdims=True)
+        # Convert to probabilities using scipy's softmax
+        try:
+            from scipy.special import softmax
+            probabilities = softmax(predictions, axis=-1)
+        except ImportError:
+            # Fallback to manual softmax if scipy is not available
+            exp_predictions = np.exp(predictions - np.max(predictions, axis=-1, keepdims=True))
+            probabilities = exp_predictions / np.sum(exp_predictions, axis=-1, keepdims=True)
         
         # Get top 5 predictions efficiently using argpartition
         top_k = 5
