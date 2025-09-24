@@ -243,11 +243,11 @@ def predict_with_torchscript(preprocessed_data: Dict[str, Any]) -> Dict[str, Any
         # Load model
         model = load_torchscript_model()
         
-        # Convert numpy arrays to torch tensors
-        JnB = torch.tensor(preprocessed_data['JnB'], dtype=torch.float)
-        shuttle = torch.tensor(preprocessed_data['shuttle'], dtype=torch.float)
-        pos = torch.tensor(preprocessed_data['pos'], dtype=torch.float)
-        video_len = torch.tensor(preprocessed_data['video_len'], dtype=torch.long)
+        # Convert numpy arrays to torch tensors (zero-copy)
+        JnB = torch.from_numpy(preprocessed_data['JnB']).float()
+        shuttle = torch.from_numpy(preprocessed_data['shuttle']).float()
+        pos = torch.from_numpy(preprocessed_data['pos']).float()
+        video_len = torch.from_numpy(preprocessed_data['video_len']).long()
         
         # Run inference
         start_time = time.time()
