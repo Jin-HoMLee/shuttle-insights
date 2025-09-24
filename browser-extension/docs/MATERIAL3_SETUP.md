@@ -7,19 +7,16 @@ Provide step-by-step instructions and best practices for installing and setting 
 
 #### 1. Choose Your Implementation
 
-- [ ] **MUI (Material UI) v5+** for React-based UI, supporting Material 3 via `@mui/material` and `@mui/material-next`.
-- [x] **Material Web Components (MWC)** for framework-agnostic setup (`@material/web`).
+- **MUI (Material UI) v5+** for React-based UI, supporting Material 3 via `@mui/material` and `@mui/material-next`.
+- **Material Web Components (MWC)** for framework-agnostic setup (`@material/web`).
 
 #### 2. Installation
 
-- [ ] **React (MUI):**
+- **React (MUI):**
 
 ```bash
 npm install @mui/material @mui/icons-material @emotion/react @emotion/styled
 npm install @mui/material-next
-```
-
-- [x] **Web Components (MWC):**
 
 ```bash
 npm install @material/web
