@@ -3,9 +3,11 @@
  * 
  * Contains HTML templates and template strings for the panel UI.
  * This module isolates the large HTML templates from the main panel logic.
+ * Updated to use Material Design 3 components.
  */
 
 import { UI_IDS, CSS_CLASSES } from './constants.js';
+import { initializeMaterial3 } from './material3-imports.js';
 
 /**
  * Main panel HTML template
@@ -15,10 +17,15 @@ import { UI_IDS, CSS_CLASSES } from './constants.js';
  * @returns {string} Complete HTML template for the panel
  */
 export function getPanelTemplate(dateTimeStr, videoTitle, videoUrl) {
+  // Initialize Material 3 theme
+  initializeMaterial3();
+  
   return `
     <div id="${UI_IDS.HEADER}" class="${CSS_CLASSES.SECTION_TITLE}" style="background: linear-gradient(135deg, #1976d2, #42a5f5); color: white; margin: 0; padding: 16px; border-radius: 8px 8px 0 0;">
-      <button id="${UI_IDS.CLOSE_BTN}" class="yt-shot-labeler-tooltip" data-tooltip="Close panel" aria-label="Close panel" 
-              style="float:right;background:rgba(255,255,255,0.2);border:none;color:white;font-size:18px;cursor:pointer;border-radius:4px;padding:4px 8px;transition:background 0.2s;">×</button>
+      <md-icon-button id="${UI_IDS.CLOSE_BTN}" class="yt-shot-labeler-tooltip" data-tooltip="Close panel" aria-label="Close panel" 
+                      style="float:right; --md-icon-button-icon-color: white; --md-icon-button-state-layer-color: rgba(255,255,255,0.12);">
+        ×
+      </md-icon-button>
       <div style="display: flex; align-items: center; gap: 12px;">
         <span style="font-size: 20px;">🏸</span>
         <strong style="font-size: 16px; font-weight: 600;">YouTube Badminton Shot Labeler</strong>
@@ -43,9 +50,9 @@ function getVideoDetailsSection(dateTimeStr, videoTitle, videoUrl) {
   return `
     <div class="${CSS_CLASSES.SECTION}">
       <div class="${CSS_CLASSES.SECTION_TITLE}">📊 Video Details</div>
-      <div class="${CSS_CLASSES.INFO}">
-        <div><b>Date/Time:</b> <span id="${UI_IDS.DATETIME}">${dateTimeStr}</span></div>
-        <div><b>Video Title:</b> <span id="${UI_IDS.VIDEO_TITLE}">${videoTitle}</span></div>
+      <div class="${CSS_CLASSES.INFO}" style="background: var(--md-sys-color-surface-variant); padding: 12px; border-radius: 8px; border: 1px solid var(--md-sys-color-outline);">
+        <div style="margin-bottom: 8px;"><b>Date/Time:</b> <span id="${UI_IDS.DATETIME}">${dateTimeStr}</span></div>
+        <div style="margin-bottom: 8px;"><b>Video Title:</b> <span id="${UI_IDS.VIDEO_TITLE}">${videoTitle}</span></div>
         <div style="max-width:310px;word-break:break-all;"><b>URL:</b> <span id="${UI_IDS.URL}">${videoUrl}</span></div>
       </div>
     </div>
@@ -59,10 +66,10 @@ function getPoseOverlaySection() {
   return `
     <div class="${CSS_CLASSES.SECTION}">
       <div class="${CSS_CLASSES.SECTION_TITLE}">🎯 Pose Overlay</div>
-      <button id="${UI_IDS.CUSTOM_ACTION_BTN}" class="yt-shot-labeler-btn yt-shot-labeler-tooltip" 
-              data-tooltip="Toggle pose detection overlay on video" aria-label="Toggle pose overlay">
-        <span>👤</span> Toggle Pose Overlay
-      </button>
+      <md-filled-button id="${UI_IDS.CUSTOM_ACTION_BTN}" class="yt-shot-labeler-tooltip" 
+                        data-tooltip="Toggle pose detection overlay on video" aria-label="Toggle pose overlay">
+        👤 Toggle Pose Overlay
+      </md-filled-button>
       <span id="${UI_IDS.OVERLAY_STATUS}" class="${CSS_CLASSES.STATUS_MESSAGE}"></span>
     </div>
   `;
@@ -75,10 +82,10 @@ function getLoadDataSection() {
   return `
     <div class="${CSS_CLASSES.SECTION}">
       <div class="${CSS_CLASSES.SECTION_TITLE}">📂 Load Data</div>
-      <button id="${UI_IDS.LOAD_CSV}" class="yt-shot-labeler-btn yt-shot-labeler-tooltip" 
-              data-tooltip="Load previously saved shot labels from CSV file" aria-label="Load existing CSV">
-        <span>📁</span> Load Existing CSV
-      </button>
+      <md-outlined-button id="${UI_IDS.LOAD_CSV}" class="yt-shot-labeler-tooltip" 
+                          data-tooltip="Load previously saved shot labels from CSV file" aria-label="Load existing CSV">
+        📁 Load Existing CSV
+      </md-outlined-button>
       <input type="file" id="${UI_IDS.CSV_FILE_INPUT}" accept=".csv" style="display:none;" aria-label="CSV file input">
     </div>
   `;
@@ -92,18 +99,19 @@ function getLabelShotSection() {
     <div class="${CSS_CLASSES.SECTION}">
       <div class="${CSS_CLASSES.SECTION_TITLE}">🎬 Label Shot</div>
       <div style="margin:12px 0; display: flex; align-items: center; gap: 12px;">
-        <button id="${UI_IDS.MARK_START}" class="yt-shot-labeler-btn yt-shot-labeler-btn-primary yt-shot-labeler-tooltip" 
-                data-tooltip="Mark the start time of a badminton shot" aria-label="Mark shot start">
-          <span>▶️</span> Mark Start
-        </button>
+        <md-filled-button id="${UI_IDS.MARK_START}" class="yt-shot-labeler-tooltip" 
+                          data-tooltip="Mark the start time of a badminton shot" aria-label="Mark shot start">
+          ▶️ Mark Start
+        </md-filled-button>
         <span id="${UI_IDS.SHOT_STATUS}" style="flex: 1;"></span>
       </div>
       <div id="${UI_IDS.LABEL_BUTTONS}" style="margin-bottom:12px;"></div>
       <div id="${UI_IDS.DIMENSION_CONTROLS}" style="margin-bottom:12px;"></div>
-      <button id="${UI_IDS.MARK_END}" class="yt-shot-labeler-btn yt-shot-labeler-btn-success yt-shot-labeler-tooltip" 
-              data-tooltip="Mark the end time and save the labeled shot" aria-label="Mark shot end and save">
-        <span>⏹️</span> Mark End & Save
-      </button>
+      <md-filled-button id="${UI_IDS.MARK_END}" class="yt-shot-labeler-tooltip" 
+                        data-tooltip="Mark the end time and save the labeled shot" aria-label="Mark shot end and save"
+                        style="--md-filled-button-container-color: var(--md-sys-color-tertiary); --md-filled-button-label-text-color: var(--md-sys-color-on-tertiary);">
+        ⏹️ Mark End & Save
+      </md-filled-button>
     </div>
   `;
 }
@@ -128,10 +136,11 @@ function getExportSection() {
   return `
     <div class="${CSS_CLASSES.SECTION}">
       <div class="${CSS_CLASSES.SECTION_TITLE}">💾 Export</div>
-      <button id="${UI_IDS.SAVE_LABELS}" class="yt-shot-labeler-btn yt-shot-labeler-btn-success yt-shot-labeler-tooltip" 
-              data-tooltip="Download all labeled shots as CSV file" aria-label="Download CSV file">
-        <span>⬇️</span> Download CSV
-      </button>
+      <md-filled-button id="${UI_IDS.SAVE_LABELS}" class="yt-shot-labeler-tooltip" 
+                        data-tooltip="Download all labeled shots as CSV file" aria-label="Download CSV file"
+                        style="--md-filled-button-container-color: var(--md-sys-color-tertiary); --md-filled-button-label-text-color: var(--md-sys-color-on-tertiary);">
+        ⬇️ Download CSV
+      </md-filled-button>
     </div>
   `;
 }

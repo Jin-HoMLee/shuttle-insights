@@ -3,13 +3,14 @@
  * 
  * Handles creation and management of shot type selection buttons.
  * Provides interactive UI elements for selecting shot types from the glossary.
+ * Updated to use Material Design 3 filter chips.
  */
 
 import { CSS_CLASSES } from './constants.js';
 import { addTooltip } from './utils/ui/ui-utils.js';
 
 /**
- * Sets up shot type selection buttons
+ * Sets up shot type selection buttons using Material 3 filter chips
  * 
  * @param {HTMLElement} container - Container element for shot buttons
  * @param {Array} shots - Array of shot definitions from glossary
@@ -22,7 +23,7 @@ export function setupShotButtons(container, shots, getCurrentShot, updateStatus)
     return;
   }
 
-  // Create section container for shot buttons
+  // Create section container for shot buttons using Material 3 chip set
   const shotSection = document.createElement('div');
   shotSection.className = CSS_CLASSES.CATEGORY_SECTION;
   
@@ -32,63 +33,62 @@ export function setupShotButtons(container, shots, getCurrentShot, updateStatus)
   shotHeader.className = CSS_CLASSES.CATEGORY_TITLE;
   shotSection.appendChild(shotHeader);
 
-  // Create button for each shot type
+  // Create chip set container
+  const chipSet = document.createElement('md-chip-set');
+  chipSet.style.cssText = 'display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;';
+
+  // Create filter chip for each shot type
   shots.forEach(shot => {
-    const button = createShotButton(shot, getCurrentShot, updateStatus, container);
-    shotSection.appendChild(button);
+    const chip = createShotChip(shot, getCurrentShot, updateStatus, chipSet);
+    chipSet.appendChild(chip);
   });
 
+  shotSection.appendChild(chipSet);
   container.appendChild(shotSection);
 }
 
 /**
- * Creates a single shot selection button
+ * Creates a single shot selection filter chip using Material 3
  * 
  * @param {Object} shot - Shot definition object
  * @param {Function} getCurrentShot - Function to get current shot object
  * @param {Function} updateStatus - Status update callback
- * @param {HTMLElement} container - Container for managing button states
- * @returns {HTMLElement} Created button element
+ * @param {HTMLElement} chipSet - Chip set container for managing selection states
+ * @returns {HTMLElement} Created filter chip element
  */
-function createShotButton(shot, getCurrentShot, updateStatus, container) {
-  const button = document.createElement('button');
-  button.textContent = shot.term;
-  button.className = CSS_CLASSES.LABEL_BTN;
+function createShotChip(shot, getCurrentShot, updateStatus, chipSet) {
+  const chip = document.createElement('md-filter-chip');
+  chip.textContent = shot.term;
+  chip.setAttribute('label', shot.term);
   
   // Add enhanced tooltip with definition
-  addTooltip(button, `${shot.term}: ${shot.definition}`);
-  button.setAttribute('aria-label', `Select ${shot.term} shot type`);
+  addTooltip(chip, `${shot.term}: ${shot.definition}`);
+  chip.setAttribute('aria-label', `Select ${shot.term} shot type`);
 
-  button.onclick = () => {
+  chip.addEventListener('click', () => {
     const currentShot = getCurrentShot();
     currentShot.label = shot.term;
     
-    // Update button selection state
-    updateButtonSelection(container, button);
+    // Update chip selection state
+    updateChipSelection(chipSet, chip);
     updateStatus();
-    
-    // Add visual feedback
-    button.style.transform = 'scale(0.95)';
-    setTimeout(() => {
-      button.style.transform = '';
-    }, 150);
-  };
+  });
 
-  return button;
+  return chip;
 }
 
 /**
- * Updates button selection states within a container
+ * Updates chip selection states within a chip set
  * 
- * @param {HTMLElement} container - Container element
- * @param {HTMLElement} selectedButton - Button to mark as selected
+ * @param {HTMLElement} chipSet - Chip set container
+ * @param {HTMLElement} selectedChip - Chip to mark as selected
  */
-function updateButtonSelection(container, selectedButton) {
-  // Remove selection from all buttons in container
-  container.querySelectorAll('button').forEach(btn => {
-    btn.classList.remove("selected");
+function updateChipSelection(chipSet, selectedChip) {
+  // Remove selection from all chips in set
+  chipSet.querySelectorAll('md-filter-chip').forEach(chip => {
+    chip.removeAttribute('selected');
   });
   
-  // Mark the clicked button as selected
-  selectedButton.classList.add("selected");
+  // Mark the clicked chip as selected
+  selectedChip.setAttribute('selected', '');
 }

@@ -94,7 +94,7 @@ function setupDimensionCollapse(header, content) {
 }
 
 /**
- * Creates a dimension control group (label + value buttons)
+ * Creates a dimension control group (label + value chips using Material 3)
  * 
  * @param {Object} dimension - Dimension definition object
  * @param {Function} getCurrentShot - Function to get current shot object
@@ -115,87 +115,74 @@ function createDimensionControl(dimension, getCurrentShot, updateStatus) {
   label.title = dimension.description;
   container.appendChild(label);
 
-  // Create button group for dimension values
-  const buttonGroup = document.createElement('div');
-  buttonGroup.className = CSS_CLASSES.DIMENSION_BUTTONS;
-  buttonGroup.style.display = "flex";
-  buttonGroup.style.gap = "4px";
-  buttonGroup.style.flexWrap = "wrap";
+  // Create chip set for dimension values
+  const chipSet = document.createElement('md-chip-set');
+  chipSet.style.cssText = 'display: flex; flex-wrap: wrap; gap: 4px;';
 
-  // Create button for each dimension value
+  // Create filter chip for each dimension value
   if (dimension.values && Array.isArray(dimension.values)) {
     dimension.values.forEach(value => {
-      const button = createDimensionValueButton(
+      const chip = createDimensionValueChip(
         value, 
-        dimension, 
+        dimension,
         getCurrentShot, 
         updateStatus, 
-        buttonGroup
+        chipSet
       );
-      buttonGroup.appendChild(button);
+      chipSet.appendChild(chip);
     });
   }
 
-  container.appendChild(buttonGroup);
+  container.appendChild(chipSet);
   return container;
 }
 
 /**
- * Creates a button for a specific dimension value
+ * Creates a filter chip for a specific dimension value using Material 3
  * 
  * @param {Object} value - Dimension value object
  * @param {Object} dimension - Parent dimension object
  * @param {Function} getCurrentShot - Function to get current shot object
  * @param {Function} updateStatus - Status update callback
- * @param {HTMLElement} buttonGroup - Parent button group for state management
- * @returns {HTMLElement} Value button element
+ * @param {HTMLElement} chipSet - Parent chip set for state management
+ * @returns {HTMLElement} Value chip element
  */
-function createDimensionValueButton(value, dimension, getCurrentShot, updateStatus, buttonGroup) {
-  const button = document.createElement('button');
-  button.textContent = value.term;
-  button.className = CSS_CLASSES.DIMENSION_BTN;
-  button.title = value.description;
+function createDimensionValueChip(value, dimension, getCurrentShot, updateStatus, chipSet) {
+  const chip = document.createElement('md-filter-chip');
+  chip.textContent = value.term;
+  chip.setAttribute('label', value.term);
+  chip.title = value.description;
   
-  // Style the dimension button
-  Object.assign(button.style, {
-    fontSize: "11px",
-    padding: "2px 6px",
-    border: "1px solid #ccc",
-    borderRadius: "3px",
-    background: "#f9f9f9",
-    cursor: "pointer",
-    color: "#333"
-  });
+  // Style the dimension chip to be smaller
+  chip.style.cssText = '--md-filter-chip-container-height: 24px; font-size: 11px;';
 
-  button.onclick = () => {
+  chip.addEventListener('click', () => {
     const currentShot = getCurrentShot();
     const dimensionKey = getDimensionKey(dimension.term);
     
     // Set the dimension value on the current shot
     currentShot[dimensionKey] = value.term;
     
-    // Update button states within this dimension group
-    updateDimensionButtonStates(buttonGroup, button);
+    // Update chip states within this dimension group
+    updateDimensionChipStates(chipSet, chip);
     updateStatus();
-  };
+  });
 
-  return button;
+  return chip;
 }
 
 /**
- * Updates button states within a dimension button group
+ * Updates dimension chip selection states within a chip set
  * 
- * @param {HTMLElement} buttonGroup - Container with dimension value buttons
- * @param {HTMLElement} selectedButton - Button to mark as selected
+ * @param {HTMLElement} chipSet - Chip set container
+ * @param {HTMLElement} selectedChip - Chip to mark as selected
  */
-function updateDimensionButtonStates(buttonGroup, selectedButton) {
-  // Reset all buttons in this group
-  buttonGroup.querySelectorAll('button').forEach(btn => {
-    btn.style.background = "#f9f9f9";
-    btn.style.color = "#333";
+function updateDimensionChipStates(chipSet, selectedChip) {
+  // Remove selection from all chips in this dimension group
+  chipSet.querySelectorAll('md-filter-chip').forEach(chip => {
+    chip.removeAttribute('selected');
   });
   
-  // Highlight selected button
-  selectedButton.style.background = "#007cba";
-  selectedButton.style.color = "white";
+  // Mark the clicked chip as selected
+  selectedChip.setAttribute('selected', '');
 }

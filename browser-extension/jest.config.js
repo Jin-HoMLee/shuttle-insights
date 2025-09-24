@@ -6,4 +6,10 @@ export default {
   },
   moduleFileExtensions: ['js', 'json', 'ts'],
   setupFilesAfterEnv: [],
+  moduleNameMapper: {
+    '^@material/web/.*$': '<rootDir>/test/__mocks__/material-web.js'
+  },
+  transformIgnorePatterns: [
+    'node_modules/(?!@material/web)'
+  ]
 };

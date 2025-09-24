@@ -1,4 +1,4 @@
-/* Modern Design System Variables */
+/* Modern Design System Variables - Updated for Material 3 */
 :root {
   --primary-color: #1976d2;
   --primary-dark: #1565c0;
@@ -20,6 +20,25 @@
   --border-radius-small: 4px;
   --transition-fast: 0.15s ease;
   --transition-medium: 0.25s ease;
+  
+  /* Material 3 design tokens */
+  --md-sys-color-primary: #1976d2;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #bbdefb;
+  --md-sys-color-on-primary-container: #0d47a1;
+  --md-sys-color-secondary: #757575;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-error: #f44336;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-surface: #fafafa;
+  --md-sys-color-on-surface: #212121;
+  --md-sys-color-surface-variant: #f3f3f3;
+  --md-sys-color-on-surface-variant: #757575;
+  --md-sys-color-outline: #e0e0e0;
+  --md-sys-color-background: #ffffff;
+  --md-sys-color-on-background: #212121;
+  --md-sys-color-tertiary: #4caf50;
+  --md-sys-color-on-tertiary: #ffffff;
 }
 
 #yt-shot-labeler-panel {
@@ -390,6 +409,33 @@
     box-shadow: 0 0 0 0 rgba(25, 118, 210, 0);
     transform: scale(1);
   }
+}
+
+/* Material 3 Component Integration */
+md-filled-button {
+  --md-filled-button-container-height: 36px;
+  margin: 4px;
+  font-family: inherit;
+}
+
+md-outlined-button {
+  --md-outlined-button-container-height: 36px;
+  margin: 4px;
+  font-family: inherit;
+}
+
+md-icon-button {
+  --md-icon-button-icon-size: 18px;
+  margin: 2px;
+}
+
+md-filter-chip {
+  margin: 2px;
+  font-family: inherit;
+}
+
+md-chip-set {
+  margin: 4px 0;
 }
 
 /* Responsive design for smaller screens */

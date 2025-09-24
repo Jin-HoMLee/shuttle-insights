@@ -171,9 +171,12 @@ export function createShotListUpdater(panel, getShots, removeShot) {
           
           const dimensionText = dimensions.length > 0 ? ` (${dimensions.join(', ')})` : '';
           
-          return `<div style="display:flex;align-items:center;gap:6px;">
+          return `<div style="display:flex;align-items:center;gap:6px;padding:8px;background:var(--md-sys-color-surface-variant);border-radius:8px;margin-bottom:4px;">
             <div style="flex:1;">#${i + 1}: <b>${shot.label}</b>${dimensionText} [${shot.start.toFixed(2)}s - ${shot.end.toFixed(2)}s]</div>
-            <button title="Delete" class="${CSS_CLASSES.DELETE_BTN}" data-index="${i}" style="background:transparent;border:none;cursor:pointer;font-size:15px;">🗑️</button>
+            <md-icon-button title="Delete" class="${CSS_CLASSES.DELETE_BTN}" data-index="${i}" 
+                            style="--md-icon-button-icon-color: var(--md-sys-color-error);">
+              🗑️
+            </md-icon-button>
           </div>`;
         }).join("");
         
