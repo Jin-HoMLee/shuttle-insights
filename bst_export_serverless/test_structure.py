@@ -52,40 +52,65 @@ def test_syntax_validation():
 
 def test_import_structure():
     """Test import structure without actually importing dependencies."""
+    import ast
     try:
-        # Check if serverless_api can be loaded without external deps
-        
-        # Just validate the module structure
         with open('serverless_api.py', 'r') as f:
-            content = f.read()
-        
-        # Check for key components
-        required_components = [
-            'FastAPI',
-            'PoseData',
-            'PredictionResponse',
-            'load_torchscript_model',
-            'load_onnx_model',
-            'predict_badminton_shot',
-            '@app.post("/predict",',
-            'MODEL_CONFIG'
-        ]
-        
-        found_components = []
-        missing_components = []
-        
-        for component in required_components:
-            if component in content:
-                found_components.append(component)
-            else:
-                missing_components.append(component)
-        
+            tree = ast.parse(f.read(), filename='serverless_api.py')
+
+        # Define required classes, functions, and variables
+        required_classes = {'PoseData', 'PredictionResponse'}
+        required_functions = {'load_torchscript_model', 'load_onnx_model', 'predict_badminton_shot'}
+        required_variables = {'MODEL_CONFIG'}
+        required_fastapi = {'FastAPI'}
+        required_routes = {'/predict'}
+
+        found_classes = set()
+        found_functions = set()
+        found_variables = set()
+        found_fastapi = set()
+        found_routes = set()
+
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ClassDef):
+                if node.name in required_classes:
+                    found_classes.add(node.name)
+            elif isinstance(node, ast.FunctionDef):
+                if node.name in required_functions:
+                    found_functions.add(node.name)
+            elif isinstance(node, ast.Assign):
+                for target in node.targets:
+                    if isinstance(target, ast.Name) and target.id in required_variables:
+                        found_variables.add(target.id)
+            elif isinstance(node, ast.ImportFrom):
+                for alias in node.names:
+                    if alias.name in required_fastapi:
+                        found_fastapi.add(alias.name)
+            elif isinstance(node, ast.Call):
+                # Look for @app.post("/predict")
+                if hasattr(node.func, 'attr') and node.func.attr in {'post', 'get'}:
+                    for arg in node.args:
+                        if isinstance(arg, ast.Constant) and isinstance(arg.value, str):
+                            for route in required_routes:
+                                if route in arg.value:
+                                    found_routes.add(route)
+
+        missing = []
+        if not required_classes.issubset(found_classes):
+            missing.extend(list(required_classes - found_classes))
+        if not required_functions.issubset(found_functions):
+            missing.extend(list(required_functions - found_functions))
+        if not required_variables.issubset(found_variables):
+            missing.extend(list(required_variables - found_variables))
+        if not required_fastapi.issubset(found_fastapi):
+            missing.extend(list(required_fastapi - found_fastapi))
+        if not required_routes.issubset(found_routes):
+            missing.extend(list(required_routes - found_routes))
+
         return {
-            'success': len(missing_components) == 0,
-            'found_components': found_components,
-            'missing_components': missing_components
+            'success': len(missing) == 0,
+            'found_components': list(found_classes | found_functions | found_variables | found_fastapi | found_routes),
+            'missing_components': missing
         }
-        
     except Exception as e:
         return {
             'success': False,
@@ -142,7 +167,9 @@ def main():
     import_result = test_import_structure()
     if import_result['success']:
         print("✓ All required components found")
-        print(f"  Found {len(import_result['found_components'])} components")
+        print(f"  Found {len(import_result['found_components'])} components:")
+        for comp in sorted(import_result['found_components']):
+            print(f"    - {comp}")
     else:
         print("✗ Missing components:")
         for component in import_result.get('missing_components', []):
