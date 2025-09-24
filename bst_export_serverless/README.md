@@ -2,43 +2,53 @@
 
 Tools for exporting BST (Badminton Stroke-type Transformer) models and deploying as a serverless API for cloud inference.
 
-## Quick Start
+## Quick Start 
+(paths are relative to `bst_export_serverless`)
 
 ```bash
 # Export BST model to TorchScript and ONNX formats
-python bst_export/export_bst_model.py --model_type BST_CG_AP --weights_path models/bst/weights/bst_CG_AP_JnB_bone_between_2_hits_with_max_limits_seq_100_merged_2.pt
+python export_bst_model.py --model_type BST_CG_AP --weights_path ../models/bst/weights/bst_CG_AP_JnB_bone_between_2_hits_with_max_limits_seq_100_merged_2.pt
 
 # Test exported models for cloud deployment
-python bst_export/cloud_deployment_example.py --model_path models/bst/exported/bst_cg_ap_seq100_scripted.pt
+python cloud_deployment_example.py --model_path ../models/bst/exported/bst_cg_ap_seq100_scripted.pt
 
 # Run basic functionality tests
-python bst_export/test_export_basic.py
+python test_export_basic.py
 
 # Test serverless API structure
-python bst_export/test_structure.py
+python test_structure.py
 ```
 
 ## Serverless API
 
+### Setup venv
+
+Make sure, to move into the folder `bst_export_serverless` (e.g. `cd bst_export_serverless`), before setting up the venv: 
+
 ```bash
-# Setup venv
 pyenv local 3.13.5
 python -m venv .venv_bst_export
 pip install --upgrade pip
-pip install -r bst_export/requirements_serverless.txt
+pip install -r requirements_serverless.txt
 # or 
 make setup
+```
 
-# Local development
-python bst_export/serverless_api.py
+### Local development
+```bash
+python serverless_api.py
 # or
-uvicorn bst_export.serverless_api:app --reload --port 8000
+uvicorn bst_export_serverless.serverless_api:app --reload --port 8000
+``` 
 
-# Google Cloud Functions deployment
-./bst_export/deploy_gcf.sh
+### Google Cloud Functions deployment
+```bash
+./deploy_gcf.sh
+```
 
-# Test API
-python bst_export/api_client_example.py --api-url http://localhost:8000
+### Test API
+```bash
+python api_client_example.py --api-url http://localhost:8000
 ```
 
 ## Makefile Commands
