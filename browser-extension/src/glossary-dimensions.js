@@ -159,37 +159,7 @@ function createDimensionValueButton(value, dimension, getCurrentShot, updateStat
   button.className = CSS_CLASSES.DIMENSION_BTN;
   button.title = value.description;
   
-  // Style the dimension button
-  Object.assign(button.style, {
-    fontSize: "11px",
-    padding: "2px 6px",
-    border: "1px solid #ccc",
-    borderRadius: "3px",
-    background: "#f9f9f9",
-    cursor: "pointer",
-    color: "#333",
-    transition: "all 0.2s ease"
-  });
-
-
-  // Add hover effects and accessibility
-  button.addEventListener('mouseenter', () => {
-    if (!button.classList.contains('selected')) {
-      button.style.background = "#e6f3ff";
-      button.style.borderColor = "#007cba";
-    } else {
-      button.style.background = "#005a8b";
-    }
-  });
-
-  button.addEventListener('mouseleave', () => {
-    if (!button.classList.contains('selected')) {
-      button.style.background = "#f9f9f9";
-      button.style.borderColor = "#ccc";
-    } else {
-      button.style.background = "#007cba";
-    }
-  });
+  // (All visual styling handled by CSS)
 
   // Add accessibility attributes
   button.setAttribute('role', 'button');
@@ -234,14 +204,10 @@ function updateDimensionButtonStates(buttonGroup, selectedButton) {
   // Reset all buttons in this group
   buttonGroup.querySelectorAll('button').forEach(btn => {
     btn.classList.remove('selected');
-    btn.style.background = "#f9f9f9";
-    btn.style.color = "#333";
     btn.setAttribute('aria-pressed', 'false');
   });
   // Highlight selected button
   selectedButton.classList.add('selected');
-  selectedButton.style.background = "#007cba";
-  selectedButton.style.color = "white";
   selectedButton.setAttribute('aria-pressed', 'true');
 }
 
@@ -253,8 +219,6 @@ function updateDimensionButtonStates(buttonGroup, selectedButton) {
 function resetDimensionButtonStates(buttonGroup) {
   buttonGroup.querySelectorAll('button').forEach(btn => {
     btn.classList.remove('selected');
-    btn.style.background = "#f9f9f9";
-    btn.style.color = "#333";
     btn.setAttribute('aria-pressed', 'false');
   });
 }
@@ -276,21 +240,15 @@ function restoreDimensionButtonStates(content, getCurrentShot) {
       // Get the dimension and value from button context
       const dimensionContainer = button.closest(`.${CSS_CLASSES.DIMENSION_SECTION}`);
       if (!dimensionContainer) return;
-      
       const dimensionLabel = dimensionContainer.querySelector('div').textContent.replace(':', '');
       const dimensionKey = getDimensionKey(dimensionLabel);
       const buttonValue = button.textContent;
-      
       // Check if this button's value matches the current shot's dimension value
       if (currentShot[dimensionKey] === buttonValue) {
         button.classList.add('selected');
-        button.style.background = "#007cba";
-        button.style.color = "white";
         button.setAttribute('aria-pressed', 'true');
       } else {
         button.classList.remove('selected');
-        button.style.background = "#f9f9f9";
-        button.style.color = "#333";
         button.setAttribute('aria-pressed', 'false');
       }
     });
