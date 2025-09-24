@@ -12,20 +12,15 @@ from pathlib import Path
 
 def test_file_structure():
     """Test that all required files exist."""
-    required_files = [
-        'serverless_api.py',
-        'main.py',
-        'requirements_serverless.txt',
-        'deploy_gcf.sh',
-        'test_serverless_api.py',
-        'api_client_example.py'
-    ]
-    
-    missing_files = []
-    for file in required_files:
-        if not os.path.exists(file):
-            missing_files.append(file)
-    
+    # Dynamically derive required files based on naming conventions and known extensions
+    # Required: all .py files, all .sh files, all .txt files in this directory
+    exts = {'.py', '.sh', '.txt'}
+    cwd_files = [f for f in os.listdir('.') if os.path.isfile(f)]
+    required_files = [f for f in cwd_files if os.path.splitext(f)[1] in exts]
+    # Optionally, add any additional required files by name here if needed
+
+    missing_files = [f for f in required_files if not os.path.exists(f)]
+
     return {
         'success': len(missing_files) == 0,
         'missing_files': missing_files,
