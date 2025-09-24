@@ -1,4 +1,5 @@
 #!/bin/bash
+# To make this script executable, run: chmod +x deploy_gcf.sh
 # Google Cloud Functions Deployment Script for BST Serverless API
 
 set -e
