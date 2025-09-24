@@ -44,6 +44,9 @@ export function setupDimensionControls(container, dimensions, getCurrentShot, up
     content.appendChild(dimensionControl);
   });
 
+  // Restore the visual state of dimension buttons based on current shot
+  restoreDimensionButtonStates(content, getCurrentShot);
+
   dimensionSection.appendChild(content);
   container.appendChild(dimensionSection);
 }
@@ -109,6 +112,7 @@ function createDimensionControl(dimension, getCurrentShot, updateStatus) {
   // Create dimension label
   const label = document.createElement('div');
   label.textContent = dimension.term + ':';
+  label.setAttribute('data-dimension-label', 'true');
   label.style.fontSize = "12px";
   label.style.fontWeight = "bold";
   label.style.marginBottom = "4px";
@@ -156,28 +160,37 @@ function createDimensionValueButton(value, dimension, getCurrentShot, updateStat
   button.className = CSS_CLASSES.DIMENSION_BTN;
   button.title = value.description;
   
-  // Style the dimension button
-  Object.assign(button.style, {
-    fontSize: "11px",
-    padding: "2px 6px",
-    border: "1px solid #ccc",
-    borderRadius: "3px",
-    background: "#f9f9f9",
-    cursor: "pointer",
-    color: "#333"
-  });
+  // Button visual styling is handled via CSS classes (see CSS_CLASSES.DIMENSION_BTN) for consistency and maintainability.
+
+  // Add accessibility attributes
+  button.setAttribute('role', 'button');
+  button.setAttribute('tabindex', '0');
+  button.setAttribute('aria-pressed', 'false');
 
   button.onclick = () => {
     const currentShot = getCurrentShot();
     const dimensionKey = getDimensionKey(dimension.term);
-    
-    // Set the dimension value on the current shot
-    currentShot[dimensionKey] = value.term;
-    
-    // Update button states within this dimension group
-    updateDimensionButtonStates(buttonGroup, button);
+    // Check if this button is already selected
+    const isCurrentlySelected = button.classList.contains('selected');
+    if (isCurrentlySelected) {
+      // Deselect - clear the dimension value and reset button state
+      delete currentShot[dimensionKey];
+      resetDimensionButtonStates(buttonGroup);
+    } else {
+      // Select - set the dimension value and update button states
+      currentShot[dimensionKey] = value.term;
+      updateDimensionButtonStates(buttonGroup, button);
+    }
     updateStatus();
   };
+
+  // Add keyboard navigation support
+  button.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      button.click();
+    }
+  });
 
   return button;
 }
@@ -191,11 +204,56 @@ function createDimensionValueButton(value, dimension, getCurrentShot, updateStat
 function updateDimensionButtonStates(buttonGroup, selectedButton) {
   // Reset all buttons in this group
   buttonGroup.querySelectorAll('button').forEach(btn => {
-    btn.style.background = "#f9f9f9";
-    btn.style.color = "#333";
+    btn.classList.remove('selected');
+    btn.setAttribute('aria-pressed', 'false');
   });
-  
   // Highlight selected button
-  selectedButton.style.background = "#007cba";
-  selectedButton.style.color = "white";
+  selectedButton.classList.add('selected');
+  selectedButton.setAttribute('aria-pressed', 'true');
+}
+
+/**
+ * Resets all button states within a dimension button group to unselected
+ * 
+ * @param {HTMLElement} buttonGroup - Container with dimension value buttons
+ */
+function resetDimensionButtonStates(buttonGroup) {
+  buttonGroup.querySelectorAll('button').forEach(btn => {
+    btn.classList.remove('selected');
+    btn.setAttribute('aria-pressed', 'false');
+  });
+}
+
+/**
+ * Restores the visual state of dimension buttons based on current shot values
+ * 
+ * @param {HTMLElement} content - Content container with all dimension controls
+ * @param {Function} getCurrentShot - Function to get current shot object
+ */
+function restoreDimensionButtonStates(content, getCurrentShot) {
+  const currentShot = getCurrentShot();
+  
+  // Find all dimension buttons and restore their states
+  content.querySelectorAll(`.${CSS_CLASSES.DIMENSION_BUTTONS}`).forEach(buttonGroup => {
+    const buttons = buttonGroup.querySelectorAll('button');
+    
+    buttons.forEach(button => {
+      // Get the dimension and value from button context
+      const dimensionContainer = button.closest(`.${CSS_CLASSES.DIMENSION_SECTION}`);
+      if (!dimensionContainer) return;
+      const labelEl = dimensionContainer.querySelector('[data-dimension-label="true"]');
+      if (!labelEl) return;
+      const dimensionLabel = labelEl.textContent.replace(':', '');
+      const dimensionKey = getDimensionKey(dimensionLabel);
+      const buttonValue = button.textContent.trim();
+      // Check if this button's value matches the current shot's dimension value
+      if (currentShot[dimensionKey] === buttonValue) {
+        button.classList.add('selected');
+        button.setAttribute('aria-pressed', 'true');
+      } else {
+        button.classList.remove('selected');
+        button.setAttribute('aria-pressed', 'false');
+      }
+    });
+  });
 }

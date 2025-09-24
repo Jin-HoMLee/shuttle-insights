@@ -170,6 +170,29 @@
   opacity: 0.6;
 }
 
+/* Advanced Shot Dimension Button States (corrected for actual class) */
+.yt-shot-labeler-dimension-btn {
+  background: #f9f9f9;
+  color: #333;
+  border: 1px solid #ccc;
+  transition: all 0.2s ease;
+}
+
+.yt-shot-labeler-dimension-btn:hover:not(.selected) {
+  background: #e6f3ff;
+  border-color: #007cba;
+}
+
+.yt-shot-labeler-dimension-btn.selected {
+  background: #007cba;
+  color: white;
+  border-color: #007cba;
+}
+
+.yt-shot-labeler-dimension-btn.selected:hover {
+  background: #005a8b;
+}
+
 /* Primary Button Variant */
 .yt-shot-labeler-btn-primary {
   background: var(--primary-color);
