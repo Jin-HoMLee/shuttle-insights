@@ -174,7 +174,7 @@ function createDimensionValueButton(value, dimension, getCurrentShot, updateStat
     const isCurrentlySelected = button.classList.contains('selected');
     if (isCurrentlySelected) {
       // Deselect - clear the dimension value and reset button state
-      currentShot[dimensionKey] = null;
+      delete currentShot[dimensionKey];
       resetDimensionButtonStates(buttonGroup);
     } else {
       // Select - set the dimension value and update button states
