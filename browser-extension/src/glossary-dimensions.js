@@ -160,7 +160,7 @@ function createDimensionValueButton(value, dimension, getCurrentShot, updateStat
   button.className = CSS_CLASSES.DIMENSION_BTN;
   button.title = value.description;
   
-  // (All visual styling handled by CSS)
+  // Button visual styling is handled via CSS classes (see CSS_CLASSES.DIMENSION_BTN) for consistency and maintainability.
 
   // Add accessibility attributes
   button.setAttribute('role', 'button');
