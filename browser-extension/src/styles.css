@@ -416,4 +416,10 @@
     padding: 6px 10px;
     font-size: 12px;
   }
+
+  .dimension-btn.selected {
+  background: #007cba !important;
+  color: white !important;
+  border-color: #007cba;
+  }
 }
