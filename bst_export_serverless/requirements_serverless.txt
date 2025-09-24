@@ -21,3 +21,6 @@ functions-framework>=3.0.0
 
 # For making HTTP requests (e.g., downloading models)
 requests==2.32.5
+
+# For softmax function in serverless_api.py
+scipy==1.16.2
