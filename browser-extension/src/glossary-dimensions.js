@@ -112,6 +112,7 @@ function createDimensionControl(dimension, getCurrentShot, updateStatus) {
   // Create dimension label
   const label = document.createElement('div');
   label.textContent = dimension.term + ':';
+  label.setAttribute('data-dimension-label', 'true');
   label.style.fontSize = "12px";
   label.style.fontWeight = "bold";
   label.style.marginBottom = "4px";
@@ -240,7 +241,9 @@ function restoreDimensionButtonStates(content, getCurrentShot) {
       // Get the dimension and value from button context
       const dimensionContainer = button.closest(`.${CSS_CLASSES.DIMENSION_SECTION}`);
       if (!dimensionContainer) return;
-      const dimensionLabel = dimensionContainer.querySelector('div').textContent.replace(':', '');
+      const labelEl = dimensionContainer.querySelector('[data-dimension-label="true"]');
+      if (!labelEl) return;
+      const dimensionLabel = labelEl.textContent.replace(':', '');
       const dimensionKey = getDimensionKey(dimensionLabel);
       const buttonValue = button.textContent;
       // Check if this button's value matches the current shot's dimension value
