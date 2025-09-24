@@ -126,7 +126,7 @@ Dragging:    Panel following mouse cursor
 
 ### Keyboard Shortcuts
 - **S** → Mark shot start
-- **E** → Mark shot end  
+- **E** → Mark shot end
 - **O** → Toggle pose overlay
 - **Esc** → Close panel
 
