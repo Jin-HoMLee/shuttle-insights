@@ -21,7 +21,7 @@ import time
 import hashlib
 import secrets
 from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Union
+from typing import Dict, List, Any, Optional, Union, Tuple
 from pathlib import Path
 
 # Import validation and response models
@@ -119,7 +119,7 @@ def hash_key(key: str) -> str:
     """Hash API key for rate limiting."""
     return hashlib.sha256(key.encode()).hexdigest()[:16]
 
-def check_rate_limit(api_key: str) -> tuple[bool, Dict[str, Any]]:
+def check_rate_limit(api_key: str) -> Tuple[bool, Dict[str, Any]]:
     """
     Check if API key is within rate limits.
     
