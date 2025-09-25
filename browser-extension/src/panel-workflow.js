@@ -140,9 +140,14 @@ export function createStatusUpdater(panel, getCurrentShot) {
 
     const currentShot = getCurrentShot();
     const dimensions = [];
+    
+    // Check all possible dimensions and include them if they have values
     if (currentShot.longitudinalPosition) dimensions.push(`Pos: ${currentShot.longitudinalPosition}`);
+    if (currentShot.lateralPosition) dimensions.push(`Lateral: ${currentShot.lateralPosition}`);
     if (currentShot.timing) dimensions.push(`Time: ${currentShot.timing}`);
     if (currentShot.intention) dimensions.push(`Intent: ${currentShot.intention}`);
+    if (currentShot.impact) dimensions.push(`Impact: ${currentShot.impact}`);
+    if (currentShot.direction) dimensions.push(`Direction: ${currentShot.direction}`);
     
     const dimensionText = dimensions.length > 0 ? ` | ${dimensions.join(' | ')}` : '';
     status.textContent = `Start: ${currentShot.start !== null ? currentShot.start.toFixed(2) + 's' : "-"} | End: ${currentShot.end !== null ? currentShot.end.toFixed(2) + 's' : "-"} | Label: ${currentShot.label ?? '-'}${dimensionText}`;
@@ -166,8 +171,12 @@ export function createShotListUpdater(panel, getShots, removeShot) {
       ? `<div style="color:#999;">No shots labeled yet.</div>`
       : shots.map((shot, i) => {
           const dimensions = [];
-          if (shot.intention) dimensions.push(shot.intention);
           if (shot.longitudinalPosition) dimensions.push(shot.longitudinalPosition);
+          if (shot.lateralPosition) dimensions.push(shot.lateralPosition);
+          if (shot.timing) dimensions.push(shot.timing);
+          if (shot.intention) dimensions.push(shot.intention);
+          if (shot.impact) dimensions.push(shot.impact);
+          if (shot.direction) dimensions.push(shot.direction);
           
           const dimensionText = dimensions.length > 0 ? ` (${dimensions.join(', ')})` : '';
           
