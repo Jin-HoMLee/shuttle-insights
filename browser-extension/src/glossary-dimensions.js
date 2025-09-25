@@ -217,6 +217,7 @@ function updateDimensionChipStates(chipSet, selectedChip) {
   
   // Mark the clicked chip as selected
   selectedChip.setAttribute('selected', '');
+}
 
 function updateDimensionButtonStates(buttonGroup, selectedButton) {
   // Reset all buttons in this group
