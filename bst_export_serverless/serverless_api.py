@@ -86,7 +86,7 @@ class PredictionResponse(BaseModel):
     inference_time: float
     predictions: List[List[float]]
     probabilities: List[List[float]]
-    top_predictions: Dict[str, List[List[int]]]
+    top_predictions: Dict[str, List[List[float]]]
     metadata: Dict[str, Any]
 
 class ErrorResponse(BaseModel):
