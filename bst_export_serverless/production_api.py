@@ -32,9 +32,13 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
 
+# Model configuration
+from production_config import ModelConfig 
+MODEL_CONFIG = ModelConfig().dict()
+
 # Import base serverless API components
 from serverless_api import (
-    MODEL_CONFIG, PoseData, PredictionResponse, ErrorResponse,
+    PoseData, PredictionResponse, ErrorResponse,
     load_torchscript_model, load_onnx_model, preprocess_input,
     predict_with_torchscript, predict_with_onnx
 )

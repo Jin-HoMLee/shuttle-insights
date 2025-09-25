@@ -33,14 +33,8 @@ torchscript_model = None
 onnx_session = None
 
 # Model configuration
-MODEL_CONFIG = {
-    'torchscript_path': 'models/bst/weights/exported/bst_cg_ap_seq100_scripted.pt',
-    'onnx_path': 'models/bst/weights/exported/bst_cg_ap_seq100.onnx',
-    'seq_len': 100,
-    'n_people': 2,
-    'pose_features': 72,
-    'n_classes': 66  # Badminton shot types
-}
+from production_config import ModelConfig # Importing from production_config.py
+MODEL_CONFIG = ModelConfig().dict()
 
 # Input validation models
 class PoseData(BaseModel):

@@ -10,7 +10,8 @@ Author: Jin-Ho M. Lee
 
 import os
 from typing import List, Dict, Any
-from pydantic import BaseSettings, Field
+from pydantic import Field
+from pydantic_settings import BaseSettings
 
 
 class SecurityConfig(BaseSettings):
@@ -67,8 +68,8 @@ class ModelConfig(BaseSettings):
     """Model-related configuration."""
     
     # Model paths
-    torchscript_path: str = Field(default='models/bst/weights/exported/bst_cg_ap_seq100_scripted.pt', env='TORCHSCRIPT_MODEL_PATH')
-    onnx_path: str = Field(default='models/bst/weights/exported/bst_cg_ap_seq100.onnx', env='ONNX_MODEL_PATH')
+    torchscript_path: str = Field(default='../models/bst/exported/bst_cg_ap_seq100_scripted.pt', env='TORCHSCRIPT_MODEL_PATH')
+    onnx_path: str = Field(default='../models/bst/exported/bst_cg_ap_seq100.onnx', env='ONNX_MODEL_PATH')
     
     # Model parameters
     seq_len: int = Field(default=100, env='MODEL_SEQ_LEN')
