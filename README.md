@@ -127,12 +127,14 @@ jupyter lab
 # - 03_lstm_shot_prediction.ipynb: Train ML models for shot prediction
 ```
 
-### 3. Browser Extension for Manual Labeling
+### 3. Chrome Browser Extension for Manual Labeling
 
-1. Load the browser extension from `browser-extension/chrome-extension/`
-2. Go to any YouTube badminton video
-3. Use the extension panel to manually label shots and events
-4. Export labeled data as CSV
+1. Before building, test with `npm --prefix browser-extension test`. 
+2. Build with `npm --prefix browser-extension run build`. 
+3. Load the browser extension from `browser-extension/dist/` (In Chrome Browser: Extensions > Manage Extensions > Developer Mode > Load unpacked)
+4. Go to any YouTube badminton video. 
+5. Use the extension panel to manually label shots and events. 
+6. Export labeled data as CSV. 
 
 See [browser-extension/README.md](browser-extension/README.md) for detailed instructions.
 
@@ -254,7 +256,7 @@ prediction = predict_shot(model, pose_sequence)
 5. **Browser extension not loading**
    - Enable Developer mode in Chrome Extensions
    - Check for console errors in the extension
-   - Rebuild with `npm run build` in the chrome-extension directory
+   - Rebuild with `npm --prefix browser-extension run build` in the chrome-extension directory
 
 ## Contributing
 
