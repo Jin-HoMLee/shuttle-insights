@@ -1,16 +1,17 @@
 /**
- * Content Script - Main Entry Point
+ * Content Script - Pose Overlay Management
  * 
- * This script handles pose overlay functionality and panel management for the 
- * YouTube Badminton Shot Labeler extension. It manages the pose detection loop,
- * video event handling, and communication with the panel UI.
+ * This script handles pose overlay functionality for the YouTube Badminton Shot Labeler extension.
+ * It manages the pose detection loop, video event handling, and communication with the popup UI.
  * 
  * Key Responsibilities:
- * - Pose overlay start/stop management
- * - Video change detection and handling
- * - Panel toggle functionality
- * - Event listener management for video elements
- * - MutationObserver for YouTube UI changes
+ * - Pose overlay start/stop management via TensorFlow.js
+ * - Video change detection and overlay repositioning
+ * - Communication with popup interface via Chrome messaging
+ * - Video metadata provision to popup
+ * 
+ * Note: UI management has been moved to popup interface (popup.js).
+ * This script focuses solely on pose detection and video integration.
  */
 
 import { getVideo } from './utils/video/video-utils.js';
