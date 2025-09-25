@@ -41,8 +41,13 @@ import '@material/web/dialog/dialog.js';
  * This function should be called once during extension initialization
  */
 export function initializeMaterial3() {
+  // Prevent duplicate style injection
+  if (document.getElementById('material3-theme-style')) {
+    return;
+  }
   // Set global Material 3 theme colors to match our existing design
   const style = document.createElement('style');
+  style.id = 'material3-theme-style';
   style.textContent = `
     :root {
       /* Material 3 design tokens matching our existing design */
