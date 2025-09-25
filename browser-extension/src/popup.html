@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Badminton Shot Labeler</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div id="popup-container">
+    <!-- Header -->
+    <div id="popup-header">
+      <div class="header-title">
+        <span class="header-icon">🏸</span>
+        YouTube Badminton Shot Labeler
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div id="popup-content">
+      <!-- Status Section -->
+      <div class="popup-section">
+        <div class="section-title">📊 Status</div>
+        <div id="connection-status" class="status-message">Checking connection...</div>
+      </div>
+
+      <!-- Video Details Section -->
+      <div class="popup-section" id="video-details-section" style="display: none;">
+        <div class="section-title">📊 Video Details</div>
+        <div class="popup-info">
+          <div><b>Date/Time:</b> <span id="popup-datetime"></span></div>
+          <div><b>Video Title:</b> <span id="popup-video-title"></span></div>
+          <div style="max-width:310px;word-break:break-all;"><b>URL:</b> <span id="popup-url"></span></div>
+        </div>
+      </div>
+
+      <!-- Pose Overlay Section -->
+      <div class="popup-section" id="pose-overlay-section" style="display: none;">
+        <div class="section-title">🎯 Pose Overlay</div>
+        <button id="popup-pose-toggle" class="popup-btn popup-tooltip" 
+                data-tooltip="Toggle pose detection overlay on video" aria-label="Toggle pose overlay">
+          <span>👤</span> Toggle Pose Overlay
+        </button>
+        <span id="popup-overlay-status" class="status-message"></span>
+      </div>
+
+      <!-- Load Data Section -->
+      <div class="popup-section" id="load-data-section" style="display: none;">
+        <div class="section-title">📂 Load Data</div>
+        <button id="popup-load-csv" class="popup-btn popup-tooltip" 
+                data-tooltip="Load previously saved shot labels from CSV file" aria-label="Load existing CSV">
+          <span>📁</span> Load Existing CSV
+        </button>
+        <input type="file" id="popup-csv-file-input" accept=".csv" style="display:none;" aria-label="CSV file input">
+      </div>
+
+      <!-- Label Shot Section -->
+      <div class="popup-section" id="label-shot-section" style="display: none;">
+        <div class="section-title">🏸 Label Shot</div>
+        <div class="shot-marking-buttons">
+          <button id="popup-mark-start" class="popup-btn popup-tooltip" 
+                  data-tooltip="Mark the start of a shot (S)" aria-label="Mark shot start">
+            <span>▶️</span> Mark Start (S)
+          </button>
+          <button id="popup-mark-end" class="popup-btn popup-tooltip" 
+                  data-tooltip="Mark the end of a shot (E)" aria-label="Mark shot end">
+            <span>⏹️</span> Mark End (E)
+          </button>
+        </div>
+        <div id="popup-shot-status" class="status-message"></div>
+        
+        <!-- Shot Type Buttons Container -->
+        <div id="popup-label-buttons"></div>
+        
+        <!-- Dimension Controls Container -->
+        <div id="popup-dimension-controls"></div>
+      </div>
+
+      <!-- Labeled Shots Section -->
+      <div class="popup-section" id="labeled-shots-section" style="display: none;">
+        <div class="section-title">📝 Labeled Shots</div>
+        <div id="popup-label-list"></div>
+      </div>
+
+      <!-- Export Section -->
+      <div class="popup-section" id="export-section" style="display: none;">
+        <div class="section-title">💾 Export</div>
+        <button id="popup-save-labels" class="popup-btn popup-tooltip" 
+                data-tooltip="Export all labeled shots to CSV file" aria-label="Export to CSV">
+          <span>💾</span> Export to CSV
+        </button>
+      </div>
+
+      <!-- Quick Help Section -->
+      <div class="popup-section" id="help-section" style="display: none;">
+        <div class="section-title">❓ Quick Help</div>
+        <div class="popup-info">
+          <div><b>S:</b> Mark shot start</div>
+          <div><b>E:</b> Mark shot end</div>
+          <div><b>O:</b> Toggle pose overlay</div>
+          <div><b>Esc:</b> Close panel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

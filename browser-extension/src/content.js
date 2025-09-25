@@ -13,11 +13,11 @@
  * - MutationObserver for YouTube UI changes
  */
 
-import { togglePanel } from './panel.js';
 import { getVideo } from './utils/video/video-utils.js';
 import { removeOverlayCanvas, createOverlayCanvas } from './utils/canvas/overlay-utils.js';
 import { setupDetector } from './utils/pose/pose-utils.js';
 import { drawKeypoints, drawSkeletonAndBoxes } from './features/poseDrawing.js';
+import { getVideoTitle } from './utils/ui/ui-utils.js';
 import { EVENTS, UI_IDS } from './constants.js';
 
 // State management
@@ -181,20 +181,52 @@ function attachVideoListeners(video) {
 // ================================
 
 /**
- * Listen for start/stop overlay events from panel button
- * The panel dispatches custom events to control overlay state
+ * Listen for messages from popup
+ * The popup sends messages to control overlay state and get video information
  */
-window.addEventListener(EVENTS.POSE_OVERLAY_CONTROL, (e) => {
-  if (e.detail.action === 'start') startPoseOverlay();
-  else if (e.detail.action === 'stop') stopPoseOverlay();
-});
-
-/**
- * Panel toggle logic - responds to extension icon clicks
- * The background script sends messages when the extension icon is clicked
- */
-chrome.runtime.onMessage.addListener((msg) => {
-  if (msg.action === EVENTS.TOGGLE_PANEL) {
-    togglePanel();
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  switch (message.action) {
+    case 'ping':
+      sendResponse({ status: 'ok' });
+      break;
+      
+    case 'get-video-details':
+      const video = getVideo();
+      sendResponse({
+        title: getVideoTitle(),
+        url: window.location.href,
+        videoReady: video && video.videoWidth > 0
+      });
+      break;
+      
+    case 'get-current-time':
+      const currentVideo = getVideo();
+      if (currentVideo) {
+        sendResponse({ currentTime: currentVideo.currentTime });
+      } else {
+        sendResponse({ error: 'Video not available' });
+      }
+      break;
+      
+    case 'toggle-pose-overlay':
+      if (poseLoopId !== null) {
+        stopPoseOverlay();
+        sendResponse({ status: 'Overlay stopped', type: 'warning' });
+      } else {
+        startPoseOverlay();
+        sendResponse({ status: 'Overlay started', type: 'success' });
+      }
+      break;
+      
+    case EVENTS.TOGGLE_PANEL:
+      // Legacy support - this is no longer used with popup interface
+      console.log('Panel toggle requested - this is now handled by popup interface');
+      sendResponse({ status: 'Panel functionality moved to popup' });
+      break;
+      
+    default:
+      sendResponse({ error: 'Unknown action' });
   }
+  
+  return true; // Keep message channel open for async responses
 });

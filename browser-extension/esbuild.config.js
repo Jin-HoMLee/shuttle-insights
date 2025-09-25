@@ -9,6 +9,8 @@ function copyStaticFiles() {
     { from: 'src/manifest.json', to: 'dist/manifest.json' },
     { from: 'src/background.js', to: 'dist/background.js' },
     { from: 'src/styles.css', to: 'dist/styles.css' },
+    { from: 'src/popup.html', to: 'dist/popup.html' },
+    { from: 'src/popup.css', to: 'dist/popup.css' },
     { from: 'src/assets/badminton_shots_glossary.json', to: 'dist/assets/badminton_shots_glossary.json' }
   ];
 
@@ -31,9 +33,10 @@ function copyStaticFiles() {
 }
 
 esbuild.build({
-  entryPoints: ['src/content.js'],
+  entryPoints: ['src/content.js', 'src/popup.js'],
   bundle: true,
-  outfile: 'dist/content.js',
+  outdir: 'dist',
+  entryNames: '[name]',
   minify: false,        // Set to true for production
   sourcemap: true,      // Useful for debugging
   target: ['chrome110'],// Or latest Chrome version

@@ -2,35 +2,17 @@
  * Background Service Worker
  * 
  * This service worker handles extension-level functionality including:
- * - Extension icon click handling for panel toggle
  * - CSV file download coordination
  * - Message routing between extension components
  * 
- * The service worker runs in the background and coordinates communication
- * between the browser action (extension icon) and content scripts.
+ * Note: Extension icon clicks now open the popup interface automatically.
+ * Panel toggle functionality has been moved to the popup interface.
  */
 
 /**
- * Handles extension icon clicks to toggle the labeling panel
- * Sends a message to the content script to show/hide the panel
+ * Extension action clicks now automatically open the popup
+ * No additional handling needed - popup interface manages all UI functionality
  */
-chrome.action.onClicked.addListener((tab) => {
-  // Ensure we have a valid tab
-  if (!tab.id) {
-    console.warn('No valid tab ID for extension action');
-    return;
-  }
-  
-  // Send toggle message to content script
-  // The content script may not be present (e.g., on non-YouTube pages)
-  chrome.tabs.sendMessage(tab.id, { action: "toggle-panel" }, (response) => {
-    if (chrome.runtime.lastError) {
-      // Content script not present or not responding - this is normal
-      // Could happen on pages where the extension isn't active
-      console.log('Content script not available:', chrome.runtime.lastError.message);
-    }
-  });
-});
 
 /**
  * Handles messages from content scripts

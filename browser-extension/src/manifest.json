@@ -11,7 +11,8 @@
     "service_worker": "background.js"
   },
   "action": {
-    "default_title": "Toggle YouTube Badminton Shot Labeler"
+    "default_title": "YouTube Badminton Shot Labeler",
+    "default_popup": "popup.html"
   },
   "content_scripts": [
     {

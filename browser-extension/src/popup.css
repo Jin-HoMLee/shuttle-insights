@@ -1,0 +1,448 @@
+/* Popup-specific CSS Variables (inherit from main design system) */
+:root {
+  --primary-color: #1976d2;
+  --primary-dark: #1565c0;
+  --primary-light: #42a5f5;
+  --secondary-color: #757575;
+  --accent-color: #ff5722;
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --error-color: #f44336;
+  --background-color: #ffffff;
+  --surface-color: #fafafa;
+  --text-primary: #212121;
+  --text-secondary: #757575;
+  --border-color: #e0e0e0;
+  --shadow-light: 0 2px 4px rgba(0,0,0,0.12);
+  --shadow-medium: 0 4px 8px rgba(0,0,0,0.16);
+  --shadow-heavy: 0 8px 16px rgba(0,0,0,0.24);
+  --border-radius: 8px;
+  --border-radius-small: 4px;
+  --transition-fast: 0.15s ease;
+  --transition-medium: 0.25s ease;
+}
+
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  line-height: 1.5;
+  width: 380px;
+  max-height: 600px;
+  overflow: hidden;
+}
+
+/* Popup Container */
+#popup-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Header */
+#popup-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: white;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.header-icon {
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+/* Content */
+#popup-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  max-height: 520px;
+}
+
+/* Sections */
+.popup-section {
+  margin-bottom: 16px;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background: var(--surface-color);
+  transition: box-shadow var(--transition-fast);
+}
+
+.popup-section:hover {
+  box-shadow: var(--shadow-light);
+}
+
+.section-title {
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Info text */
+.popup-info {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.popup-info b {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.popup-info > div {
+  margin-bottom: 4px;
+}
+
+/* Buttons */
+.popup-btn {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow-light);
+}
+
+.popup-btn:hover {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+  box-shadow: var(--shadow-medium);
+  transform: translateY(-1px);
+}
+
+.popup-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-light);
+}
+
+.popup-btn:disabled {
+  background: var(--secondary-color);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Shot marking buttons */
+.shot-marking-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.shot-marking-buttons .popup-btn {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+/* Status messages */
+.status-message {
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: var(--border-radius-small);
+  margin-top: 8px;
+  display: block;
+  background: var(--surface-color);
+  border-left: 4px solid var(--secondary-color);
+  color: var(--text-secondary);
+}
+
+.status-message.success {
+  border-left-color: var(--success-color);
+  background: rgba(76, 175, 80, 0.1);
+  color: var(--success-color);
+}
+
+.status-message.warning {
+  border-left-color: var(--warning-color);
+  background: rgba(255, 152, 0, 0.1);
+  color: var(--warning-color);
+}
+
+.status-message.error {
+  border-left-color: var(--error-color);
+  background: rgba(244, 67, 54, 0.1);
+  color: var(--error-color);
+}
+
+/* Label buttons container */
+#popup-label-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* Category sections for label buttons */
+.popup-category-section {
+  margin-bottom: 12px;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background: var(--background-color);
+  box-sizing: border-box;
+  transition: box-shadow var(--transition-fast);
+}
+
+.popup-category-section:hover {
+  box-shadow: var(--shadow-light);
+}
+
+.popup-category-title {
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.popup-category-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.popup-label-btn {
+  background: linear-gradient(135deg, var(--accent-color), #ff7043);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: var(--border-radius-small);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  flex: 1;
+  min-width: 80px;
+  box-shadow: var(--shadow-light);
+}
+
+.popup-label-btn:hover {
+  background: linear-gradient(135deg, #f4511e, var(--accent-color));
+  box-shadow: var(--shadow-medium);
+  transform: translateY(-1px);
+}
+
+.popup-label-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-light);
+}
+
+/* Dimension controls */
+#popup-dimension-controls {
+  margin-top: 12px;
+}
+
+.popup-dimension-section {
+  margin-bottom: 12px;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-small);
+  background: var(--background-color);
+}
+
+.popup-dimension-title {
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.popup-dimension-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.popup-dimension-btn {
+  background: var(--surface-color);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 6px 10px;
+  border-radius: var(--border-radius-small);
+  cursor: pointer;
+  font-size: 11px;
+  transition: all var(--transition-fast);
+  flex: 1;
+  min-width: 60px;
+}
+
+.popup-dimension-btn:hover {
+  background: var(--primary-light);
+  color: white;
+  border-color: var(--primary-light);
+}
+
+.popup-dimension-btn.selected {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+/* Label list */
+#popup-label-list {
+  max-height: 120px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-small);
+  background: var(--background-color);
+}
+
+.popup-label-item {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color var(--transition-fast);
+}
+
+.popup-label-item:last-child {
+  border-bottom: none;
+}
+
+.popup-label-item:hover {
+  background: var(--surface-color);
+}
+
+.popup-label-item-content {
+  flex: 1;
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.popup-delete-btn {
+  background: var(--error-color);
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: var(--border-radius-small);
+  cursor: pointer;
+  font-size: 11px;
+  transition: all var(--transition-fast);
+}
+
+.popup-delete-btn:hover {
+  background: #d32f2f;
+  transform: scale(1.05);
+}
+
+/* Tooltips */
+.popup-tooltip {
+  position: relative;
+}
+
+.popup-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 6px 8px;
+  border-radius: var(--border-radius-small);
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-fast);
+  z-index: 1000;
+  pointer-events: none;
+  margin-bottom: 5px;
+}
+
+.popup-tooltip:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Loading states */
+.loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.loading::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Scrollbar styling */
+#popup-content::-webkit-scrollbar,
+#popup-label-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+#popup-content::-webkit-scrollbar-track,
+#popup-label-list::-webkit-scrollbar-track {
+  background: var(--surface-color);
+}
+
+#popup-content::-webkit-scrollbar-thumb,
+#popup-label-list::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+#popup-content::-webkit-scrollbar-thumb:hover,
+#popup-label-list::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-color);
+}
+
+/* Responsive adjustments for smaller popups */
+@media (max-width: 320px) {
+  body {
+    width: 320px;
+  }
+  
+  #popup-content {
+    padding: 12px;
+  }
+  
+  .popup-section {
+    padding: 10px;
+  }
+}
