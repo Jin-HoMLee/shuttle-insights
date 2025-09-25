@@ -20,7 +20,7 @@ import os
 import time
 import hashlib
 import secrets
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Any, Optional, Union, Tuple
 from pathlib import Path
 
@@ -55,7 +55,7 @@ api_keys_storage = {
     # Default demo API key (should be replaced in production)
     'demo-api-key-12345': {
         'name': 'Demo Key',
-        'created_at': datetime.utcnow().isoformat(),
+    'created_at': datetime.now(timezone.utc).isoformat(),
         'rate_limit': 100,  # requests per hour
         'enabled': True,
         'permissions': ['predict']
@@ -66,7 +66,7 @@ api_keys_storage = {
 if SECURITY_CONFIG['admin_api_key']:
     api_keys_storage[SECURITY_CONFIG['admin_api_key']] = {
         'name': 'Admin Key',
-        'created_at': datetime.utcnow().isoformat(),
+        'created_at': datetime.now(timezone.utc).isoformat(),
         'rate_limit': 1000,  # higher limit for admin
         'enabled': True,
         'permissions': ['predict', 'admin']
@@ -133,7 +133,7 @@ def check_rate_limit(api_key: str) -> Tuple[bool, Dict[str, Any]]:
         return True, {}
     
     key_hash = hash_key(api_key)
-    current_time = datetime.utcnow()
+    current_time = datetime.now(timezone.utc)
     window_start = current_time - timedelta(seconds=SECURITY_CONFIG['rate_limit_window'])
     
     # Get API key config
@@ -543,7 +543,7 @@ async def create_api_key(
     api_key = generate_api_key()
     api_keys_storage[api_key] = {
         'name': request.get('name', 'Generated Key'),
-        'created_at': datetime.utcnow().isoformat(),
+        'created_at': datetime.now(timezone.utc).isoformat(),
         'rate_limit': request.get('rate_limit', SECURITY_CONFIG['rate_limit_requests']),
         'enabled': True,
         'permissions': request.get('permissions', ['predict'])
