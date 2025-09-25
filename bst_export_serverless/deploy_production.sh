@@ -111,41 +111,44 @@ while maintaining compatibility with the FastAPI application.
 import os
 from production_api import app
 from production_config import get_config_for_environment
+from mangum import Mangum
 
 # Load environment-specific configuration
 config = get_config_for_environment()
 
-# Export the FastAPI app for Cloud Functions
+# Export the FastAPI app for Cloud Functions using Mangum ASGI adapter
+handler = Mangum(app)
+
 def main(request):
     """
     Cloud Functions entry point.
     
-    This function handles HTTP requests and routes them to the FastAPI app.
+    This function routes all HTTP requests to the FastAPI app using Mangum.
     """
-    import functions_framework
-    from fastapi import Request
-    
-    # Create a FastAPI-compatible request object
-    # Note: This is a simplified adapter. For full compatibility,
-    # consider using a more robust ASGI-to-WSGI adapter.
-    
-    if request.method == 'GET' and request.path in ['/', '/health']:
-        # Handle simple GET requests directly
-        if request.path == '/':
-            return {
-                "message": "BST Production API",
-                "status": "ready",
-                "version": "2.0.0",
-                "environment": os.getenv('ENV', 'unknown')
-            }
-        elif request.path == '/health':
-            return {"status": "healthy", "environment": os.getenv('ENV', 'unknown')}
-    
-    # For POST requests and complex routing, you would need a proper ASGI adapter
-    # This is a placeholder - implement full ASGI support as needed
-    return {"error": "Not implemented for this request type"}, 501
+    # Convert the incoming Flask request to an AWS Lambda event
+    # functions_framework passes a Flask request object
+    # Mangum expects an AWS Lambda event, so we need to adapt
+    from werkzeug.datastructures import Headers
+    import json
 
-# For local testing with functions-framework
+    # Build the event object
+    event = {
+        "httpMethod": request.method,
+        "path": request.path,
+        "headers": dict(request.headers),
+        "queryStringParameters": request.args.to_dict(),
+        "body": request.get_data(as_text=True),
+        "isBase64Encoded": False,
+    }
+    context = {}  # Empty context
+    response = handler(event, context)
+
+    # Build the Flask response from Mangum's output
+    from flask import make_response
+    flask_response = make_response(response["body"], response["statusCode"])
+    for k, v in response["headers"].items():
+        flask_response.headers[k] = v
+    return flask_response
 if __name__ == "__main__":
     import functions_framework
     functions_framework.create_app(main)
