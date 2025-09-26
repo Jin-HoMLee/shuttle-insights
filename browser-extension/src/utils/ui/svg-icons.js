@@ -36,7 +36,7 @@ export const SVG_ICONS = {
   CHART: createSvgIcon(`
     <path d="M3 3v18h18"/>
     <path d="M7 12l4-4 4 4 6-6"/>
-    <path d="M17 8l3-3-3-3"/>
+    <path d="m17 5l3-3"/>
   `),
 
   // Pose overlay - Target/crosshair icon
