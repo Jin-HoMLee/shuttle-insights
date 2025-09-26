@@ -34,6 +34,8 @@
   --success-dark: #388e3c;
   --success-darker: #2e7d32;
   --list-border: #e0e0e0;
+  --close-btn-bg: rgba(255,255,255,0.2);
+  --close-btn-color: #fff;
 }
 
 /* Dark Theme Variables */
@@ -67,6 +69,8 @@
   --success-dark: #81c784;
   --success-darker: #66bb6a;
   --list-border: #404040;
+  --close-btn-bg: rgba(255,255,255,0.08);
+  --close-btn-color: #fff;
 }
 
 #yt-shot-labeler-panel {
@@ -472,15 +476,6 @@
   border-radius: 4px;
   padding: 4px 8px;
   transition: background 0.2s;
-}
-
-:root {
-  --close-btn-bg: rgba(255,255,255,0.2);
-  --close-btn-color: #fff;
-}
-:root[data-theme="dark"] {
-  --close-btn-bg: rgba(255,255,255,0.08);
-  --close-btn-color: #fff;
 }
 
 /* Responsive design for smaller screens */
