@@ -6,7 +6,7 @@ This script exports BST (Badminton Stroke-type Transformer) models to TorchScrip
 for optimized cloud inference deployment.
 
 Usage:
-    python export_bst_model.py --model_type BST_CG_AP --weights_path weights/bst_model.pt --output_dir models/bst/weights/exported/
+    python export_bst_model.py --model_type BST_CG_AP --weights_path weights/bst_model.pt --output_dir ../models/bst/weights/exported/
 
 Supported model types:
     - BST_0: Base BST backbone
@@ -362,7 +362,7 @@ def main():
     parser.add_argument('--weights_path', type=str, default=None,
                        help='Path to pre-trained weights file (.pt or .pth)')
     
-    parser.add_argument('--output_dir', type=str, default='models/bst/weights/exported/',
+    parser.add_argument('--output_dir', type=str, default='../models/bst/exported/',
                        help='Directory to save exported models')
     
     parser.add_argument('--formats', nargs='+', default=['torchscript', 'onnx'],

@@ -1,0 +1,59 @@
+# Production API Requirements
+# Enhanced dependencies for BST production API with security features
+
+# Core API framework - same as serverless
+fastapi>=0.100.0
+uvicorn>=0.23.0
+pydantic>=2.0.0
+
+# Essential ML dependencies - same as serverless
+numpy>=1.24.0
+
+# Model inference backends (one or both) - same as serverless
+torch>=2.0.0  # For TorchScript models  
+onnxruntime>=1.15.0  # For ONNX models
+
+# Google Cloud Functions support - same as serverless
+functions-framework>=3.0.0
+
+# HTTP requests and basic utilities - same as serverless
+requests>=2.32.0
+scipy>=1.16.0
+
+# Production Security Dependencies
+python-jose[cryptography]>=3.3.0  # JWT token handling for OAuth
+passlib[bcrypt]>=1.7.4  # Password hashing (if needed)
+python-multipart>=0.0.6  # Form data handling
+
+# Enhanced Monitoring and Logging
+structlog>=23.1.0  # Structured logging
+prometheus-client>=0.17.0  # Metrics collection (optional)
+
+# Database Support (for persistent API key storage)
+sqlalchemy>=2.0.0  # ORM for database operations
+alembic>=1.12.0  # Database migrations
+
+# Redis Support (for distributed rate limiting)
+redis>=4.5.0  # Redis client
+aioredis>=2.0.0  # Async Redis client
+
+# Environment and Configuration Management
+python-decouple>=3.8  # Environment variable management
+pydantic-settings>=2.0.0  # Settings management with Pydantic
+
+# Additional Security
+cryptography>=41.0.0  # Cryptographic operations
+httpx>=0.24.0  # Modern HTTP client for external OAuth verification
+
+# Development and Testing Dependencies (optional)
+pytest>=7.4.0  # Testing framework
+pytest-asyncio>=0.21.0  # Async testing
+httpx>=0.24.0  # HTTP client for testing
+
+# Optional: AWS Support
+# boto3>=1.28.0  # AWS SDK
+# aws-lambda-powertools[pydantic]>=2.0.0  # AWS Lambda utilities
+
+# Optional: Google Cloud Support
+# google-auth>=2.20.0  # Google authentication
+# google-cloud-secret-manager>=2.16.0  # Secret management
