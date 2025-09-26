@@ -121,18 +121,27 @@ const SVG_PATHS = {
 };
 
 /**
+ * Shared helper to render SVG icon from path data or icon object
+ * @param {string|object} pathData - SVG path string or icon object
+ * @param {number} size - Icon size
+ * @param {string} color - Stroke color
+ * @param {string} fill - Fill color
+ * @returns {string} SVG element as string
+ */
+function renderSvgIcon(pathData, size = 16, color = 'currentColor', fill = 'none') {
+  if (typeof pathData === 'object') {
+    const finalFill = fill !== undefined ? fill : pathData.defaultFill;
+    return createSvgIcon(pathData.paths, size, color, finalFill);
+  } else {
+    return createSvgIcon(pathData, size, color, fill);
+  }
+}
+
+/**
  * Pre-built SVG icons with default styling
  */
 export const SVG_ICONS = Object.fromEntries(
-  Object.entries(SVG_PATHS).map(([name, pathData]) => {
-    if (typeof pathData === 'object') {
-      // Handle icons with custom default fill
-      return [name, createSvgIcon(pathData.paths, 16, 'currentColor', pathData.defaultFill)];
-    } else {
-      // Handle standard outline icons
-      return [name, createSvgIcon(pathData)];
-    }
-  })
+  Object.entries(SVG_PATHS).map(([name, pathData]) => [name, renderSvgIcon(pathData)])
 );
 
 /**
@@ -149,19 +158,10 @@ export function getSvgIcon(iconName, size, color, fill) {
     console.warn(`SVG icon '${iconName}' not found`);
     return '';
   }
-  
-  // If custom size, color, or fill requested, regenerate the icon
+  // Use shared helper for rendering
   if (size || color || fill) {
-    if (typeof pathData === 'object') {
-      // Handle icons with custom default fill
-      const finalFill = fill !== undefined ? fill : pathData.defaultFill;
-      return createSvgIcon(pathData.paths, size, color, finalFill);
-    } else {
-      // Handle standard outline icons
-      return createSvgIcon(pathData, size, color, fill);
-    }
+    return renderSvgIcon(pathData, size, color, fill);
   }
-  
   // Return the pre-built default icon
   return SVG_ICONS[iconName];
 }
