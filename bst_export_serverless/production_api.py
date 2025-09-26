@@ -416,7 +416,8 @@ async def predict_torchscript_authenticated(
                 inference_time=result['inference_time'],
                 predictions=result['predictions'],
                 probabilities=result['probabilities'],
-                top_predictions=result['top_predictions'],
+                top_indices=result['top_indices'],
+                top_probabilities=result['top_probabilities'],
                 metadata={
                     'model_type': 'torchscript',
                     'batch_size': preprocessed_data['batch_size'],
