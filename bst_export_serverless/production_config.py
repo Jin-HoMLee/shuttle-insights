@@ -284,6 +284,6 @@ if __name__ == "__main__":
         print(f"\n✅ Configuration is production-ready!")
     
     # Option to output full configuration
-    if '--full' in os.sys.argv:
+    if '--full' in sys.argv:
         print(f"\nFull Configuration:")
         print(json.dumps(cfg.to_dict(), indent=2, default=str))
