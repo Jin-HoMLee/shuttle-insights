@@ -142,16 +142,17 @@ export function getSvgIcon(iconName, size, color) {
       }
     } catch (e) {
       console.warn('Failed to parse SVG icon:', e);
-    } else {
-      // Fallback: try to strip <svg> tags manually
-      const start = iconPath.indexOf('>') + 1;
-      const end = iconPath.lastIndexOf('</svg>');
-      if (start > 0 && end > start) {
-        const pathData = iconPath.substring(start, end);
-        return createSvgIcon(pathData, size, color);
-      } else {
-        console.warn(`Failed to extract path data for icon '${iconName}'`);
-        return '';
-      }
     }
+    
+    // Fallback: try to strip <svg> tags manually
+    const start = iconPath.indexOf('>') + 1;
+    const end = iconPath.lastIndexOf('</svg>');
+    if (start > 0 && end > start) {
+      const pathData = iconPath.substring(start, end);
+      return createSvgIcon(pathData, size, color);
+    } else {
+      console.warn(`Failed to extract path data for icon '${iconName}'`);
+      return '';
+    }
+  }
 }
