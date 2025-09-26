@@ -34,7 +34,7 @@ import numpy as np
 
 # Model configuration
 from production_config import ModelConfig 
-MODEL_CONFIG = ModelConfig().dict()
+MODEL_CONFIG = ModelConfig().model_dump()
 
 # Import base serverless API components
 from serverless_api import (
