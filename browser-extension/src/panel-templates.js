@@ -17,8 +17,12 @@ import { UI_IDS, CSS_CLASSES } from './constants.js';
 export function getPanelTemplate(dateTimeStr, videoTitle, videoUrl) {
   return `
     <div id="${UI_IDS.HEADER}" class="${CSS_CLASSES.SECTION_TITLE}" style="background: linear-gradient(135deg, #1976d2, #42a5f5); color: white; margin: 0; padding: 16px; border-radius: 8px 8px 0 0;">
-      <button id="${UI_IDS.CLOSE_BTN}" class="yt-shot-labeler-tooltip" data-tooltip="Close panel" aria-label="Close panel" 
-              style="float:right;background:rgba(255,255,255,0.2);border:none;color:white;font-size:18px;cursor:pointer;border-radius:4px;padding:4px 8px;transition:background 0.2s;">×</button>
+      <div style="float: right; display: flex; gap: 8px; align-items: center;">
+        <button id="${UI_IDS.THEME_TOGGLE}" class="yt-shot-labeler-tooltip" data-tooltip="Toggle dark/light theme" aria-label="Toggle theme" 
+                style="background:rgba(255,255,255,0.2);border:none;color:white;font-size:16px;cursor:pointer;border-radius:4px;padding:6px 8px;transition:background 0.2s;line-height:1;">🌙</button>
+        <button id="${UI_IDS.CLOSE_BTN}" class="yt-shot-labeler-tooltip" data-tooltip="Close panel" aria-label="Close panel" 
+                style="background:rgba(255,255,255,0.2);border:none;color:white;font-size:18px;cursor:pointer;border-radius:4px;padding:4px 8px;transition:background 0.2s;">×</button>
+      </div>
       <div style="display: flex; align-items: center; gap: 12px;">
         <span style="font-size: 20px;">🏸</span>
         <strong style="font-size: 16px; font-weight: 600;">YouTube Badminton Shot Labeler</strong>
