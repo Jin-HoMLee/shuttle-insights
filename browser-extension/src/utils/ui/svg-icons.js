@@ -9,11 +9,12 @@
  * Base SVG wrapper with default styling
  * @param {string} pathData - SVG path data
  * @param {number} size - Icon size (default: 16)
- * @param {string} color - Icon color (default: currentColor)
+ * @param {string} color - Icon stroke color (default: currentColor)
+ * @param {string} fill - Icon fill color (default: none for outline icons)
  * @returns {string} SVG element as string
  */
-function createSvgIcon(pathData, size = 16, color = 'currentColor') {
-  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;">
+function createSvgIcon(pathData, size = 16, color = 'currentColor', fill = 'none') {
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${fill}" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;">
     ${pathData}
   </svg>`;
 }
@@ -57,7 +58,7 @@ export const SVG_ICONS = {
     <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/>
     <line x1="15" y1="9" x2="9" y2="15"/>
     <line x1="9" y1="9" x2="15" y2="15"/>
-  `),
+  `, 16, 'currentColor', 'currentColor'),
 
   // Folder icon
   FOLDER: createSvgIcon(`
@@ -78,12 +79,12 @@ export const SVG_ICONS = {
   // Play icon
   PLAY: createSvgIcon(`
     <polygon points="5 3 19 12 5 21 5 3"/>
-  `),
+  `, 16, 'currentColor', 'currentColor'),
 
   // Stop square icon
   STOP_SQUARE: createSvgIcon(`
     <rect x="6" y="6" width="12" height="12"/>
-  `),
+  `, 16, 'currentColor', 'currentColor'),
 
   // List/clipboard icon
   CLIPBOARD: createSvgIcon(`
@@ -114,21 +115,22 @@ export const SVG_ICONS = {
 };
 
 /**
- * Get an SVG icon with optional size override
+ * Get an SVG icon with optional customization
  * @param {string} iconName - Name of the icon from SVG_ICONS
  * @param {number} size - Icon size (optional)
- * @param {string} color - Icon color (optional)
+ * @param {string} color - Icon stroke color (optional)
+ * @param {string} fill - Icon fill color (optional)
  * @returns {string} SVG element as string
  */
-export function getSvgIcon(iconName, size, color) {
+export function getSvgIcon(iconName, size, color, fill) {
   const iconPath = SVG_ICONS[iconName];
   if (!iconPath) {
     console.warn(`SVG icon '${iconName}' not found`);
     return '';
   }
   
-  // If custom size or color requested, regenerate the icon
-  if (size || color) {
+  // If custom size, color, or fill requested, regenerate the icon
+  if (size || color || fill) {
     // Extract the path data from the existing icon using DOMParser for robustness
     let pathData = '';
     try {
@@ -138,7 +140,7 @@ export function getSvgIcon(iconName, size, color) {
       if (svg) {
         // Get all child nodes as string
         pathData = Array.from(svg.childNodes).map(node => node.outerHTML || node.textContent).join('');
-        return createSvgIcon(pathData, size, color);
+        return createSvgIcon(pathData, size, color, fill);
       }
     } catch (e) {
       console.warn('Failed to parse SVG icon:', e);
@@ -149,10 +151,13 @@ export function getSvgIcon(iconName, size, color) {
     const end = iconPath.lastIndexOf('</svg>');
     if (start > 0 && end > start) {
       const pathData = iconPath.substring(start, end);
-      return createSvgIcon(pathData, size, color);
+      return createSvgIcon(pathData, size, color, fill);
     } else {
       console.warn(`Failed to extract path data for icon '${iconName}'`);
       return '';
     }
   }
+  
+  // Return the default icon
+  return iconPath;
 }
