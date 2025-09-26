@@ -36,6 +36,8 @@
   --list-border: #e0e0e0;
   --close-btn-bg: rgba(255,255,255,0.2);
   --close-btn-color: #fff;
+  --theme-toggle-bg: rgba(255,255,255,0.2);
+  --theme-toggle-hover-bg: rgba(25, 118, 210, 0.15);
 }
 
 /* Dark Theme Variables */
@@ -71,6 +73,8 @@
   --list-border: #404040;
   --close-btn-bg: rgba(255,255,255,0.08);
   --close-btn-color: #fff;
+  --theme-toggle-bg: rgba(255,255,255,0.08);
+  --theme-toggle-hover-bg: rgba(100, 181, 246, 0.18);
 }
 
 #yt-shot-labeler-panel {
