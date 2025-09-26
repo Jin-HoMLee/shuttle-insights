@@ -44,5 +44,4 @@ except:
     TRACKING_URI = parsenvy.str("MLFLOW_URI")
 
 # Experiment name for MLflow tracking
-# TODO: Update this for badminton-specific experiments
-EXPERIMENT_NAME = "0-template-ds-modeling"
+EXPERIMENT_NAME = "badminton-shot-analysis"
