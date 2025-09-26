@@ -17,13 +17,19 @@ class BaseModelConfig:
     
     def __init__(self):
         # Model paths (can be overridden by environment variables)
+        default_torchscript = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), '../models/bst/exported/bst_cg_ap_seq100_scripted.pt')
+        )
         self.torchscript_path = os.getenv(
             'TORCHSCRIPT_MODEL_PATH', 
-            '../models/bst/exported/bst_cg_ap_seq100_scripted.pt'
+            default_torchscript
+        )
+        default_onnx = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), '../models/bst/exported/bst_cg_ap_seq100.onnx')
         )
         self.onnx_path = os.getenv(
             'ONNX_MODEL_PATH',
-            '../models/bst/exported/bst_cg_ap_seq100.onnx'
+            default_onnx
         )
         
         # Model parameters
