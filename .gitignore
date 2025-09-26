@@ -152,3 +152,8 @@ terraform_outputs.json
 # Ignore model weights and artifacts, but keep source code
 models/bst/saved_weights/
 models/movenet/saved_model/
+
+# Browser extension build artifacts
+browser-extension/dist/
+browser-extension/node_modules/
+*.js.map
