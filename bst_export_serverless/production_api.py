@@ -536,7 +536,7 @@ async def predict_oauth(
                 inference_time=result['inference_time'],
                 predictions=result['predictions'],
                 probabilities=result['probabilities'],
-                top_indices=result['top_predictions']['indices'],
+                top_indices=list(result['top_predictions']['indices']),
                 top_probabilities=result['top_predictions']['probabilities'],
                 metadata={
                     'model_type': result['model_type'],
