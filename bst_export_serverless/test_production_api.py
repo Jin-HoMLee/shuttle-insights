@@ -94,7 +94,7 @@ def test_get_endpoint(api_url: str, endpoint: str, headers: Dict[str, str] = Non
         
         try:
             result['response'] = response.json()
-        except:
+        except Exception:
             result['response'] = response.text
             
         return result
