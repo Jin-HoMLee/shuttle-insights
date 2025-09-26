@@ -459,8 +459,8 @@ async def predict_onnx_authenticated(
                 inference_time=result['inference_time'],
                 predictions=result['predictions'],
                 probabilities=result['probabilities'],
-                top_indices=result['top_indices'],
-                top_probabilities=result['top_probabilities'],
+                top_indices=result['top_predictions']['indices'],
+                top_probabilities=result['top_predictions']['probabilities'],
                 metadata={
                     'model_type': 'onnx',
                     'batch_size': preprocessed_data['batch_size'],
