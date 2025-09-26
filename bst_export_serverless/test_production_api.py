@@ -61,7 +61,7 @@ def test_api_endpoint(api_url: str, endpoint: str, data: Dict[str, Any],
         
         try:
             result['response'] = response.json()
-        except:
+        except Exception:
             result['response'] = response.text
             
         return result
