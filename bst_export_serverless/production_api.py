@@ -375,6 +375,9 @@ async def predict_authenticated(
             result = predict_with_onnx(preprocessed_data)
         
         if result['success']:
+            # Extract rate_limit_info once to avoid redundant lookups
+            rate_limit_info = auth_info.get('rate_limit_info', {})
+            
             return AuthenticatedPredictionResponse(
                 success=True,
                 inference_time=result['inference_time'],
@@ -388,8 +391,6 @@ async def predict_authenticated(
                     'seq_len': preprocessed_data['seq_len'],
                     'n_classes': MODEL_CONFIG['n_classes']
                 },
-                # Extract rate_limit_info once to avoid redundant lookups
-                rate_limit_info=auth_info.get('rate_limit_info', {}),
                 auth_info={
                     'api_key_name': auth_info.get('name', 'Unknown'),
                     'rate_limit_remaining': rate_limit_info.get('requests_limit', 0) - rate_limit_info.get('requests_made', 0)
@@ -419,6 +420,9 @@ async def predict_torchscript_authenticated(
         result = predict_with_torchscript(preprocessed_data)
         
         if result['success']:
+            # Extract rate_limit_info once to avoid redundant lookups
+            rate_limit_info = auth_info.get('rate_limit_info', {})
+            
             return AuthenticatedPredictionResponse(
                 success=True,
                 inference_time=result['inference_time'],
@@ -434,8 +438,7 @@ async def predict_torchscript_authenticated(
                 },
                 auth_info={
                     'api_key_name': auth_info.get('name', 'Unknown'),
-                    'rate_limit_remaining': auth_info.get('rate_limit_info', {}).get('requests_limit', 0) - 
-                                            auth_info.get('rate_limit_info', {}).get('requests_made', 0)
+                    'rate_limit_remaining': rate_limit_info.get('requests_limit', 0) - rate_limit_info.get('requests_made', 0)
                 }
             )
         else:
@@ -462,6 +465,9 @@ async def predict_onnx_authenticated(
         result = predict_with_onnx(preprocessed_data)
         
         if result['success']:
+            # Extract rate_limit_info once to avoid redundant lookups
+            rate_limit_info = auth_info.get('rate_limit_info', {})
+            
             return AuthenticatedPredictionResponse(
                 success=True,
                 inference_time=result['inference_time'],
@@ -477,8 +483,7 @@ async def predict_onnx_authenticated(
                 },
                 auth_info={
                     'api_key_name': auth_info.get('name', 'Unknown'),
-                    'rate_limit_remaining': auth_info.get('rate_limit_info', {}).get('requests_limit', 0) - 
-                                            auth_info.get('rate_limit_info', {}).get('requests_made', 0)
+                    'rate_limit_remaining': rate_limit_info.get('requests_limit', 0) - rate_limit_info.get('requests_made', 0)
                 }
             )
         else:
