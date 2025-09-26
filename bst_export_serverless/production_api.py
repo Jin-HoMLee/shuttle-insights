@@ -87,7 +87,7 @@ if SECURITY_CONFIG['admin_api_key']:
 class AuthenticatedPredictionResponse(BaseModel):
     """Prediction response with authentication metadata and explicit fields."""
     success: bool = True
-    top_indices: List[List[int]]
+    top_indices: List[List[Union[int, float]]]
     top_probabilities: List[List[float]]
     inference_time: float
     predictions: List[List[float]]
