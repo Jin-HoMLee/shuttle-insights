@@ -130,7 +130,7 @@ export function getSvgIcon(iconName, size, color) {
   // If custom size or color requested, regenerate the icon
   if (size || color) {
     // Extract the path data from the existing icon
-    const pathMatch = iconPath.match(/<svg[^>]*>(.*)<\/svg>/);
+    const pathMatch = iconPath.match(/<svg[^>]*>(.*)<\/svg>/s);
     if (pathMatch) {
       return createSvgIcon(pathMatch[1], size, color);
     }
