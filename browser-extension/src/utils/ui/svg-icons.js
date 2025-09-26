@@ -159,7 +159,7 @@ export function getSvgIcon(iconName, size, color, fill) {
     return '';
   }
   // Use shared helper for rendering
-  if (size || color || fill) {
+  if (size !== undefined || color !== undefined || fill !== undefined) {
     return renderSvgIcon(pathData, size, color, fill);
   }
   // Return the pre-built default icon
