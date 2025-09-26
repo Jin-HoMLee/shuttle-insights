@@ -16,6 +16,44 @@ from pydantic_settings import BaseSettings
 from base_config import DEFAULT_MODEL_CONFIG
 
 
+class Environment:
+    """Environment constants and utilities."""
+    
+    DEVELOPMENT = 'development'
+    TESTING = 'testing'
+    PRODUCTION = 'production'
+    
+    # Environment aliases for convenience
+    ALIASES = {
+        'dev': DEVELOPMENT,
+        'devel': DEVELOPMENT,
+        'develop': DEVELOPMENT,
+        'test': TESTING,
+        'prod': PRODUCTION,
+    }
+    
+    @classmethod
+    def get_current(cls) -> str:
+        """Get the current environment, normalized to standard values."""
+        env = os.getenv('ENV', cls.DEVELOPMENT).lower().strip()
+        return cls.ALIASES.get(env, env)
+    
+    @classmethod
+    def is_production(cls) -> bool:
+        """Check if current environment is production."""
+        return cls.get_current() == cls.PRODUCTION
+    
+    @classmethod
+    def is_development(cls) -> bool:
+        """Check if current environment is development."""
+        return cls.get_current() == cls.DEVELOPMENT
+    
+    @classmethod
+    def is_testing(cls) -> bool:
+        """Check if current environment is testing."""
+        return cls.get_current() == cls.TESTING
+
+
 class SecurityConfig(BaseSettings):
     """Security-related configuration."""
     
@@ -213,7 +251,7 @@ class ProductionConfig:
             issues.append("Neither TorchScript nor ONNX model file found")
         
         # Database checks
-        if 'sqlite' in self.database.database_url.lower() and os.getenv('ENV', '').lower() == 'production':
+        if 'sqlite' in self.database.database_url.lower() and Environment.is_production():
             issues.append("Using SQLite database in production environment")
         
         return issues
@@ -227,18 +265,21 @@ config = ProductionConfig()
 def get_config_for_environment(env: str = None) -> ProductionConfig:
     """Get configuration optimized for specific environment."""
     if env is None:
-        env = os.getenv('ENV', 'development').lower()
+        env = Environment.get_current()
+    else:
+        # Normalize provided environment
+        env = Environment.ALIASES.get(env.lower(), env.lower())
     
     cfg = ProductionConfig()
     
-    if env == 'development':
+    if env == Environment.DEVELOPMENT:
         cfg.api.debug = True
         cfg.api.enable_docs = True
         cfg.security.require_auth = False
         cfg.logging.log_level = 'DEBUG'
         cfg.logging.log_requests = True
         
-    elif env == 'testing':
+    elif env == Environment.TESTING:
         cfg.api.debug = False
         cfg.api.enable_docs = False
         cfg.security.require_auth = True
@@ -246,7 +287,7 @@ def get_config_for_environment(env: str = None) -> ProductionConfig:
         cfg.logging.log_level = 'WARNING'
         cfg.database.database_url = 'sqlite:///:memory:'
         
-    elif env == 'production':
+    elif env == Environment.PRODUCTION:
         cfg.api.debug = False
         cfg.api.enable_docs = False
         cfg.security.require_auth = True
@@ -269,7 +310,8 @@ if __name__ == "__main__":
     # Load and display configuration
     cfg = get_config_for_environment()
     
-    print(f"\nEnvironment: {os.getenv('ENV', 'development')}")
+    print(f"\nEnvironment: {Environment.get_current()}")
+    print(f"Is Production: {Environment.is_production()}")
     print(f"Authentication Required: {cfg.security.require_auth}")
     print(f"OAuth Enabled: {cfg.security.oauth_enabled}")
     print(f"Rate Limit: {cfg.security.rate_limit_requests} requests/{cfg.security.rate_limit_window}s")
