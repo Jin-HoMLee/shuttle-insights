@@ -157,14 +157,7 @@ function setupThemeToggle(panel) {
       }
     });
     
-    // Add hover effect
-    themeToggleBtn.addEventListener('mouseenter', () => {
-      themeToggleBtn.style.background = 'var(--theme-toggle-hover-bg)';
-    });
-    
-    themeToggleBtn.addEventListener('mouseleave', () => {
-      themeToggleBtn.style.background = 'var(--theme-toggle-bg)';
-    });
+    // Hover effect is now handled via CSS. No inline event listeners needed.
   }
 }
 
