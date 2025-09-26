@@ -129,10 +129,19 @@ export function getSvgIcon(iconName, size, color) {
   
   // If custom size or color requested, regenerate the icon
   if (size || color) {
-    // Extract the path data from the existing icon
-    const pathMatch = iconPath.match(/<svg[^>]*>(.*)<\/svg>/s);
-    if (pathMatch) {
-      return createSvgIcon(pathMatch[1], size, color);
+    // Extract the path data from the existing icon using DOMParser for robustness
+    let pathData = '';
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(iconPath, 'image/svg+xml');
+      const svg = doc.querySelector('svg');
+      if (svg) {
+        // Get all child nodes as string
+        pathData = Array.from(svg.childNodes).map(node => node.outerHTML || node.textContent).join('');
+        return createSvgIcon(pathData, size, color);
+      }
+    } catch (e) {
+      console.warn('Failed to parse SVG icon:', e);
     }
   }
   
