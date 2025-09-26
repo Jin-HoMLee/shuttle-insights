@@ -90,7 +90,7 @@ class AuthenticatedPredictionResponse(BaseModel):
     top_indices: List[List[int]]
     top_probabilities: List[List[float]]
     inference_time: float
-    predictions: List[List[int]]
+    predictions: List[List[float]]
     probabilities: List[List[float]]
     metadata: Dict[str, Any] = Field(default_factory=dict)
     auth_info: Dict[str, Any] = Field(default_factory=dict)
