@@ -84,8 +84,11 @@ if SECURITY_CONFIG['admin_api_key']:
         permissions=['predict', 'admin']
     )
 # Enhanced models for authentication
-class AuthenticatedPredictionResponse(PredictionResponse):
-    """Extended prediction response with authentication metadata."""
+class AuthenticatedPredictionResponse(BaseModel):
+    """Prediction response with authentication metadata and explicit fields."""
+    success: bool = True
+    top_indices: List[List[int]]
+    top_probabilities: List[List[float]]
     auth_info: Dict[str, Any] = Field(default_factory=dict)
 
 class RateLimitError(BaseModel):
