@@ -20,99 +20,120 @@ function createSvgIcon(pathData, size = 16, color = 'currentColor', fill = 'none
 }
 
 /**
- * SVG Icons collection
+ * SVG Icon path data storage
+ * Stores just the inner SVG content without the wrapper for easy customization
  */
-export const SVG_ICONS = {
+const SVG_PATHS = {
   // Main app icon - Badminton shuttlecock
-  SHUTTLECOCK: createSvgIcon(`
+  SHUTTLECOCK: `
     <circle cx="12" cy="4" r="2"/>
     <path d="M12 6v6l-3 3 3 3 3-3-3-3z"/>
     <path d="M9 9l-3-3"/>
     <path d="M15 9l3-3"/>
     <path d="M9 15l-3 3"/>
     <path d="M15 15l3 3"/>
-  `),
+  `,
 
   // Video details - Chart/analytics icon
-  CHART: createSvgIcon(`
+  CHART: `
     <path d="M3 3v18h18"/>
     <path d="M7 12l4-4 4 4 6-6"/>
     <path d="m17 5l3-3"/>
-  `),
+  `,
 
   // Pose overlay - Target/crosshair icon
-  TARGET: createSvgIcon(`
+  TARGET: `
     <circle cx="12" cy="12" r="10"/>
     <circle cx="12" cy="12" r="6"/>
     <circle cx="12" cy="12" r="2"/>
-  `),
+  `,
 
   // Person/user icon
-  USER: createSvgIcon(`
+  USER: `
     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
     <circle cx="12" cy="7" r="4"/>
-  `),
+  `,
 
-  // Stop sign icon
-  STOP: createSvgIcon(`
-    <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/>
-    <line x1="15" y1="9" x2="9" y2="15"/>
-    <line x1="9" y1="9" x2="15" y2="15"/>
-  `, 16, 'currentColor', 'currentColor'),
+  // Stop sign icon (filled)
+  STOP: {
+    paths: `
+      <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/>
+      <line x1="15" y1="9" x2="9" y2="15"/>
+      <line x1="9" y1="9" x2="15" y2="15"/>
+    `,
+    defaultFill: 'currentColor'
+  },
 
   // Folder icon
-  FOLDER: createSvgIcon(`
+  FOLDER: `
     <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-  `),
+  `,
 
   // Folder open icon
-  FOLDER_OPEN: createSvgIcon(`
+  FOLDER_OPEN: `
     <path d="M6 14l1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-  `),
+  `,
 
   // Video/film icon
-  VIDEO: createSvgIcon(`
+  VIDEO: `
     <polygon points="23 7 16 12 23 17 23 7"/>
     <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
-  `),
+  `,
 
-  // Play icon
-  PLAY: createSvgIcon(`
-    <polygon points="5 3 19 12 5 21 5 3"/>
-  `, 16, 'currentColor', 'currentColor'),
+  // Play icon (filled)
+  PLAY: {
+    paths: `<polygon points="5 3 19 12 5 21 5 3"/>`,
+    defaultFill: 'currentColor'
+  },
 
-  // Stop square icon
-  STOP_SQUARE: createSvgIcon(`
-    <rect x="6" y="6" width="12" height="12"/>
-  `, 16, 'currentColor', 'currentColor'),
+  // Stop square icon (filled)
+  STOP_SQUARE: {
+    paths: `<rect x="6" y="6" width="12" height="12"/>`,
+    defaultFill: 'currentColor'
+  },
 
   // List/clipboard icon
-  CLIPBOARD: createSvgIcon(`
+  CLIPBOARD: `
     <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
     <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-  `),
+  `,
 
   // Save/disk icon
-  SAVE: createSvgIcon(`
+  SAVE: `
     <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
     <polyline points="17,21 17,13 7,13 7,21"/>
     <polyline points="7,3 7,8 15,8"/>
-  `),
+  `,
 
   // Download icon
-  DOWNLOAD: createSvgIcon(`
+  DOWNLOAD: `
     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
     <polyline points="7,10 12,15 17,10"/>
     <line x1="12" y1="15" x2="12" y2="3"/>
-  `),
+  `,
 
   // Question/help icon
-  HELP: createSvgIcon(`
+  HELP: `
     <circle cx="12" cy="12" r="10"/>
     <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
     <circle cx="12" cy="17" r="1"/>
-  `)
+  `
 };
+
+/**
+ * Pre-built SVG icons with default styling
+ */
+export const SVG_ICONS = Object.fromEntries(
+  Object.entries(SVG_PATHS).map(([name, pathData]) => {
+    if (typeof pathData === 'object') {
+      // Handle icons with custom default fill
+      return [name, createSvgIcon(pathData.paths, 16, 'currentColor', pathData.defaultFill)];
+    } else {
+      // Handle standard outline icons
+      return [name, createSvgIcon(pathData)];
+    }
+  })
+);
 
 /**
  * Get an SVG icon with optional customization
@@ -123,26 +144,24 @@ export const SVG_ICONS = {
  * @returns {string} SVG element as string
  */
 export function getSvgIcon(iconName, size, color, fill) {
-  const iconPath = SVG_ICONS[iconName];
-  if (!iconPath) {
+  const pathData = SVG_PATHS[iconName];
+  if (!pathData) {
     console.warn(`SVG icon '${iconName}' not found`);
     return '';
   }
   
   // If custom size, color, or fill requested, regenerate the icon
   if (size || color || fill) {
-    // Extract the path data from the existing icon by stripping <svg> tags
-    const start = iconPath.indexOf('>') + 1;
-    const end = iconPath.lastIndexOf('</svg>');
-    if (start > 0 && end > start) {
-      const pathData = iconPath.substring(start, end);
-      return createSvgIcon(pathData, size, color, fill);
+    if (typeof pathData === 'object') {
+      // Handle icons with custom default fill
+      const finalFill = fill !== undefined ? fill : pathData.defaultFill;
+      return createSvgIcon(pathData.paths, size, color, finalFill);
     } else {
-      console.warn(`Failed to extract path data for icon '${iconName}'`);
-      return '';
+      // Handle standard outline icons
+      return createSvgIcon(pathData, size, color, fill);
     }
   }
   
-  // Return the default icon
-  return iconPath;
+  // Return the pre-built default icon
+  return SVG_ICONS[iconName];
 }
