@@ -21,10 +21,9 @@ from concurrent.futures import ThreadPoolExecutor
 
 def create_test_data(seq_len: int = 100, batch_size: int = 1) -> Dict[str, Any]:
     """Create sample badminton pose data for testing."""
+    np.random.seed(42)
     n_people = 2
     pose_features = 72
-    
-    np.random.seed(42)
     
     JnB = np.random.randn(batch_size, seq_len, n_people, pose_features).tolist()
     shuttle = np.random.randn(batch_size, seq_len, 2).tolist()
