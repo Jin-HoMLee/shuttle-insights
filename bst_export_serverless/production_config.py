@@ -13,6 +13,7 @@ import sys
 from typing import List, Dict, Any
 from pydantic import Field
 from pydantic_settings import BaseSettings
+from base_config import DEFAULT_MODEL_CONFIG
 
 
 class SecurityConfig(BaseSettings):
@@ -66,20 +67,22 @@ class APIConfig(BaseSettings):
 
 
 class ModelConfig(BaseSettings):
-    """Model-related configuration."""
+    """Model-related configuration extending base configuration."""
     
-    # Model paths
-    torchscript_path: str = Field(default='../models/bst/exported/bst_cg_ap_seq100_scripted.pt', env='TORCHSCRIPT_MODEL_PATH')
-    onnx_path: str = Field(default='../models/bst/exported/bst_cg_ap_seq100.onnx', env='ONNX_MODEL_PATH')
+    # Model paths (inherit defaults from base config)
+    torchscript_path: str = Field(default=DEFAULT_MODEL_CONFIG.torchscript_path, env='TORCHSCRIPT_MODEL_PATH')
+    onnx_path: str = Field(default=DEFAULT_MODEL_CONFIG.onnx_path, env='ONNX_MODEL_PATH')
     
-    # Model parameters
-    seq_len: int = Field(default=100, env='MODEL_SEQ_LEN')
-    n_people: int = Field(default=2, env='MODEL_N_PEOPLE')
-    pose_features: int = Field(default=72, env='MODEL_POSE_FEATURES')
-    n_classes: int = Field(default=66, env='MODEL_N_CLASSES')
+    # Model parameters (inherit defaults from base config)
+    seq_len: int = Field(default=DEFAULT_MODEL_CONFIG.seq_len, env='MODEL_SEQ_LEN')
+    n_people: int = Field(default=DEFAULT_MODEL_CONFIG.n_people, env='MODEL_N_PEOPLE')
+    pose_features: int = Field(default=DEFAULT_MODEL_CONFIG.pose_features, env='MODEL_POSE_FEATURES')
+    n_classes: int = Field(default=DEFAULT_MODEL_CONFIG.n_classes, env='MODEL_N_CLASSES')
     
-    # Model loading
-    prefer_torchscript: bool = Field(default=True, env='PREFER_TORCHSCRIPT')
+    # Model loading (inherit defaults from base config)
+    prefer_torchscript: bool = Field(default=DEFAULT_MODEL_CONFIG.prefer_torchscript, env='PREFER_TORCHSCRIPT')
+    
+    # Production-specific model settings
     model_cache_size: int = Field(default=1, env='MODEL_CACHE_SIZE')
     
     class Config:

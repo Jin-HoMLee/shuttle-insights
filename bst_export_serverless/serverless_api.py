@@ -32,9 +32,9 @@ import numpy as np
 torchscript_model = None
 onnx_session = None
 
-# Model configuration
-from production_config import ModelConfig # Importing from production_config.py
-MODEL_CONFIG = ModelConfig().dict()
+# Model configuration (using lightweight base config for serverless independence)
+from base_config import get_model_config
+MODEL_CONFIG = get_model_config().dict()
 
 # Input validation models
 class PoseData(BaseModel):
