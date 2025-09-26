@@ -213,7 +213,7 @@ class ProductionConfig:
             issues.append("Neither TorchScript nor ONNX model file found")
         
         # Database checks
-        if 'sqlite' in self.database.database_url.lower() and 'production' in os.getenv('ENV', '').lower():
+        if 'sqlite' in self.database.database_url.lower() and os.getenv('ENV', '').lower() == 'production':
             issues.append("Using SQLite database in production environment")
         
         return issues
