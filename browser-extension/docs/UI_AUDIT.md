@@ -39,6 +39,15 @@ Located in `src/styles.css`:
 }
 ```
 
+### Theme System (NEW in v2.1)
+**Implementation**: Complete dark/light theme system with toggle button
+- **Theme Toggle**: Located in panel header with 🌙/☀️ icons
+- **Persistence**: Uses Chrome storage API to remember user preference
+- **CSS Architecture**: Dark theme overrides using `[data-theme="dark"]` selector
+- **Accessibility**: High contrast ratios for both themes (WCAG AA compliant)
+- **Components**: All UI elements automatically adapt to theme changes
+- **Module**: `src/utils/theme-manager.js` handles theme logic
+
 ## Pages and UI Structure
 
 ### Single Page Application
@@ -69,6 +78,7 @@ The extension provides **one main UI page**: the **Labeling Panel**
 - **Components**:
   - Extension icon (🏸)
   - Title text
+  - Theme toggle button (`#yt-shot-labeler-theme-toggle`) 🌙/☀️ *(NEW in v2.1)*
   - Close button (×)
 
 #### Panel Content (`#yt-shot-labeler-content`)
@@ -264,7 +274,7 @@ src/
 
 ### Future Improvements
 1. **Design System Documentation**: Create a component style guide
-2. **Theme Support**: Add dark/light mode toggle
+2. ~~**Theme Support**: Add dark/light mode toggle~~ ✅ **IMPLEMENTED** (v2.1)
 3. **Internationalization**: Support for multi-language UI
 4. **Enhanced Mobile Experience**: Better touch targets and gestures
 5. **Animation Library**: Consistent micro-interactions across components

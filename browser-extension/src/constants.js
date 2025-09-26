@@ -23,7 +23,8 @@ export const UI_IDS = {
   CONTENT: 'yt-shot-labeler-content',
   DATETIME: 'yt-shot-labeler-datetime',
   VIDEO_TITLE: 'yt-shot-labeler-videotitle',
-  URL: 'yt-shot-labeler-url'
+  URL: 'yt-shot-labeler-url',
+  THEME_TOGGLE: 'yt-shot-labeler-theme-toggle'
 };
 
 // CSS Classes

@@ -34,11 +34,11 @@ export function stylePanelElement(panel) {
     top: PANEL_CONFIG.DEFAULT_POSITION.top, 
     right: PANEL_CONFIG.DEFAULT_POSITION.right, 
     zIndex: PANEL_CONFIG.Z_INDEX,
-    background: "white", 
+    background: "var(--background-color)", 
     border: "1px solid var(--border-color)", 
     padding: "0",
     borderRadius: "12px", 
-    boxShadow: "0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)", 
+    boxShadow: "var(--shadow-heavy)", 
     width: PANEL_CONFIG.DEFAULT_SIZE.width,
     fontSize: "14px", 
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", 
@@ -60,12 +60,12 @@ export function stylePanelElement(panel) {
   // Add enhanced hover effect
   panel.addEventListener('mouseenter', () => {
     panel.style.transform = 'translateY(-2px)';
-    panel.style.boxShadow = '0 12px 40px rgba(0,0,0,0.16), 0 4px 12px rgba(0,0,0,0.12)';
+    panel.style.boxShadow = 'var(--shadow-heavy)'; // Use CSS variable for consistency
   });
   
   panel.addEventListener('mouseleave', () => {
     panel.style.transform = 'translateY(0)';
-    panel.style.boxShadow = '0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)';
+    panel.style.boxShadow = 'var(--shadow-medium)'; // Use CSS variable for consistency
   });
 }
 

@@ -19,6 +19,7 @@ import { removeOverlayCanvas, createOverlayCanvas } from './utils/canvas/overlay
 import { setupDetector } from './utils/pose/pose-utils.js';
 import { drawKeypoints, drawSkeletonAndBoxes } from './features/poseDrawing.js';
 import { EVENTS, UI_IDS } from './constants.js';
+import { initializeTheme } from './utils/theme-manager.js';
 
 // State management
 let detector = null; // Pose detector instance (needed for pose estimation)
@@ -198,3 +199,6 @@ chrome.runtime.onMessage.addListener((msg) => {
     togglePanel();
   }
 });
+
+// Initialize theme on content script load
+initializeTheme();
