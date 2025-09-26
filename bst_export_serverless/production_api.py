@@ -55,27 +55,34 @@ SECURITY_CONFIG = {
 
 # In-memory storage for rate limiting and API keys (use Redis in production)
 rate_limit_storage = {}
+
+def make_api_key(name: str, rate_limit: int, enabled: bool, permissions: List[str]) -> Dict[str, Any]:
+    return {
+        'name': name,
+        'created_at': datetime.now(timezone.utc).isoformat(),
+        'rate_limit': rate_limit,
+        'enabled': enabled,
+        'permissions': permissions
+    }
+
 api_keys_storage = {
     # Default demo API key (should be replaced in production)
-    'demo-api-key-12345': {
-        'name': 'Demo Key',
-    'created_at': datetime.now(timezone.utc).isoformat(),
-        'rate_limit': 100,  # requests per hour
-        'enabled': True,
-        'permissions': ['predict']
-    }
+    'demo-api-key-12345': make_api_key(
+        name='Demo Key',
+        rate_limit=100,
+        enabled=True,
+        permissions=['predict']
+    )
 }
 
 # Add admin key if provided
 if SECURITY_CONFIG['admin_api_key']:
-    api_keys_storage[SECURITY_CONFIG['admin_api_key']] = {
-        'name': 'Admin Key',
-        'created_at': datetime.now(timezone.utc).isoformat(),
-        'rate_limit': 1000,  # higher limit for admin
-        'enabled': True,
-        'permissions': ['predict', 'admin']
-    }
-
+    api_keys_storage[SECURITY_CONFIG['admin_api_key']] = make_api_key(
+        name='Admin Key',
+        rate_limit=1000,  # higher limit for admin
+        enabled=True,
+        permissions=['predict', 'admin']
+    )
 # Enhanced models for authentication
 class AuthenticatedPredictionResponse(PredictionResponse):
     """Extended prediction response with authentication metadata."""
