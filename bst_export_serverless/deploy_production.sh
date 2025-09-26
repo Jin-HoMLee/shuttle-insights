@@ -105,53 +105,15 @@ cat > main.py << EOF
 Cloud Functions entry point for BST Production API
 
 This module provides the entry point for Google Cloud Functions deployment
-while maintaining compatibility with the FastAPI application.
+using FastAPI and functions_framework.
 """
 
-import os
 from production_api import app
-from production_config import get_config_for_environment
-from mangum import Mangum
+import functions_framework
 
-# Load environment-specific configuration
-config = get_config_for_environment()
-
-# Export the FastAPI app for Cloud Functions using Mangum ASGI adapter
-handler = Mangum(app)
-
+@functions_framework.http
 def main(request):
-    """
-    Cloud Functions entry point.
-    
-    This function routes all HTTP requests to the FastAPI app using Mangum.
-    """
-    # Convert the incoming Flask request to an AWS Lambda event
-    # functions_framework passes a Flask request object
-    # Mangum expects an AWS Lambda event, so we need to adapt
-    from werkzeug.datastructures import Headers
-    import json
-
-    # Build the event object
-    event = {
-        "httpMethod": request.method,
-        "path": request.path,
-        "headers": dict(request.headers),
-        "queryStringParameters": request.args.to_dict(),
-        "body": request.get_data(as_text=True),
-        "isBase64Encoded": False,
-    }
-    context = {}  # Empty context
-    response = handler(event, context)
-
-    # Build the Flask response from Mangum's output
-    from flask import make_response
-    flask_response = make_response(response["body"], response["statusCode"])
-    for k, v in response["headers"].items():
-        flask_response.headers[k] = v
-    return flask_response
-if __name__ == "__main__":
-    import functions_framework
-    functions_framework.create_app(main)
+    return app(request)
 EOF
 
 echo "✓ Created Cloud Functions entry point"

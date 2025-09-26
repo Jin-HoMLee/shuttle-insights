@@ -15,7 +15,6 @@ onnxruntime>=1.15.0  # For ONNX models
 
 # Google Cloud Functions support - same as serverless
 functions-framework>=3.0.0
-mangum>=0.17.0
 
 # HTTP requests and basic utilities - same as serverless
 requests>=2.32.0
