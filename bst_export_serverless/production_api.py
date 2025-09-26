@@ -385,7 +385,7 @@ async def predict_authenticated(
                     'n_classes': MODEL_CONFIG['n_classes']
                 },
                 # Extract rate_limit_info once to avoid redundant lookups
-                rate_limit_info = auth_info.get('rate_limit_info', {})
+                rate_limit_info=auth_info.get('rate_limit_info', {}),
                 auth_info={
                     'api_key_name': auth_info.get('name', 'Unknown'),
                     'rate_limit_remaining': rate_limit_info.get('requests_limit', 0) - rate_limit_info.get('requests_made', 0)
