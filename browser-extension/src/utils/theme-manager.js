@@ -67,11 +67,19 @@ export async function setCurrentTheme(theme) {
     } catch (error) {
       console.warn('Failed to save theme to storage:', error);
       // Fallback to localStorage
-      localStorage.setItem(THEME_STORAGE_KEY, theme);
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, theme);
+      } catch (lsError) {
+        console.warn('Failed to save theme to localStorage:', lsError);
+      }
     }
   } else {
     // Fallback to localStorage for testing/development environments
-    localStorage.setItem(THEME_STORAGE_KEY, theme);
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch (lsError) {
+      console.warn('Failed to save theme to localStorage:', lsError);
+    }
   }
 }
 
