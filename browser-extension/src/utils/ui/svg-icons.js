@@ -160,7 +160,13 @@ export function getSvgIcon(iconName, size, color, fill) {
   }
   // Use shared helper for rendering
   if (size !== undefined || color !== undefined || fill !== undefined) {
-    return renderSvgIcon(pathData, size, color, fill);
+    // Use default values if any parameter is undefined
+    return renderSvgIcon(
+      pathData,
+      size ?? 16,
+      color ?? 'currentColor',
+      fill ?? 'none'
+    );
   }
   // Return the pre-built default icon
   return SVG_ICONS[iconName];
