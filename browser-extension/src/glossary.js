@@ -41,6 +41,7 @@
 import { loadGlossaryData, showGlossaryError } from './glossary-loader.js';
 import { setupShotButtons } from './glossary-buttons.js';
 import { setupDimensionControls } from './glossary-dimensions.js';
+import { UI_IDS } from './constants.js';
 
 /**
  * Sets up glossary buttons and dimension controls for the panel
@@ -50,9 +51,8 @@ import { setupDimensionControls } from './glossary-dimensions.js';
  * @param {Function} updateStatus - Callback to update the status display
  */
 export async function setupGlossaryButtons(panel, getCurrentShot, updateStatus) {
-  const labelDiv = panel.querySelector('#label-buttons');
-  const dimensionDiv = panel.querySelector('#dimension-controls');
-  
+  const labelDiv = panel.querySelector(`#${UI_IDS.LABEL_BUTTONS}`);
+  const dimensionDiv = panel.querySelector(`#${UI_IDS.DIMENSION_CONTROLS}`);  
   if (!labelDiv || !dimensionDiv) {
     console.warn('Glossary container elements not found');
     return;

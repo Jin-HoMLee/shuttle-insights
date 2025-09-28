@@ -20,6 +20,7 @@ import {
   createShotListUpdater 
 } from './panel-workflow.js';
 import { UI_IDS, EVENTS } from './constants.js';
+import { initializeTheme, toggleTheme, updateThemeToggleButton, getCurrentTheme } from './utils/theme-manager.js';
 
 /**
  * Creates and initializes the main labeling panel
@@ -78,6 +79,12 @@ export function createLabelerPanel() {
   // Add panel to DOM
   document.body.appendChild(panel);
 
+  // Initialize theme and set up theme toggle
+  initializeTheme().then(currentTheme => {
+    const themeToggleBtn = panel.querySelector(`#${UI_IDS.THEME_TOGGLE}`);
+    updateThemeToggleButton(themeToggleBtn, currentTheme);
+  });
+
   // Trigger entrance animation
   setTimeout(() => {
     panel.style.transition = 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
@@ -98,6 +105,9 @@ export function createLabelerPanel() {
 function setupPanelFunctionality(panel, workflowState, callbacks) {
   // Setup overlay toggle button
   setupOverlayButton(panel);
+  
+  // Setup theme toggle button
+  setupThemeToggle(panel);
   
   // Setup shot marking buttons
   setupShotMarkingButtons(panel, workflowState, callbacks);
@@ -128,6 +138,27 @@ function setupPanelFunctionality(panel, workflowState, callbacks) {
   // Setup keyboard shortcuts and close button
   setupKeyboardShortcuts(panel, keyboardHandlers);
   setupCloseButton(panel);
+}
+
+/**
+ * Sets up the theme toggle button functionality
+ * @param {HTMLElement} panel - The panel element
+ */
+function setupThemeToggle(panel) {
+  const themeToggleBtn = panel.querySelector(`#${UI_IDS.THEME_TOGGLE}`);
+  
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', async () => {
+      try {
+        const newTheme = await toggleTheme();
+        updateThemeToggleButton(themeToggleBtn, newTheme);
+      } catch (error) {
+        console.error('Failed to toggle theme:', error);
+      }
+    });
+    
+    // Hover effect is now handled via CSS. No inline event listeners needed.
+  }
 }
 
 /**

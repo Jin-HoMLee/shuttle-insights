@@ -1,5 +1,6 @@
 /* Modern Design System Variables */
 :root {
+  /* Light Theme (Default) */
   --primary-color: #1976d2;
   --primary-dark: #1565c0;
   --primary-light: #42a5f5;
@@ -20,6 +21,60 @@
   --border-radius-small: 4px;
   --transition-fast: 0.15s ease;
   --transition-medium: 0.25s ease;
+  /* Additional variables for light theme */
+  --disabled-bg: #f5f5f5;
+  --disabled-border: #e0e0e0;
+  --dimension-btn-bg: #f9f9f9;
+  --dimension-btn-hover-bg: #e6f3ff;
+  --dimension-btn-hover-border: #007cba;
+  --dimension-btn-selected-bg: #007cba;
+  --dimension-btn-selected-hover-bg: #005a8b;
+  --error-dark: #d32f2f;
+  --error-darker: #b71c1c;
+  --success-dark: #388e3c;
+  --success-darker: #2e7d32;
+  --list-border: #e0e0e0;
+  --close-btn-bg: rgba(255,255,255,0.2);
+  --close-btn-color: #fff;
+  --theme-toggle-bg: rgba(255,255,255,0.2);
+  --theme-toggle-hover-bg: rgba(25, 118, 210, 0.15);
+}
+
+/* Dark Theme Variables */
+:root[data-theme="dark"] {
+  --primary-color: #64b5f6;
+  --primary-dark: #42a5f5;
+  --primary-light: #90caf9;
+  --secondary-color: #b0b0b0;
+  --accent-color: #ff8a65;
+  --success-color: #81c784;
+  --warning-color: #ffb74d;
+  --error-color: #e57373;
+  --background-color: #121212;
+  --surface-color: #1e1e1e;
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0b0;
+  --border-color: #333333;
+  --shadow-light: 0 2px 4px rgba(0,0,0,0.3);
+  --shadow-medium: 0 4px 8px rgba(0,0,0,0.4);
+  --shadow-heavy: 0 8px 16px rgba(0,0,0,0.5);
+  /* Additional variables for dark theme */
+  --disabled-bg: #2e2e2e;
+  --disabled-border: #404040;
+  --dimension-btn-bg: #2e2e2e;
+  --dimension-btn-hover-bg: #1a3d5c;
+  --dimension-btn-hover-border: #42a5f5;
+  --dimension-btn-selected-bg: #42a5f5;
+  --dimension-btn-selected-hover-bg: #64b5f6;
+  --error-dark: #e57373;
+  --error-darker: #ef5350;
+  --success-dark: #81c784;
+  --success-darker: #66bb6a;
+  --list-border: #404040;
+  --close-btn-bg: rgba(255,255,255,0.08);
+  --close-btn-color: #fff;
+  --theme-toggle-bg: rgba(255,255,255,0.08);
+  --theme-toggle-hover-bg: rgba(100, 181, 246, 0.18);
 }
 
 #yt-shot-labeler-panel {
@@ -161,36 +216,43 @@
 
 .yt-shot-labeler-btn:disabled,
 .yt-shot-labeler-label-btn:disabled {
-  background: #f5f5f5;
+  background: var(--disabled-bg);
   color: var(--text-secondary);
-  border-color: #e0e0e0;
+  border-color: var(--disabled-border);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
   opacity: 0.6;
 }
 
-/* Advanced Shot Dimension Button States (corrected for actual class) */
+/* Advanced Shot Dimension Label and Button States (corrected for actual class) */
+.yt-shot-labeler-dimension-label {
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
 .yt-shot-labeler-dimension-btn {
-  background: #f9f9f9;
-  color: #333;
-  border: 1px solid #ccc;
+  background: var(--dimension-btn-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
   transition: all 0.2s ease;
 }
 
 .yt-shot-labeler-dimension-btn:hover:not(.selected) {
-  background: #e6f3ff;
-  border-color: #007cba;
+  background: var(--dimension-btn-hover-bg);
+  border-color: var(--dimension-btn-hover-border);
 }
 
 .yt-shot-labeler-dimension-btn.selected {
-  background: #007cba;
+  background: var(--dimension-btn-selected-bg);
   color: white;
-  border-color: #007cba;
+  border-color: var(--dimension-btn-selected-bg);
 }
 
 .yt-shot-labeler-dimension-btn.selected:hover {
-  background: #005a8b;
+  background: var(--dimension-btn-selected-hover-bg);
 }
 
 /* Primary Button Variant */
@@ -209,24 +271,24 @@
 .yt-shot-labeler-btn-danger {
   background: var(--error-color);
   color: white;
-  border-color: #d32f2f;
+  border-color: var(--error-dark);
 }
 
 .yt-shot-labeler-btn-danger:hover {
-  background: #d32f2f;
-  border-color: #b71c1c;
+  background: var(--error-dark);
+  border-color: var(--error-darker);
 }
 
 /* Success Button Variant */
 .yt-shot-labeler-btn-success {
   background: var(--success-color);
   color: white;
-  border-color: #388e3c;
+  border-color: var(--success-dark);
 }
 
 .yt-shot-labeler-btn-success:hover {
-  background: #388e3c;
-  border-color: #2e7d32;
+  background: var(--success-dark);
+  border-color: var(--success-darker);
 }
 
 /* Resize handles */
@@ -249,7 +311,7 @@
 /* List of labeled shots */
 #label-list > div {
   margin-bottom: 4px;
-  border-bottom: 1px dashed #e0e0e0;
+  border-bottom: 1px dashed var(--list-border);
   padding-bottom: 2px;
 }
 
@@ -415,6 +477,29 @@
   }
 }
 
+/* Close button styles */
+.yt-shot-labeler-close-btn {
+  background: var(--close-btn-bg, rgba(255,255,255,0.2));
+  border: none;
+  color: var(--close-btn-color, white);
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 4px 8px;
+  transition: background 0.2s;
+}
+
+/* Theme toggle button styles */
+.yt-shot-labeler-theme-toggle {
+  background: var(--close-btn-bg, rgba(255,255,255,0.2));
+  border: none;
+  color: var(--close-btn-color, white);
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 4px 8px;
+  transition: background 0.2s;
+}
 /* Responsive design for smaller screens */
 @media (max-width: 480px) {
   :root {

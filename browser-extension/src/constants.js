@@ -23,7 +23,9 @@ export const UI_IDS = {
   CONTENT: 'yt-shot-labeler-content',
   DATETIME: 'yt-shot-labeler-datetime',
   VIDEO_TITLE: 'yt-shot-labeler-videotitle',
-  URL: 'yt-shot-labeler-url'
+  URL: 'yt-shot-labeler-url',
+  DATA_TOOLTIP: 'data-tooltip', 
+  THEME_TOGGLE: 'yt-shot-labeler-theme-toggle'
 };
 
 // CSS Classes
@@ -35,10 +37,12 @@ export const CSS_CLASSES = {
   CATEGORY_SECTION: 'yt-shot-labeler-category-section',
   CATEGORY_TITLE: 'yt-shot-labeler-category-title',
   DIMENSION_SECTION: 'yt-shot-labeler-dimension-section',
+  DIMENSION_LABEL: 'yt-shot-labeler-dimension-label',
   DIMENSION_BTN: 'yt-shot-labeler-dimension-btn',
   DIMENSION_BUTTONS: 'yt-shot-labeler-dimension-buttons',
   DELETE_BTN: 'yt-shot-labeler-delete',
   RESIZE_HANDLE: 'yt-shot-labeler-resize-handle',
+  TOOLTIP: 'yt-shot-labeler-tooltip',
   STATUS_MESSAGE: 'yt-shot-labeler-status-message'
 };
 
