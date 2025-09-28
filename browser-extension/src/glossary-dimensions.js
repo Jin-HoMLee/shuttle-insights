@@ -113,8 +113,8 @@ function createDimensionControl(dimension, getCurrentShot, updateStatus) {
   const label = document.createElement('div');
   label.textContent = dimension.term + ':';
   label.setAttribute('data-dimension-label', 'true');
-  label.className = 'yt-shot-labeler-dimension-label';
-  label.title = dimension.description;
+  label.className = CSS_CLASSES.DIMENSION_LABEL + ' ' + CSS_CLASSES.TOOLTIP;
+  label.setAttribute('data-tooltip', dimension.description || '');
   container.appendChild(label);
 
   // Create button group for dimension values
@@ -155,8 +155,8 @@ function createDimensionControl(dimension, getCurrentShot, updateStatus) {
 function createDimensionValueButton(value, dimension, getCurrentShot, updateStatus, buttonGroup) {
   const button = document.createElement('button');
   button.textContent = value.term;
-  button.className = CSS_CLASSES.DIMENSION_BTN;
-  button.title = value.description;
+  button.className = CSS_CLASSES.DIMENSION_BTN + ' ' + CSS_CLASSES.TOOLTIP;
+  button.setAttribute('data-tooltip', value.description || '');
   
   // Button visual styling is handled via CSS classes (see CSS_CLASSES.DIMENSION_BTN) for consistency and maintainability.
 
