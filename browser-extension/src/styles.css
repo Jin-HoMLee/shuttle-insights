@@ -225,7 +225,14 @@
   opacity: 0.6;
 }
 
-/* Advanced Shot Dimension Button States (corrected for actual class) */
+/* Advanced Shot Dimension Label and Button States (corrected for actual class) */
+.yt-shot-labeler-dimension-label {
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
 .yt-shot-labeler-dimension-btn {
   background: var(--dimension-btn-bg);
   color: var(--text-primary);

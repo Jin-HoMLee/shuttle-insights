@@ -113,9 +113,7 @@ function createDimensionControl(dimension, getCurrentShot, updateStatus) {
   const label = document.createElement('div');
   label.textContent = dimension.term + ':';
   label.setAttribute('data-dimension-label', 'true');
-  label.style.fontSize = "12px";
-  label.style.fontWeight = "bold";
-  label.style.marginBottom = "4px";
+  label.className = 'yt-shot-labeler-dimension-label';
   label.title = dimension.description;
   container.appendChild(label);
 
