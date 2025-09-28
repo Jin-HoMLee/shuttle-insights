@@ -17,13 +17,13 @@ import { UI_IDS, CSS_CLASSES } from './constants.js';
 export function getPanelTemplate(dateTimeStr, videoTitle, videoUrl) {
   return `
     <div id="${UI_IDS.HEADER}" class="${CSS_CLASSES.SECTION_TITLE}" style="background: linear-gradient(135deg, #1976d2, #42a5f5); color: white; margin: 0; padding: 16px; border-radius: 8px 8px 0 0;">
-      <div style="float: right; display: flex; gap: 8px; align-items: center;">
-        <button id="${UI_IDS.THEME_TOGGLE}" class="yt-shot-labeler-tooltip yt-shot-labeler-theme-toggle" data-tooltip="Toggle dark/light theme" aria-label="Toggle theme">🌙</button>
-        <button id="${UI_IDS.CLOSE_BTN}" class="yt-shot-labeler-tooltip yt-shot-labeler-close-btn" data-tooltip="Close panel" aria-label="Close panel">×</button>
-      </div>
       <div style="display: flex; align-items: center; gap: 12px;">
         <span style="font-size: 20px;">🏸</span>
         <strong style="font-size: 16px; font-weight: 600;">YouTube Badminton Shot Labeler</strong>
+      </div>
+      <div style="float: right; display: flex; gap: 8px; align-items: center;">
+        <button id="${UI_IDS.THEME_TOGGLE}" class="yt-shot-labeler-tooltip yt-shot-labeler-theme-toggle" data-tooltip="Toggle dark/light theme" aria-label="Toggle theme">🌙</button>
+        <button id="${UI_IDS.CLOSE_BTN}" class="yt-shot-labeler-tooltip yt-shot-labeler-close-btn" data-tooltip="Close panel" aria-label="Close panel">×</button>
       </div>
     </div>
     <div id="${UI_IDS.CONTENT}">
