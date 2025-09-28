@@ -348,6 +348,32 @@ async def health_check():
         }
     }
 
+def build_authenticated_response(result, preprocessed_data, model_type, auth_info, top_indices=None):
+    """
+    Helper to construct AuthenticatedPredictionResponse for all endpoints.
+    """
+    rate_limit_info = auth_info.get('rate_limit_info', {})
+    return AuthenticatedPredictionResponse(
+        success=True,
+        inference_time=result['inference_time'],
+        predictions=result['predictions'],
+        probabilities=result['probabilities'],
+        top_indices=top_indices if top_indices is not None else [
+            [int(idx) for idx in group] for group in result['top_predictions']['indices']
+        ],
+        top_probabilities=result['top_predictions']['probabilities'],
+        metadata={
+            'model_type': model_type,
+            'batch_size': preprocessed_data['batch_size'],
+            'seq_len': preprocessed_data['seq_len'],
+            'n_classes': MODEL_CONFIG['n_classes']
+        },
+        auth_info={
+            'api_key_name': auth_info.get('name', 'Unknown'),
+            'rate_limit_remaining': rate_limit_info.get('requests_limit', 0) - rate_limit_info.get('requests_made', 0)
+        }
+    )
+
 @app.post("/predict", response_model=Union[AuthenticatedPredictionResponse, ErrorResponse])
 async def predict_authenticated(
     data: PoseData,
@@ -363,42 +389,22 @@ async def predict_authenticated(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Insufficient permissions for prediction"
             )
-        
         # Preprocess input
         preprocessed_data = preprocess_input(data)
-        
         # Try TorchScript first
         result = predict_with_torchscript(preprocessed_data)
-        
         if not result['success']:
             # Fallback to ONNX
             result = predict_with_onnx(preprocessed_data)
-        
         if result['success']:
-            # Extract rate_limit_info once to avoid redundant lookups
-            rate_limit_info = auth_info.get('rate_limit_info', {})
-            
-            return AuthenticatedPredictionResponse(
-                success=True,
-                inference_time=result['inference_time'],
-                predictions=result['predictions'],
-                probabilities=result['probabilities'],
-                top_indices=[[int(idx) for idx in group] for group in result['top_predictions']['indices']],
-                top_probabilities=result['top_predictions']['probabilities'],
-                metadata={
-                    'model_type': result['model_type'],
-                    'batch_size': preprocessed_data['batch_size'],
-                    'seq_len': preprocessed_data['seq_len'],
-                    'n_classes': MODEL_CONFIG['n_classes']
-                },
-                auth_info={
-                    'api_key_name': auth_info.get('name', 'Unknown'),
-                    'rate_limit_remaining': rate_limit_info.get('requests_limit', 0) - rate_limit_info.get('requests_made', 0)
-                }
+            return build_authenticated_response(
+                result,
+                preprocessed_data,
+                result['model_type'],
+                auth_info
             )
         else:
             raise HTTPException(status_code=500, detail=result['error'])
-            
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except HTTPException:
@@ -415,38 +421,17 @@ async def predict_torchscript_authenticated(
     try:
         if 'predict' not in auth_info.get('permissions', []):
             raise HTTPException(status_code=403, detail="Insufficient permissions")
-        
         preprocessed_data = preprocess_input(data)
         result = predict_with_torchscript(preprocessed_data)
-        
         if result['success']:
-            # Extract rate_limit_info once to avoid redundant lookups
-            rate_limit_info = auth_info.get('rate_limit_info', {})
-            
-            return AuthenticatedPredictionResponse(
-                success=True,
-                inference_time=result['inference_time'],
-                predictions=result['predictions'],
-                probabilities=result['probabilities'],
-                top_indices=[
-                    [int(idx) if isinstance(idx, (np.integer, int)) else float(idx) for idx in indices]
-                    for indices in result['top_predictions']['indices']
-                ],
-                top_probabilities=result['top_predictions']['probabilities'],
-                metadata={
-                    'model_type': 'torchscript',
-                    'batch_size': preprocessed_data['batch_size'],
-                    'seq_len': preprocessed_data['seq_len'],
-                    'n_classes': MODEL_CONFIG['n_classes']
-                },
-                auth_info={
-                    'api_key_name': auth_info.get('name', 'Unknown'),
-                    'rate_limit_remaining': rate_limit_info.get('requests_limit', 0) - rate_limit_info.get('requests_made', 0)
-                }
+            return build_authenticated_response(
+                result,
+                preprocessed_data,
+                'torchscript',
+                auth_info
             )
         else:
             raise HTTPException(status_code=500, detail=result['error'])
-            
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except HTTPException:
@@ -463,31 +448,15 @@ async def predict_onnx_authenticated(
     try:
         if 'predict' not in auth_info.get('permissions', []):
             raise HTTPException(status_code=403, detail="Insufficient permissions")
-        
         preprocessed_data = preprocess_input(data)
         result = predict_with_onnx(preprocessed_data)
-        
         if result['success']:
-            # Extract rate_limit_info once to avoid redundant lookups
-            rate_limit_info = auth_info.get('rate_limit_info', {})
-            
-            return AuthenticatedPredictionResponse(
-                success=True,
-                inference_time=result['inference_time'],
-                predictions=result['predictions'],
-                probabilities=result['probabilities'],
-                top_indices=normalize_top_indices(result['top_predictions']['indices']),
-                top_probabilities=result['top_predictions']['probabilities'],
-                metadata={
-                    'model_type': 'onnx',
-                    'batch_size': preprocessed_data['batch_size'],
-                    'seq_len': preprocessed_data['seq_len'],
-                    'n_classes': MODEL_CONFIG['n_classes']
-                },
-                auth_info={
-                    'api_key_name': auth_info.get('name', 'Unknown'),
-                    'rate_limit_remaining': rate_limit_info.get('requests_limit', 0) - rate_limit_info.get('requests_made', 0)
-                }
+            return build_authenticated_response(
+                result,
+                preprocessed_data,
+                'onnx',
+                auth_info,
+                normalize_top_indices(result['top_predictions']['indices'])
             )
         else:
             raise HTTPException(status_code=500, detail=result['error'])
