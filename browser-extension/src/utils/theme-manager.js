@@ -47,7 +47,12 @@ export async function getCurrentTheme() {
   }
   
   // Fallback to localStorage for testing/development environments
-  return localStorage.getItem(THEME_STORAGE_KEY) || DEFAULT_THEME;
+  try {
+    return localStorage.getItem(THEME_STORAGE_KEY) || DEFAULT_THEME;
+  } catch (error) {
+    console.warn('Failed to get theme from localStorage:', error);
+    return DEFAULT_THEME;
+  }
 }
 
 /**
