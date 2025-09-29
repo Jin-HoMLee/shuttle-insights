@@ -374,6 +374,22 @@ def build_authenticated_response(result, preprocessed_data, model_type, auth_inf
         }
     )
 
+def normalize_top_indices(indices):
+    """
+    Normalize top_indices to always be a list of lists of ints/floats.
+    Handles cases where indices is a scalar, flat list, or nested list/array.
+    """
+    import numpy as np
+    if isinstance(indices, (int, float, np.integer, np.floating)):
+        return [[indices]]
+    if isinstance(indices, (list, np.ndarray)):
+        # If flat list of scalars, wrap in another list
+        if not any(isinstance(i, (list, np.ndarray)) for i in indices):
+            return [list(indices)]
+        # Already nested
+        return [list(i) if isinstance(i, (np.ndarray, list)) else [i] for i in indices]
+    return [[indices]]
+
 @app.post("/predict", response_model=Union[AuthenticatedPredictionResponse, ErrorResponse])
 async def predict_authenticated(
     data: PoseData,
@@ -573,22 +589,6 @@ async def list_api_keys(auth_info: Dict[str, Any] = Depends(verify_api_key)):
             for key, info in api_keys_storage.items()
         ]
     }
-
-def normalize_top_indices(indices):
-    """
-    Normalize top_indices to always be a list of lists of ints/floats.
-    Handles cases where indices is a scalar, flat list, or nested list/array.
-    """
-    import numpy as np
-    if isinstance(indices, (int, float, np.integer, np.floating)):
-        return [[indices]]
-    if isinstance(indices, (list, np.ndarray)):
-        # If flat list of scalars, wrap in another list
-        if not any(isinstance(i, (list, np.ndarray)) for i in indices):
-            return [list(indices)]
-        # Already nested
-        return [list(i) if isinstance(i, (np.ndarray, list)) else [i] for i in indices]
-    return [[indices]]
 
 if __name__ == "__main__":
     # For local development
