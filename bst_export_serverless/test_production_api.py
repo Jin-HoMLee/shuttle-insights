@@ -19,9 +19,10 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 
 
-def create_test_data(seq_len: int = 100, batch_size: int = 1) -> Dict[str, Any]:
+def create_test_data(seq_len: int = 100, batch_size: int = 1, seed: int = None) -> Dict[str, Any]:
     """Create sample badminton pose data for testing."""
-    np.random.seed(42)
+    if seed is not None:
+        np.random.seed(seed)
     n_people = 2
     pose_features = 72
     
