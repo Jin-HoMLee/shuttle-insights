@@ -8,6 +8,7 @@
 
 import { addTooltip, showButtonLoading, hideButtonLoading } from './utils/ui/ui-utils.js';
 import { UI_IDS, KEYBOARD_SHORTCUTS, EVENTS } from './constants.js';
+import { SVG_ICONS } from './utils/ui/svg-icons.js';
 
 /**
  * Sets up keyboard shortcuts for the panel
@@ -133,7 +134,7 @@ export function setupOverlayButton(panel) {
   const customBtn = panel.querySelector(`#${UI_IDS.CUSTOM_ACTION_BTN}`);
   if (!customBtn) return;
 
-  customBtn.innerHTML = '<span>👤</span> Start Pose Overlay';
+  customBtn.innerHTML = `<span>${SVG_ICONS.USER}</span> Start Pose Overlay`;
   customBtn.dataset.state = 'stopped';
   
   customBtn.onclick = () => {
@@ -144,7 +145,7 @@ export function setupOverlayButton(panel) {
       }));
       setTimeout(() => {
         hideButtonLoading(customBtn);
-        customBtn.innerHTML = '<span>🛑</span> Stop Pose Overlay';
+        customBtn.innerHTML = `<span>${SVG_ICONS.STOP}</span> Stop Pose Overlay`;
         customBtn.dataset.state = 'started';
         customBtn.classList.add('yt-shot-labeler-btn-danger');
       }, 500);
@@ -155,7 +156,7 @@ export function setupOverlayButton(panel) {
       }));
       setTimeout(() => {
         hideButtonLoading(customBtn);
-        customBtn.innerHTML = '<span>👤</span> Start Pose Overlay';
+        customBtn.innerHTML = `<span>${SVG_ICONS.USER}</span> Start Pose Overlay`;
         customBtn.dataset.state = 'stopped';
         customBtn.classList.remove('yt-shot-labeler-btn-danger');
       }, 300);
