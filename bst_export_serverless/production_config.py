@@ -219,13 +219,13 @@ class ProductionConfig:
     def to_dict(self) -> Dict[str, Any]:
         """Convert configuration to dictionary."""
         return {
-            'security': self.security.dict(),
-            'api': self.api.dict(),
-            'model': self.model.dict(),
-            'database': self.database.dict(),
-            'redis': self.redis.dict(),
-            'logging': self.logging.dict(),
-            'monitoring': self.monitoring.dict()
+            'security': self.security.model_dump(),
+            'api': self.api.model_dump(),
+            'model': self.model.model_dump(),
+            'database': self.database.model_dump(),
+            'redis': self.redis.model_dump(),
+            'logging': self.logging.model_dump(),
+            'monitoring': self.monitoring.model_dump()
         }
     
     def validate_production_ready(self) -> List[str]:
