@@ -1,0 +1,61 @@
+{
+  "app": {
+    "title": "YouTube 배드민턴 샷 라벨러"
+  },
+  "ui": {
+    "close": "닫기",
+    "toggle_theme": "다크/라이트 테마 전환",
+    "language_selector_tooltip": "언어 변경",
+    "language_selector_aria": "언어 선택기"
+  },
+  "sections": {
+    "video_details": "비디오 정보",
+    "pose_overlay": "자세 오버레이",
+    "load_data": "데이터 불러오기",
+    "label_shot": "샷 라벨링",
+    "labeled_shots": "라벨된 샷들",
+    "export": "내보내기",
+    "quick_help": "빠른 도움말"
+  },
+  "buttons": {
+    "mark_start": "시작 표시",
+    "mark_end_save": "끝 표시 & 저장",
+    "download_csv": "CSV 다운로드",
+    "load_csv": "기존 CSV 불러오기",
+    "toggle_pose_overlay": "자세 오버레이 전환"
+  },
+  "labels": {
+    "date_time": "날짜/시간:",
+    "video_title": "비디오 제목:",
+    "url": "URL:"
+  },
+  "tooltips": {
+    "close_panel": "패널 닫기",
+    "toggle_theme": "다크/라이트 테마 전환",
+    "mark_start": "배드민턴 샷의 시작 시간 표시",
+    "mark_end_save": "끝 시간을 표시하고 라벨된 샷을 저장",
+    "download_csv": "모든 라벨된 샷을 CSV 파일로 다운로드",
+    "load_csv": "이전에 저장된 샷 라벨을 CSV 파일에서 불러오기",
+    "toggle_pose_overlay": "비디오에서 자세 감지 오버레이 전환"
+  },
+  "aria_labels": {
+    "close_panel": "패널 닫기",
+    "toggle_theme": "테마 전환",
+    "mark_start": "샷 시작 표시",
+    "mark_end_save": "샷 끝 표시 및 저장",
+    "download_csv": "CSV 파일 다운로드",
+    "load_csv": "기존 CSV 불러오기",
+    "toggle_pose_overlay": "자세 오버레이 전환",
+    "labeled_shots_list": "라벨된 샷 목록",
+    "csv_file_input": "CSV 파일 입력"
+  },
+  "help": {
+    "keyboard_shortcuts": "키보드 단축키:",
+    "ctrl_s": "Ctrl+S: 시작 시간 표시",
+    "ctrl_e": "Ctrl+E: 끝 시간 표시 & 저장",
+    "ctrl_o": "Ctrl+O: 자세 오버레이 전환",
+    "esc": "Esc: 패널 닫기",
+    "workflow": "작업 흐름:",
+    "workflow_steps": "1. 샷 시작 표시 → 2. 샷 유형 선택 → 3. 끝 표시 & 저장"
+  }
+}

@@ -38,6 +38,8 @@
   --close-btn-color: #fff;
   --theme-toggle-bg: rgba(255,255,255,0.2);
   --theme-toggle-hover-bg: rgba(25, 118, 210, 0.15);
+  --language-selector-bg: rgba(255,255,255,0.2);
+  --language-selector-hover-bg: rgba(25, 118, 210, 0.15);
 }
 
 /* Dark Theme Variables */
@@ -75,6 +77,8 @@
   --close-btn-color: #fff;
   --theme-toggle-bg: rgba(255,255,255,0.08);
   --theme-toggle-hover-bg: rgba(100, 181, 246, 0.18);
+  --language-selector-bg: rgba(255,255,255,0.08);
+  --language-selector-hover-bg: rgba(100, 181, 246, 0.18);
 }
 
 #yt-shot-labeler-panel {
@@ -499,6 +503,22 @@
   border-radius: 4px;
   padding: 4px 8px;
   transition: background 0.2s;
+}
+
+.yt-shot-labeler-language-selector {
+  background: var(--language-selector-bg, rgba(255,255,255,0.2));
+  border: none;
+  color: var(--close-btn-color, white);
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 4px 6px;
+  transition: background 0.2s;
+  line-height: 1;
+}
+
+.yt-shot-labeler-language-selector:hover {
+  background: var(--language-selector-hover-bg, rgba(25, 118, 210, 0.15));
 }
 /* Responsive design for smaller screens */
 @media (max-width: 480px) {

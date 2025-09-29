@@ -88,20 +88,20 @@ describe('Panel Coordinator Module Structure', () => {
       expect(() => togglePanel()).not.toThrow();
     });
     
-    it('should handle duplicate panel prevention', () => {
+    it('should handle duplicate panel prevention', async () => {
       // Mock existing panel
       document.getElementById = jest.fn(() => ({ id: 'badminton-labeler-panel' }));
       
-      expect(() => createLabelerPanel()).not.toThrow();
+      await expect(createLabelerPanel()).resolves.not.toThrow();
     });
     
   });
   
   describe('Module Integration Pattern', () => {
     
-    it('should coordinate multiple modules', () => {
+    it('should coordinate multiple modules', async () => {
       
-      createLabelerPanel();
+      await createLabelerPanel();
       
       // At minimum, the panel should be created and modules coordinated
       expect(createPanelElement).toHaveBeenCalled();
