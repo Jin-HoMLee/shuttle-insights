@@ -292,6 +292,12 @@ def get_config_for_environment(env: str = None) -> ProductionConfig:
         cfg.api.enable_docs = False
         cfg.security.require_auth = True
         cfg.security.cors_origins = [os.getenv('ALLOWED_ORIGIN', 'https://yourdomain.com')]
+        # Validate that the placeholder is not used in production
+        if 'https://yourdomain.com' in cfg.security.cors_origins:
+            raise ValueError(
+                "Production CORS origin is set to the placeholder 'https://yourdomain.com'. "
+                "Please set the ALLOWED_ORIGIN environment variable to your actual domain."
+            )
         cfg.logging.log_level = 'INFO'
         cfg.logging.log_request_body = False
         cfg.monitoring.enable_metrics = True
