@@ -1,0 +1,61 @@
+{
+  "app": {
+    "title": "YouTube Badminton Shot Labeler"
+  },
+  "ui": {
+    "close": "Close",
+    "toggle_theme": "Toggle dark/light theme",
+    "language_selector_tooltip": "Switch language",
+    "language_selector_aria": "Language selector"
+  },
+  "sections": {
+    "video_details": "Video Details",
+    "pose_overlay": "Pose Overlay",
+    "load_data": "Load Data",
+    "label_shot": "Label Shot",
+    "labeled_shots": "Labeled Shots",
+    "export": "Export",
+    "quick_help": "Quick Help"
+  },
+  "buttons": {
+    "mark_start": "Mark Start",
+    "mark_end_save": "Mark End & Save",
+    "download_csv": "Download CSV",
+    "load_csv": "Load Existing CSV",
+    "toggle_pose_overlay": "Toggle Pose Overlay"
+  },
+  "labels": {
+    "date_time": "Date/Time:",
+    "video_title": "Video Title:",
+    "url": "URL:"
+  },
+  "tooltips": {
+    "close_panel": "Close panel",
+    "toggle_theme": "Toggle dark/light theme",
+    "mark_start": "Mark the start time of a badminton shot",
+    "mark_end_save": "Mark the end time and save the labeled shot",
+    "download_csv": "Download all labeled shots as CSV file",
+    "load_csv": "Load previously saved shot labels from CSV file",
+    "toggle_pose_overlay": "Toggle pose detection overlay on video"
+  },
+  "aria_labels": {
+    "close_panel": "Close panel",
+    "toggle_theme": "Toggle theme",
+    "mark_start": "Mark shot start",
+    "mark_end_save": "Mark shot end and save",
+    "download_csv": "Download CSV file",
+    "load_csv": "Load existing CSV",
+    "toggle_pose_overlay": "Toggle pose overlay",
+    "labeled_shots_list": "List of labeled shots",
+    "csv_file_input": "CSV file input"
+  },
+  "help": {
+    "keyboard_shortcuts": "Keyboard Shortcuts:",
+    "ctrl_s": "Ctrl+S: Mark start time",
+    "ctrl_e": "Ctrl+E: Mark end time & save",
+    "ctrl_o": "Ctrl+O: Toggle pose overlay",
+    "esc": "Esc: Close panel",
+    "workflow": "Workflow:",
+    "workflow_steps": "1. Mark shot start → 2. Select shot type → 3. Mark end & save"
+  }
+}

@@ -21,14 +21,24 @@ import {
 } from './panel-workflow.js';
 import { UI_IDS, EVENTS } from './constants.js';
 import { initializeTheme, toggleTheme, updateThemeToggleButton, getCurrentTheme } from './utils/theme-manager.js';
+import { 
+  initializeI18n, 
+  switchLanguage, 
+  updateLanguageSelector, 
+  getCurrentLanguage, 
+  SUPPORTED_LANGUAGES 
+} from './utils/i18n-manager.js';
 
 /**
  * Creates and initializes the main labeling panel
  * Sets up the complete UI with all sub-components and event handlers
  */
-export function createLabelerPanel() {
+export async function createLabelerPanel() {
   // Prevent duplicate panels
   if (document.getElementById(UI_IDS.PANEL)) return;
+
+  // Initialize i18n system first
+  await initializeI18n();
 
   // Initialize workflow state
   const workflowState = createWorkflowState();
@@ -85,6 +95,11 @@ export function createLabelerPanel() {
     updateThemeToggleButton(themeToggleBtn, currentTheme);
   });
 
+  // Initialize language selector
+  const currentLanguage = getCurrentLanguage();
+  const languageSelector = panel.querySelector(`#${UI_IDS.LANGUAGE_SELECTOR}`);
+  updateLanguageSelector(languageSelector, currentLanguage);
+
   // Trigger entrance animation
   setTimeout(() => {
     panel.style.transition = 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
@@ -108,6 +123,9 @@ function setupPanelFunctionality(panel, workflowState, callbacks) {
   
   // Setup theme toggle button
   setupThemeToggle(panel);
+  
+  // Setup language selector button
+  setupLanguageSelector(panel);
   
   // Setup shot marking buttons
   setupShotMarkingButtons(panel, workflowState, callbacks);
@@ -162,10 +180,65 @@ function setupThemeToggle(panel) {
 }
 
 /**
+ * Sets up the language selector button functionality
+ * @param {HTMLElement} panel - The panel element
+ */
+function setupLanguageSelector(panel) {
+  const languageSelector = panel.querySelector(`#${UI_IDS.LANGUAGE_SELECTOR}`);
+  
+  if (languageSelector) {
+    languageSelector.addEventListener('click', async () => {
+      try {
+        const currentLang = getCurrentLanguage();
+        const supportedLangs = Object.keys(SUPPORTED_LANGUAGES);
+        const currentIndex = supportedLangs.indexOf(currentLang);
+        const nextIndex = (currentIndex + 1) % supportedLangs.length;
+        const nextLang = supportedLangs[nextIndex];
+        
+        await switchLanguage(nextLang);
+        updateLanguageSelector(languageSelector, nextLang);
+        
+        // Update tooltips and text immediately
+        refreshPanelText(panel);
+      } catch (error) {
+        console.error('Failed to switch language:', error);
+      }
+    });
+  }
+}
+
+/**
+ * Refreshes all translatable text in the panel
+ * @param {HTMLElement} panel - The panel element
+ */
+function refreshPanelText(panel) {
+  // Note: For a complete implementation, we would need to reload the panel content
+  // or update each element individually. For now, we'll show a simple notification
+  // that a page refresh is needed for full language changes.
+  
+  // Update dynamic tooltips and aria-labels
+  const elementsToUpdate = [
+    { selector: `#${UI_IDS.LANGUAGE_SELECTOR}`, tooltip: 'ui.language_selector_tooltip', aria: 'ui.language_selector_aria' },
+    { selector: `#${UI_IDS.THEME_TOGGLE}`, tooltip: 'ui.toggle_theme', aria: 'aria_labels.toggle_theme' },
+    { selector: `#${UI_IDS.CLOSE_BTN}`, tooltip: 'tooltips.close_panel', aria: 'aria_labels.close_panel' }
+  ];
+  
+  elementsToUpdate.forEach(({ selector, tooltip, aria }) => {
+    const element = panel.querySelector(selector);
+    if (element) {
+      import('./utils/i18n-manager.js').then(({ t }) => {
+        element.setAttribute('data-tooltip', t(tooltip));
+        element.setAttribute('aria-label', t(aria));
+      });
+    }
+  });
+}
+
+/**
  * Toggles the panel visibility
  * Creates panel if it doesn't exist, removes it if it does
  */
-export function togglePanel() {
+export async function togglePanel() {
   const panel = document.getElementById(UI_IDS.PANEL);
   if (panel) {
     window.dispatchEvent(new CustomEvent(EVENTS.POSE_OVERLAY_CONTROL, { 
@@ -173,6 +246,6 @@ export function togglePanel() {
     }));
     panel.remove();
   } else {
-    createLabelerPanel();
+    await createLabelerPanel();
   }
 }

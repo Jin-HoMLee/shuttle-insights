@@ -25,7 +25,8 @@ export const UI_IDS = {
   VIDEO_TITLE: 'yt-shot-labeler-videotitle',
   URL: 'yt-shot-labeler-url',
   DATA_TOOLTIP: 'data-tooltip', 
-  THEME_TOGGLE: 'yt-shot-labeler-theme-toggle'
+  THEME_TOGGLE: 'yt-shot-labeler-theme-toggle',
+  LANGUAGE_SELECTOR: 'yt-shot-labeler-language-selector'
 };
 
 // CSS Classes

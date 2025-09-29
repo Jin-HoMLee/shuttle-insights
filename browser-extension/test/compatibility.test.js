@@ -51,11 +51,11 @@ describe('Compatibility Layers', () => {
       expect(togglePanel).toHaveLength(0);
     });
     
-    it('should return same values as coordinator', () => {
+    it('should return same values as coordinator', async () => {
       const { createLabelerPanel: coordinatorCreate } = require('../src/panel-coordinator.js');
-      coordinatorCreate.mockReturnValue('test-result');
+      coordinatorCreate.mockResolvedValue('test-result');
       
-      const result = createLabelerPanel();
+      const result = await createLabelerPanel();
       
       expect(result).toBe('test-result');
     });

@@ -21,14 +21,14 @@ import { createLabelerPanel as createLabelerPanelImpl, togglePanel as togglePane
  * Creates and initializes the main labeling panel
  * Sets up the complete UI with all sub-components and event handlers
  */
-export function createLabelerPanel() {
-  return createLabelerPanelImpl();
+export async function createLabelerPanel() {
+  return await createLabelerPanelImpl();
 }
 
 /**
  * Toggles the panel visibility
  * Creates panel if it doesn't exist, removes it if it does
  */
-export function togglePanel() {
-  return togglePanelImpl();
+export async function togglePanel() {
+  return await togglePanelImpl();
 }

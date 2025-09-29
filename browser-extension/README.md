@@ -31,10 +31,20 @@ This browser extension lets you label shots/events in any YouTube video and expo
    - Click the `×` button to close the panel.
    - Click the extension icon again to bring it back.
 
+7. **Language Selection:**
+   - Click the flag button (🇺🇸/🇰🇷) in the panel header to switch between English and Korean.
+   - Your language preference is automatically saved.
+
+8. **Theme Toggle:**
+   - Click the moon/sun button (🌙/☀️) to switch between dark and light themes.
+   - Theme preference is automatically saved.
+
 ## Features
 
 - Show/hide panel with the extension icon.
 - Movable and resizable panel.
+- **Multi-language support (English/Korean)** with language selector.
+- Dark/light theme toggle with automatic persistence.
 - Pose overlay visualization with TensorFlow.js.
 - Advanced shot dimensions (position, timing, intention, etc.).
 - Displays current date/time, video title, and URL at the top.
