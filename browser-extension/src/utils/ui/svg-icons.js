@@ -130,7 +130,7 @@ const SVG_PATHS = {
  */
 function renderSvgIcon(pathData, size = 16, color = 'currentColor', fill = 'none') {
   if (typeof pathData === 'object') {
-    const finalFill = fill !== undefined ? fill : pathData.defaultFill;
+    const finalFill = fill ?? pathData.defaultFill;
     return createSvgIcon(pathData.paths, size, color, finalFill);
   } else {
     return createSvgIcon(pathData, size, color, fill);
