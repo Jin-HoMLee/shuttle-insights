@@ -11,7 +11,7 @@ The YouTube Badminton Shot Labeler is a Chrome browser extension that enables us
 
 **Key Statistics:**
 - **32 source files** (27 JavaScript modules, 1 CSS file, 1 manifest, 3 data files)
-- **9 test suites** with 83 tests (82 passing)
+- **Test Count:** 9 test suites, 83 tests (82 passing)
 - **Build output:** ~2.2MB bundled content script
 - **Dependencies:** 3 production (TensorFlow.js), 4 dev (build/test tools)
 
