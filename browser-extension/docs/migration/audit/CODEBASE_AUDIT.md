@@ -11,7 +11,7 @@ The YouTube Badminton Shot Labeler is a Chrome browser extension that enables us
 
 **Key Statistics:**
 - **32 source files** (27 JavaScript modules, 1 CSS file, 1 manifest, 3 data files)
-- **Test Count:** 9 test suites, 83 tests (82 passing)
+- **Test Count:** 9 test suites, 83 tests (83 passing)
 - **Build output:** ~2.2MB bundled content script
 - **Dependencies:** 3 production (TensorFlow.js), 4 dev (build/test tools)
 
@@ -1000,7 +1000,7 @@ https://youtube.com/watch?v=xyz,1,10.5,15.2,"Smash","rear","middle","normal","at
 
 **Testing Library:** Jest v30.1.3  
 **Environment:** jsdom (simulated browser)  
-**Test Count:** 9 test suites, 83 tests (82 passing)
+**Test Count:** 9 test suites, 83 tests (83 passing)
 
 ### Test Suites
 
@@ -1084,6 +1084,8 @@ https://youtube.com/watch?v=xyz,1,10.5,15.2,"Smash","rear","middle","normal","at
 - All modules load correctly
 - Extension ready for deployment
 
+**Note:** Requires `npm run build` to generate required build artifacts (`dist/content.js`) before running
+
 ### Test Configuration (jest.config.js)
 
 ```javascript
@@ -1124,6 +1126,8 @@ npx jest --coverage # Coverage report
 ```
 
 **Coverage:** Not formally tracked, but major modules have unit tests
+
+**Note:** All tests pass when run locally with proper build setup. Integration tests require `npm run build` to generate the necessary `dist/content.js` file before running tests.
 
 ---
 
@@ -1603,7 +1607,7 @@ The YouTube Badminton Shot Labeler browser extension is a well-architected, modu
 **Strengths:**
 - ✅ Modular architecture with clear boundaries
 - ✅ Comprehensive documentation
-- ✅ Good test coverage (82/83 tests passing)
+- ✅ Good test coverage (83/83 tests passing)
 - ✅ Modern JavaScript practices (ES6 modules)
 - ✅ Accessibility features (themes, keyboard shortcuts)
 - ✅ Well-organized file structure

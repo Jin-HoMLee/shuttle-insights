@@ -10,7 +10,7 @@ Quick reference summary of the browser-extension codebase audit. For full detail
 |--------|-------|
 | **Total Lines** | ~4,600 lines |
 | **Source Files** | 32 files (27 JS, 1 CSS, 1 manifest, 3 data) |
-| **Test Suites** | 9 suites, 83 tests (82 passing) |
+| **Test Suites** | 9 suites, 83 tests (83 passing) |
 | **Build Output** | ~2.2MB bundled content script |
 | **Production Dependencies** | 3 (TensorFlow.js ecosystem) |
 | **Dev Dependencies** | 4 (build/test tools) |
@@ -175,10 +175,11 @@ video_url,shot_id,start_sec,end_sec,label,longitudinal_position,lateral_position
 | `panel-coordinator.test.js` | 11 | Panel orchestration |
 | `theme-integration.test.js` | 6 | Theme integration |
 | `compatibility.test.js` | 15 | Backward compatibility |
-| `integration.test.js` | 5 | End-to-end (1 failing - dist not committed) |
+| `integration.test.js` | 5 | End-to-end (requires build artifacts) |
 
 **Test Framework:** Jest v30.1.3 with jsdom  
-**Coverage:** Major modules have unit tests
+**Coverage:** Major modules have unit tests  
+**Note:** Integration tests require `npm run build` to generate `dist/content.js` before running
 
 ---
 
