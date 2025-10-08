@@ -8,95 +8,95 @@ Visual overview of the browser extension architecture, components, and data flow
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                        Chrome Browser                                │
+│                        Chrome Browser                               │
 ├─────────────────────────────────────────────────────────────────────┤
-│                                                                      │
-│  ┌────────────────────────────────────────────────────────────┐    │
-│  │                  Extension Components                       │    │
-│  ├────────────────────────────────────────────────────────────┤    │
-│  │                                                             │    │
-│  │  ┌────────────────┐              ┌──────────────────────┐ │    │
-│  │  │   Background   │◄────────────►│   Chrome Extension   │ │    │
-│  │  │  Service Worker│              │        APIs          │ │    │
-│  │  │                │              │  • downloads         │ │    │
-│  │  │ • Icon clicks  │              │  • storage           │ │    │
-│  │  │ • CSV download │              │  • tabs              │ │    │
-│  │  │ • Messaging    │              │  • runtime           │ │    │
-│  │  └───────┬────────┘              └──────────────────────┘ │    │
-│  │          │                                                 │    │
-│  │          │ message("toggle-panel")                        │    │
-│  │          │ message("download-csv")                        │    │
-│  │          ▼                                                 │    │
-│  │  ┌────────────────────────────────────────────────────┐  │    │
-│  │  │           Content Script (content.js)              │  │    │
-│  │  ├────────────────────────────────────────────────────┤  │    │
-│  │  │                                                     │  │    │
-│  │  │  ┌─────────────────┐    ┌──────────────────────┐  │  │    │
-│  │  │  │  Pose Overlay   │    │     Panel UI         │  │  │    │
-│  │  │  │                 │    │                      │  │  │    │
-│  │  │  │ ┌─────────────┐ │    │ ┌──────────────────┐ │  │  │    │
-│  │  │  │ │ TensorFlow  │ │    │ │  Panel Header    │ │  │  │    │
-│  │  │  │ │  Detector   │ │    │ │  • Title         │ │  │  │    │
-│  │  │  │ └─────────────┘ │    │ │  • Theme toggle  │ │  │  │    │
-│  │  │  │ ┌─────────────┐ │    │ │  • Close button  │ │  │  │    │
-│  │  │  │ │   Canvas    │ │    │ └──────────────────┘ │  │  │    │
-│  │  │  │ │   Overlay   │ │    │                      │  │  │    │
-│  │  │  │ └─────────────┘ │    │ ┌──────────────────┐ │  │  │    │
-│  │  │  │ ┌─────────────┐ │    │ │  Video Info      │ │  │  │    │
-│  │  │  │ │   Pose      │ │    │ │  • Date/time     │ │  │  │    │
-│  │  │  │ │  Drawing    │ │    │ │  • Title         │ │  │  │    │
-│  │  │  │ └─────────────┘ │    │ │  • URL           │ │  │  │    │
-│  │  │  └─────────────────┘    │ └──────────────────┘ │  │  │    │
-│  │  │                         │                      │  │  │    │
-│  │  │                         │ ┌──────────────────┐ │  │  │    │
-│  │  │                         │ │  Workflow        │ │  │  │    │
-│  │  │                         │ │  • Mark Start    │ │  │  │    │
-│  │  │                         │ │  • Mark End      │ │  │  │    │
-│  │  │                         │ │  • Status        │ │  │  │    │
-│  │  │                         │ └──────────────────┘ │  │  │    │
-│  │  │                         │                      │  │  │    │
-│  │  │                         │ ┌──────────────────┐ │  │  │    │
-│  │  │                         │ │  Glossary        │ │  │  │    │
-│  │  │                         │ │  • Shot buttons  │ │  │  │    │
-│  │  │                         │ │  • Dimensions    │ │  │  │    │
-│  │  │                         │ └──────────────────┘ │  │  │    │
-│  │  │                         │                      │  │  │    │
-│  │  │                         │ ┌──────────────────┐ │  │  │    │
-│  │  │                         │ │  Shot List       │ │  │  │    │
-│  │  │                         │ │  • Labeled shots │ │  │  │    │
-│  │  │                         │ │  • Edit/delete   │ │  │  │    │
-│  │  │                         │ └──────────────────┘ │  │  │    │
-│  │  │                         │                      │  │  │    │
-│  │  │                         │ ┌──────────────────┐ │  │  │    │
-│  │  │                         │ │  CSV Controls    │ │  │  │    │
-│  │  │                         │ │  • Import        │ │  │  │    │
-│  │  │                         │ │  • Export        │ │  │  │    │
-│  │  │                         │ └──────────────────┘ │  │  │    │
-│  │  │                         │                      │  │  │    │
-│  │  │                         │ ┌──────────────────┐ │  │  │    │
-│  │  │                         │ │  Drag/Resize     │ │  │  │    │
-│  │  │                         │ │  • 8 handles     │ │  │  │    │
-│  │  │                         │ │  • Draggable     │ │  │  │    │
-│  │  │                         │ └──────────────────┘ │  │  │    │
-│  │  │                         └──────────────────────┘  │  │    │
-│  │  └────────────────────────────────────────────────────┘  │    │
-│  │                               │                           │    │
-│  └───────────────────────────────┼───────────────────────────┘    │
-│                                  │                                │
-│                                  ▼                                │
-│  ┌────────────────────────────────────────────────────────────┐  │
-│  │                    YouTube Video Page                       │  │
-│  ├────────────────────────────────────────────────────────────┤  │
-│  │                                                             │  │
-│  │  ┌────────────────┐     ┌────────────────┐                │  │
-│  │  │  Video Player  │     │  Pose Overlay  │                │  │
-│  │  │                │     │     Canvas     │                │  │
-│  │  │  (YouTube)     │     │  (Extension)   │                │  │
-│  │  └────────────────┘     └────────────────┘                │  │
-│  │                                                             │  │
-│  └─────────────────────────────────────────────────────────────┘  │
-│                                                                    │
-└────────────────────────────────────────────────────────────────────┘
+│                                                                     │
+│  ┌────────────────────────────────────────────────────────────┐     │
+│  │                  Extension Components                      │     │
+│  ├────────────────────────────────────────────────────────────┤     │
+│  │                                                            │     │
+│  │  ┌────────────────┐              ┌──────────────────────┐  │     │
+│  │  │   Background   │◄────────────►│   Chrome Extension   │  │     │
+│  │  │  Service Worker│              │        APIs          │  │     │
+│  │  │                │              │  • downloads         │  │     │
+│  │  │ • Icon clicks  │              │  • storage           │  │     │
+│  │  │ • CSV download │              │  • tabs              │  │     │
+│  │  │ • Messaging    │              │  • runtime           │  │     │
+│  │  └───────┬────────┘              └──────────────────────┘  │     │
+│  │          │                                                 │     │
+│  │          │ message("toggle-panel")                         │     │
+│  │          │ message("download-csv")                         │     │
+│  │          ▼                                                 │     │
+│  │  ┌────────────────────────────────────────────────────┐    │     │
+│  │  │           Content Script (content.js)              │    │     │
+│  │  ├────────────────────────────────────────────────────┤    │     │
+│  │  │                                                    │    │     │
+│  │  │  ┌─────────────────┐    ┌──────────────────────┐   │    │     │
+│  │  │  │  Pose Overlay   │    │     Panel UI         │   │    │     │
+│  │  │  │                 │    │                      │   │    │     │
+│  │  │  │ ┌─────────────┐ │    │ ┌──────────────────┐ │   │    │     │
+│  │  │  │ │ TensorFlow  │ │    │ │  Panel Header    │ │   │    │     │
+│  │  │  │ │  Detector   │ │    │ │  • Title         │ │   │    │     │
+│  │  │  │ └─────────────┘ │    │ │  • Theme toggle  │ │   │    │     │
+│  │  │  │ ┌─────────────┐ │    │ │  • Close button  │ │   │    │     │
+│  │  │  │ │   Canvas    │ │    │ └──────────────────┘ │   │    │     │
+│  │  │  │ │   Overlay   │ │    │                      │   │    │     │
+│  │  │  │ └─────────────┘ │    │ ┌──────────────────┐ │   │    │     │
+│  │  │  │ ┌─────────────┐ │    │ │  Video Info      │ │   │    │     │
+│  │  │  │ │   Pose      │ │    │ │  • Date/time     │ │   │    │     │
+│  │  │  │ │  Drawing    │ │    │ │  • Title         │ │   │    │     │
+│  │  │  │ └─────────────┘ │    │ │  • URL           │ │   │    │     │
+│  │  │  └─────────────────┘    │ └──────────────────┘ │   │    │     │
+│  │  │                         │                      │   │    │     │
+│  │  │                         │ ┌──────────────────┐ │   │    │     │
+│  │  │                         │ │  Workflow        │ │   │    │     │
+│  │  │                         │ │  • Mark Start    │ │   │    │     │
+│  │  │                         │ │  • Mark End      │ │   │    │     │
+│  │  │                         │ │  • Status        │ │   │    │     │
+│  │  │                         │ └──────────────────┘ │   │    │     │
+│  │  │                         │                      │   │    │     │
+│  │  │                         │ ┌──────────────────┐ │   │    │     │
+│  │  │                         │ │  Glossary        │ │   │    │     │
+│  │  │                         │ │  • Shot buttons  │ │   │    │     │
+│  │  │                         │ │  • Dimensions    │ │   │    │     │
+│  │  │                         │ └──────────────────┘ │   │    │     │
+│  │  │                         │                      │   │    │     │
+│  │  │                         │ ┌──────────────────┐ │   │    │     │
+│  │  │                         │ │  Shot List       │ │   │    │     │
+│  │  │                         │ │  • Labeled shots │ │   │    │     │
+│  │  │                         │ │  • Edit/delete   │ │   │    │     │
+│  │  │                         │ └──────────────────┘ │   │    │     │
+│  │  │                         │                      │   │    │     │
+│  │  │                         │ ┌──────────────────┐ │   │    │     │
+│  │  │                         │ │  CSV Controls    │ │   │    │     │
+│  │  │                         │ │  • Import        │ │   │    │     │
+│  │  │                         │ │  • Export        │ │   │    │     │
+│  │  │                         │ └──────────────────┘ │   │    │     │
+│  │  │                         │                      │   │    │     │
+│  │  │                         │ ┌──────────────────┐ │   │    │     │
+│  │  │                         │ │  Drag/Resize     │ │   │    │     │
+│  │  │                         │ │  • 8 handles     │ │   │    │     │
+│  │  │                         │ │  • Draggable     │ │   │    │     │
+│  │  │                         │ └──────────────────┘ │   │    │     │
+│  │  │                         └──────────────────────┘   │    │     │
+│  │  └────────────────────────────────────────────────────┘    │     │
+│  │                               │                            │     │
+│  └───────────────────────────────┼────────────────────────────┘     │
+│                                  │                                  │
+│                                  ▼                                  │
+│  ┌────────────────────────────────────────────────────────────┐     │
+│  │                    YouTube Video Page                      │     │
+│  ├────────────────────────────────────────────────────────────┤     │
+│  │                                                            │     │
+│  │  ┌────────────────┐     ┌────────────────┐                 │     │
+│  │  │  Video Player  │     │  Pose Overlay  │                 │     │
+│  │  │                │     │     Canvas     │                 │     │
+│  │  │  (YouTube)     │     │  (Extension)   │                 │     │
+│  │  └────────────────┘     └────────────────┘                 │     │
+│  │                                                            │     │
+│  └────────────────────────────────────────────────────────────┘     │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -197,8 +197,8 @@ content.js (Entry Point)
 │                             └─── positionOverlayCanvas()
 │
 ├─── getVideo() ───────────► utils/video/video-utils.js
-│                           ├─── getVideo()
-│                           └─── getVideoURL()
+│                             ├─── getVideo()
+│                             └─── getVideoURL()
 │
 └─── constants.js
      ├─── UI_IDS
@@ -229,7 +229,7 @@ background.js (Service Worker - Independent)
 ## Data Flow Diagram
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────────────┐
 │                         User Actions                             │
 └────────────┬────────────────────────────────┬────────────────────┘
              │                                │
@@ -333,7 +333,7 @@ Content Script
         │       │   ├─► Load glossary (glossary-loader)
         │       │   ├─► Setup CSV (csv-import/export)
         │       │   ├─► Enable drag (drag.js)
-        │       │   ├─── Enable resize (resize.js)
+        │       │   ├─► Enable resize (resize.js)
         │       │   └─► Apply theme (theme-manager)
         │       │
         │       └─► Insert into DOM
@@ -351,13 +351,13 @@ User labels a shot
     │
     ├─► Select Shot Type
     │   ├─► Click shot button
-    │   ├─── Set currentShot.label
+    │   ├─► Set currentShot.label
     │   ├─► Update button state
     │   └─► Update status display
     │
     ├─► Select Dimensions (optional)
     │   ├─► Click dimension buttons
-    │   ├─── Set currentShot.dimensions
+    │   ├─► Set currentShot.dimensions
     │   └─► Update button states
     │
     ├─► Mark End
@@ -374,7 +374,7 @@ User labels a shot
     └─► Export CSV
         ├─► Generate CSV content
         │   ├─► Format headers
-        │   ├─── Format each shot row
+        │   ├─► Format each shot row
         │   └─► Escape CSV fields
         ├─► Create Blob
         ├─► Send to background
@@ -394,8 +394,8 @@ startPoseOverlay()
     │   └─► Load MoveNet model
     │
     ├─► Create canvas overlay
-    │   ├─── Position over video
-    │   └─── Match video dimensions
+    │   ├─► Position over video
+    │   └─► Match video dimensions
     │
     ├─► Attach video listeners
     │   ├─► play/pause events
@@ -408,13 +408,13 @@ startPoseOverlay()
     poseOverlayLoop()
         │
         ├─► Estimate poses from video
-        │   ├─── detector.estimatePoses(video)
+        │   ├─► detector.estimatePoses(video)
         │   └─► Get keypoints and boxes
         │
         ├─► Clear canvas
         │
-        ├─── Draw poses
-        │   ├─── drawKeypoints()
+        ├─► Draw poses
+        │   ├─► drawKeypoints()
         │   └─► drawSkeletonAndBoxes()
         │
         └─► requestAnimationFrame(loop)
@@ -455,12 +455,12 @@ parseCSVContent()
     │   └─► Map column names to indices
     │
     ├─► Parse data rows
-    │   ├─── Split by comma (respect quotes)
+    │   ├─► Split by comma (respect quotes)
     │   ├─► Extract shot fields
     │   └─► Validate format
     │
     ├─► Validate imported shots
-    │   ├─── Check required fields
+    │   ├─► Check required fields
     │   └─► Check timestamps
     │
     ├─► Replace shots array
@@ -573,39 +573,39 @@ File Events
 │                    Browser Extension                        │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │                 Presentation Layer                    │  │
-│  ├──────────────────────────────────────────────────────┤  │
-│  │  • CSS Custom Properties (theming)                   │  │
-│  │  • Vanilla HTML/CSS (no framework)                   │  │
-│  │  • Material Design inspired                          │  │
-│  └──────────────────────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │                 Presentation Layer                   │   │
+│  ├──────────────────────────────────────────────────────┤   │
+│  │  • CSS Custom Properties (theming)                   │   │
+│  │  • Vanilla HTML/CSS (no framework)                   │   │
+│  │  • Material Design inspired                          │   │
+│  └──────────────────────────────────────────────────────┘   │
 │                          │                                  │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │                   Logic Layer                        │  │
-│  ├──────────────────────────────────────────────────────┤  │
-│  │  • ES6 JavaScript modules                           │  │
-│  │  • Event-driven architecture                        │  │
-│  │  • Factory and callback patterns                    │  │
-│  └──────────────────────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │                   Logic Layer                        │   │
+│  ├──────────────────────────────────────────────────────┤   │
+│  │  • ES6 JavaScript modules                            │   │
+│  │  • Event-driven architecture                         │   │
+│  │  • Factory and callback patterns                     │   │
+│  └──────────────────────────────────────────────────────┘   │
 │                          │                                  │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │              Machine Learning Layer                  │  │
-│  ├──────────────────────────────────────────────────────┤  │
-│  │  • TensorFlow.js (tfjs-core v4.22.0)               │  │
-│  │  • WebGL Backend (tfjs-backend-webgl)              │  │
-│  │  • MoveNet Pose Detection (pose-detection v2.1.3)  │  │
-│  └──────────────────────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │              Machine Learning Layer                  │   │
+│  ├──────────────────────────────────────────────────────┤   │
+│  │  • TensorFlow.js (tfjs-core v4.22.0)                 │   │
+│  │  • WebGL Backend (tfjs-backend-webgl)                │   │
+│  │  • MoveNet Pose Detection (pose-detection v2.1.3)    │   │
+│  └──────────────────────────────────────────────────────┘   │
 │                          │                                  │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │              Platform Integration                    │  │
-│  ├──────────────────────────────────────────────────────┤  │
-│  │  • Chrome Extension APIs (Manifest V3)              │  │
-│  │  • YouTube DOM Integration                          │  │
-│  │  • HTML5 Video API                                  │  │
-│  │  • Canvas API                                       │  │
-│  │  • FileReader API                                   │  │
-│  └──────────────────────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │              Platform Integration                    │   │
+│  ├──────────────────────────────────────────────────────┤   │
+│  │  • Chrome Extension APIs (Manifest V3)               │   │
+│  │  • YouTube DOM Integration                           │   │
+│  │  • HTML5 Video API                                   │   │
+│  │  • Canvas API                                        │   │
+│  │  • FileReader API                                    │   │
+│  └──────────────────────────────────────────────────────┘   │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
 
@@ -629,7 +629,7 @@ Vanilla JS + CSS
     ├─► ES6 Modules
     ├─► No framework
     ├─► Pure CSS with custom properties
-    ├─── esbuild bundler
+    ├─► esbuild bundler
     └─► Jest testing
 ```
 
@@ -640,7 +640,7 @@ TypeScript + Modern Framework
     │
     ├─► TypeScript (type safety)
     ├─► React/Vue/Svelte (component framework)
-    ├─── Tailwind/CSS Modules (styling)
+    ├─► Tailwind/CSS Modules (styling)
     ├─► Webpack/Vite (bundler)
     └─► Testing framework + type tests
 ```
@@ -683,14 +683,14 @@ Optimization Opportunities:
     │
     ├─► Lazy load TensorFlow.js (only when overlay enabled)
     ├─► Code splitting by feature
-    ├─── Tree shaking unused TensorFlow.js modules
+    ├─► Tree shaking unused TensorFlow.js modules
     └─► Minify production build
 
 Runtime Performance:
     │
     ├─► Pose detection: ~30 FPS
     ├─► GPU acceleration via WebGL
-    ├─── Canvas rendering: 60 FPS (capped by requestAnimationFrame)
+    ├─► Canvas rendering: 60 FPS (capped by requestAnimationFrame)
     └─► Memory cleanup on stop
 ```
 
