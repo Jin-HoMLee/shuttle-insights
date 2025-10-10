@@ -18,16 +18,16 @@ This directory contains comprehensive documentation for the YouTube Badminton Sh
 
 | Document | Purpose | Best For |
 |----------|---------|----------|
-| **[UI_AUDIT.md](./UI_AUDIT.md)** | Complete UI components inventory | UI/UX design, component catalog |
-| **[UI_COMPONENT_DIAGRAM.md](./UI_COMPONENT_DIAGRAM.md)** | Visual component hierarchy | Understanding UI structure |
-| **[THEME_IMPLEMENTATION.md](./THEME_IMPLEMENTATION.md)** | Theme system implementation guide | Theme migration, dark/light mode |
+| **[UI_AUDIT.md](./ui/UI_AUDIT.md)** | Complete UI components inventory | UI/UX design, component catalog |
+| **[UI_COMPONENT_DIAGRAM.md](./ui/UI_COMPONENT_DIAGRAM.md)** | Visual component hierarchy | Understanding UI structure |
+| **[THEME_IMPLEMENTATION.md](./ui/THEME_IMPLEMENTATION.md)** | Theme system implementation guide | Theme migration, dark/light mode |
 
 ### 🏗️ Architecture Documentation
 
 | Document | Purpose | Best For |
 |----------|---------|----------|
-| **[RESTRUCTURING_SUMMARY.md](./RESTRUCTURING_SUMMARY.md)** | Folder restructure history and rationale | Understanding project organization |
-| **[SPLITTING_DOCUMENTATION.md](./SPLITTING_DOCUMENTATION.md)** | Module splitting details and patterns | Understanding modular architecture |
+| **[RESTRUCTURING_SUMMARY.md](./architecture/RESTRUCTURING_SUMMARY.md)** | Folder restructure history and rationale | Understanding project organization |
+| **[SPLITTING_DOCUMENTATION.md](./architecture/SPLITTING_DOCUMENTATION.md)** | Module splitting details and patterns | Understanding modular architecture |
 
 ---
 

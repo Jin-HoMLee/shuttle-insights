@@ -1,5 +1,7 @@
 # Theme Implementation Guide
 
+-> back to [README](../README.md)
+
 ## Overview
 
 The YouTube Badminton Shot Labeler extension now supports dark and light themes to improve accessibility and user experience. The theme system uses CSS custom properties (CSS variables) for consistent theming across all UI components.

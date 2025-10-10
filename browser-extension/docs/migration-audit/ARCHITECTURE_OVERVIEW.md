@@ -2,6 +2,8 @@
 
 Visual overview of the browser extension architecture, components, and data flow.
 
+-> back to [README](README.md)
+
 ---
 
 ## System Architecture

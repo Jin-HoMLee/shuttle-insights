@@ -1,5 +1,7 @@
 # UI Component Structure Diagram
 
+-> back to [README](../README.md)
+
 ## Visual Component Hierarchy
 
 ```

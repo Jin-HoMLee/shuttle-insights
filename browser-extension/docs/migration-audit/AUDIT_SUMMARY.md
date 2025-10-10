@@ -2,6 +2,8 @@
 
 Quick reference summary of the browser-extension codebase audit. For full details, see [CODEBASE_AUDIT.md](./CODEBASE_AUDIT.md).
 
+-> back to [README](README.md)
+
 ---
 
 ## Quick Stats

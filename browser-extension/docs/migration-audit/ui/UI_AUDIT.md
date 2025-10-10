@@ -3,6 +3,8 @@
 ## Overview
 This document provides a comprehensive audit of the YouTube Badminton Shot Labeler browser extension UI, listing all components, pages, and design systems used.
 
+-> back to [README](../README.md)
+
 ## UI Architecture
 
 ### Design System
