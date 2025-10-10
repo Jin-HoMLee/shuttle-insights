@@ -54,8 +54,8 @@ This directory contains comprehensive documentation for the YouTube Badminton Sh
 ### For Project Maintainers
 
 **Architecture:** [ARCHITECTURE_OVERVIEW.md](./ARCHITECTURE_OVERVIEW.md)  
-**Module organization:** [SPLITTING_DOCUMENTATION.md](./SPLITTING_DOCUMENTATION.md)  
-**Project structure:** [RESTRUCTURING_SUMMARY.md](./RESTRUCTURING_SUMMARY.md)
+**Module organization:** [SPLITTING_DOCUMENTATION.md](./architecture/SPLITTING_DOCUMENTATION.md)  
+**Project structure:** [RESTRUCTURING_SUMMARY.md](./architecture/RESTRUCTURING_SUMMARY.md)
 
 ---
 
