@@ -47,9 +47,9 @@ This directory contains comprehensive documentation for the YouTube Badminton Sh
 
 ### For UI/UX Designers
 
-**Start here:** [UI_AUDIT.md](./UI_AUDIT.md)  
-**Component structure:** [UI_COMPONENT_DIAGRAM.md](./UI_COMPONENT_DIAGRAM.md)  
-**Theme system:** [THEME_IMPLEMENTATION.md](./THEME_IMPLEMENTATION.md)
+**Start here:** [UI_AUDIT.md](./ui/UI_AUDIT.md)  
+**Component structure:** [UI_COMPONENT_DIAGRAM.md](./ui/UI_COMPONENT_DIAGRAM.md)  
+**Theme system:** [THEME_IMPLEMENTATION.md](./ui/THEME_IMPLEMENTATION.md)
 
 ### For Project Maintainers
 
