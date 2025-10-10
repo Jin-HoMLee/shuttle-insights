@@ -1504,7 +1504,8 @@ export async function loadGlossaryData() {
 - Utility modules: ~1,100 lines
 - Glossary modules: ~400 lines
 
-**Test Code:** ~2,000 lines (83 tests)
+**Test Code:** ~2,000 lines (83 tests)  
+*Note: Test code line count is an estimate based on approximate file sizes and typical test structure.*
 
 ### B. Browser Compatibility
 
