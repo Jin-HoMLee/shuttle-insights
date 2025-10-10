@@ -1,5 +1,7 @@
 # Browser Extension Restructuring Summary
 
+-> back to [README](../README.md)
+
 ## Overview
 Successfully restructured the browser-extension folder according to Chrome extension best practices and modern development standards.
 

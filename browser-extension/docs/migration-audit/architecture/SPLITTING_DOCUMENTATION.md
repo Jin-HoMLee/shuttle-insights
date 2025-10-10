@@ -1,5 +1,7 @@
 # Module Splitting Documentation
 
+-> back to [README](../README.md)
+
 ## Overview
 
 This document describes the splitting process for large multi-purpose files in the browser extension, outlining the rationale and implementation details.
