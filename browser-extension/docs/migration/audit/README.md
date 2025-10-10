@@ -62,7 +62,10 @@ This directory contains comprehensive documentation for the YouTube Badminton Sh
 ## 📊 Documentation Statistics
 
 ### Audit Documentation
-- **Total Lines:** 2,637 lines
+- **Total Lines:** 2,644 lines
+  - ARCHITECTURE_OVERVIEW.md: 700 lines
+  - AUDIT_SUMMARY.md: 314 lines
+  - CODEBASE_AUDIT.md: 1630 lines
 - **Total Size:** 83KB
 - **Documents:** 3 files
 - **Coverage:** 
