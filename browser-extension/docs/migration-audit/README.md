@@ -239,7 +239,7 @@ Module splitting rationale:
 
 | Metric | Value |
 |--------|-------|
-| **Total Documentation Files** | 8 |
+| **Total Documentation Files** | 9 |
 | **Audit Documentation Lines** | 2,637 |
 | **Total Documentation Lines** | ~4,000 |
 | **Code Coverage** | 32/32 source files (100%) |
